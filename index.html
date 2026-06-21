@@ -321,6 +321,39 @@ function survey(rock,h){
   }
   update();
 }
+
+function exportBackup(){
+ const data={heat,magma,rocks,specimens};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download='TenchiSouzou_Save.json';
+ a.click();
+ URL.revokeObjectURL(a.href);
+}
+function importBackup(event){
+ const file=event.target.files[0];
+ if(!file) return;
+ const reader=new FileReader();
+ reader.onload=function(e){
+   try{
+     const data=JSON.parse(e.target.result);
+     heat=Number(data.heat)||0;
+     magma=Number(data.magma)||0;
+     if(data.rocks){
+       for(let k in rocks){ rocks[k]=Number(data.rocks[k])||0; }
+     }
+     specimens=Array.isArray(data.specimens)?data.specimens:[];
+     update();
+     saveGame();
+     alert('セーブデータを読み込みました');
+   }catch(err){
+     alert('読み込み失敗');
+   }
+ };
+ reader.readAsText(file);
+}
+
 loadGame();
 update();
 </script>
