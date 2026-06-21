@@ -44,9 +44,28 @@ h1{margin:0;letter-spacing:.12em;font-size:34px;text-shadow:0 0 18px #ff7a2a88}
 .tapHint{position:absolute;bottom:18px;color:#ffe4ab;font-weight:800;background:#0008;padding:8px 14px;border-radius:999px;border:1px solid #ffd27a66}
 .float{position:absolute;color:#ffe29e;font-weight:900;pointer-events:none;animation:floatUp .8s ease-out forwards}
 @keyframes floatUp{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-60px) scale(1.35)}}
-.resource{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.badge{min-width:120px;padding:10px 12px;border:1px solid #ffffff22;border-radius:14px;background:#100f18aa;text-align:center}
-.badge b{display:block;font-size:26px;color:white}.badge span{color:var(--muted);font-size:13px}
+.resource{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  align-items:stretch;
+}
+.badge{
+  min-width:0;
+  padding:12px 10px;
+  border:1px solid #ffffff22;
+  border-radius:16px;
+  background:linear-gradient(180deg,#171420,#0f0d15);
+  text-align:center;
+  box-shadow:inset 0 1px 0 #ffffff18,0 8px 16px #0005;
+}
+.badge b{display:block;font-size:28px;color:white;line-height:1.1}
+.badge span{color:var(--muted);font-size:13px}
+.resourceAction{
+  display:flex;
+  justify-content:center;
+  margin-top:12px;
+}
 .btn{
   border:0;color:#21160b;background:linear-gradient(180deg,#ffe08a,#e59b35);border-radius:14px;
   padding:11px 15px;margin:4px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #8e4c18,0 10px 18px #0007;
@@ -98,11 +117,9 @@ select{width:100%;padding:10px;border-radius:12px;border:1px solid #92764d;backg
         <div class="badge"><b id="magma">0</b><span>マグマタンク</span></div>
         <div class="badge"><b id="specimenCount">0</b><span>標本</span></div>
       </div>
-      <p>
+      <div class="resourceAction">
         <button class="btn" onclick="makeMagma()">🔥 地熱10 → マグマ5</button>
-        <button class="btn blue" onclick="manualSave()">💾 セーブ</button>
-        <button class="btn ghost" onclick="resetSave()">🗑 リセット</button>
-      </p>
+      </div>
       <div class="small" id="saveStatus">自動セーブ：未実行</div>
     </div>
   </section>
@@ -148,6 +165,20 @@ select{width:100%;padding:10px;border-radius:12px;border:1px solid #92764d;backg
     </div>
   </section>
 </div>
+
+
+  <div class="card savePanel">
+    <h3>💾 セーブデータ管理</h3>
+    <p>
+      <button class="btn blue" onclick="manualSave()">💾 セーブ</button>
+      <button class="btn" onclick="exportBackup()">📦 バックアップ出力</button>
+      <button class="btn ghost" onclick="openImportFile()">📂 セーブデータ読み込み</button>
+      <button class="btn red" onclick="resetSave()">🗑 リセット</button>
+      <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importBackup(event)">
+    </p>
+    <div class="small">通常は自動セーブ。バックアップ出力でJSONファイルを保存し、セーブデータ読み込みで復元できます。</div>
+  </div>
+
 </div>
 
 <script>
@@ -322,36 +353,56 @@ function survey(rock,h){
   update();
 }
 
+function openImportFile(){
+  const input=document.getElementById("importFile");
+  if(input){ input.value=""; input.click(); }
+}
 function exportBackup(){
- const data={heat,magma,rocks,specimens};
- const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
- const a=document.createElement('a');
- a.href=URL.createObjectURL(blob);
- a.download='TenchiSouzou_Save.json';
- a.click();
- URL.revokeObjectURL(a.href);
+  try{
+    saveGame();
+    const data={version:"TenchiSouzou_v0_5", savedAt:new Date().toISOString(), heat,magma,rocks,specimens};
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="TenchiSouzou_Save_"+new Date().toISOString().slice(0,10)+".json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+    beep("success");
+  }catch(e){
+    alert("バックアップ出力に失敗しました");
+    console.warn(e);
+  }
 }
 function importBackup(event){
- const file=event.target.files[0];
- if(!file) return;
- const reader=new FileReader();
- reader.onload=function(e){
-   try{
-     const data=JSON.parse(e.target.result);
-     heat=Number(data.heat)||0;
-     magma=Number(data.magma)||0;
-     if(data.rocks){
-       for(let k in rocks){ rocks[k]=Number(data.rocks[k])||0; }
-     }
-     specimens=Array.isArray(data.specimens)?data.specimens:[];
-     update();
-     saveGame();
-     alert('セーブデータを読み込みました');
-   }catch(err){
-     alert('読み込み失敗');
-   }
- };
- reader.readAsText(file);
+  const file=event.target.files && event.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(typeof data!=="object" || data===null) throw new Error("invalid data");
+      heat=Number(data.heat)||0;
+      magma=Number(data.magma)||0;
+      if(data.rocks){
+        for(let k in rocks){ rocks[k]=Number(data.rocks[k])||0; }
+      }
+      specimens=Array.isArray(data.specimens)?data.specimens:[];
+      document.getElementById("analysis").innerHTML="未分析";
+      document.getElementById("hypothesis").innerHTML="分析後に仮説候補が表示されます。";
+      document.getElementById("survey").innerHTML="セーブデータを読み込みました。";
+      update();
+      saveGame();
+      beep("success");
+      alert("セーブデータを読み込みました");
+    }catch(err){
+      beep("fail");
+      alert("読み込み失敗：JSON形式を確認してください");
+      console.warn(err);
+    }
+  };
+  reader.readAsText(file);
 }
 
 loadGame();
