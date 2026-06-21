@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>天地創造 v0.3 岩石選択生成</title>
+<style>
+:root{
+  --bg1:#17131f;--bg2:#2b1d18;--card:#221f2fdd;--card2:#2e283bdd;
+  --gold:#f3c969;--orange:#ff8a3d;--text:#f7efe1;--muted:#cbbf9f;
+  --blue:#71d7ff;--green:#8ee48e;--danger:#ff9e8b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);
+  min-height:100vh;background:
+  radial-gradient(circle at 50% 12%, #8f3b23 0 8%, transparent 25%),
+  radial-gradient(circle at 30% 5%, #3e345b 0 12%, transparent 32%),
+  linear-gradient(180deg,var(--bg1),var(--bg2));
+}
+.wrap{max-width:1180px;margin:auto;padding:18px}
+header{text-align:center;padding:16px 10px 8px}
+h1{margin:0;letter-spacing:.12em;font-size:34px;text-shadow:0 0 18px #ff7a2a88}
+.subtitle{color:var(--muted);font-size:14px;margin-top:6px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.card{
+  background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid #7d674055;
+  border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 12px 28px #0007,inset 0 1px 0 #ffffff18;
+}
+.card h3{margin:0 0 12px;color:var(--gold);font-size:18px;letter-spacing:.04em}
+.tapZone{
+  position:relative;display:grid;place-items:center;min-height:300px;border-radius:22px;cursor:pointer;
+  user-select:none;overflow:hidden;border:2px solid #ff9b3d66;background:
+  radial-gradient(circle at center 55%, #ff7a2a88 0 10%, transparent 38%),
+  radial-gradient(circle at center 70%, #341313 0 20%, transparent 55%),
+  linear-gradient(180deg,#292444,#140f18);
+  box-shadow:0 0 26px #ff6b2355,inset 0 0 40px #0009;
+}
+.tapZone::before{content:"";position:absolute;inset:18px;border:1px dashed #ffd27a66;border-radius:18px;animation:pulse 1.4s infinite ease-in-out}
+@keyframes pulse{50%{transform:scale(.98);opacity:.45}}
+.volcano{font-size:98px;filter:drop-shadow(0 0 18px #ffae42);transform-origin:center bottom}
+.tapZone:active .volcano{transform:scale(.94)}
+.tapHint{position:absolute;bottom:18px;color:#ffe4ab;font-weight:800;background:#0008;padding:8px 14px;border-radius:999px;border:1px solid #ffd27a66}
+.float{position:absolute;color:#ffe29e;font-weight:900;pointer-events:none;animation:floatUp .8s ease-out forwards}
+@keyframes floatUp{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-60px) scale(1.35)}}
+.resource{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.badge{min-width:120px;padding:10px 12px;border:1px solid #ffffff22;border-radius:14px;background:#100f18aa;text-align:center}
+.badge b{display:block;font-size:26px;color:white}.badge span{color:var(--muted);font-size:13px}
+.btn{
+  border:0;color:#21160b;background:linear-gradient(180deg,#ffe08a,#e59b35);border-radius:14px;
+  padding:11px 15px;margin:4px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #8e4c18,0 10px 18px #0007;
+}
+.btn:hover{filter:brightness(1.08)}.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #8e4c18,0 4px 10px #0007}
+.btn.blue{color:#051923;background:linear-gradient(180deg,#9deaff,#45a9d6);box-shadow:0 5px 0 #1d5f7c,0 10px 18px #0007}
+.btn.red{color:white;background:linear-gradient(180deg,#ff795e,#b7342c);box-shadow:0 5px 0 #6e1918,0 10px 18px #0007}
+.btn.ghost{color:var(--text);background:#ffffff12;border:1px solid #ffffff2c;box-shadow:none}
+.list{line-height:1.9;color:#f3ead4}
+.rockRow{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff15;padding:5px 0}
+.count{color:var(--blue);font-weight:900}
+select{width:100%;padding:10px;border-radius:12px;border:1px solid #92764d;background:#12101a;color:var(--text);font-size:16px;margin-bottom:8px}
+.resultBox{min-height:58px;padding:12px;border-radius:14px;background:#0e0d14;border:1px solid #ffffff18;line-height:1.7}
+.success{color:var(--green);font-weight:900}.fail{color:var(--danger);font-weight:900}
+.small{font-size:13px;color:var(--muted)}
+.notice{color:#ffe7a8;background:#0006;border-left:4px solid var(--gold);padding:8px 10px;border-radius:8px;margin-top:8px}
+.recipeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(max-width:560px){.recipeGrid{grid-template-columns:1fr}}
+.recipe{
+  background:#100f18aa;border:1px solid #ffffff20;border-radius:16px;padding:12px;
+}
+.recipeTitle{font-weight:900;color:#fff;font-size:17px}
+.recipeMeta{color:var(--muted);font-size:13px;margin:5px 0 8px;line-height:1.5}
+.cost{color:#ffd88e;font-weight:900}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>天地創造</h1>
+  <div class="subtitle">v0.3｜地熱 → マグマタンク → 岩石選択生成 → 分析 → 仮説 → 調査</div>
+</header>
+
+<div class="grid">
+  <section>
+    <div class="card">
+      <h3>🌋 地熱炉</h3>
+      <div id="tapZone" class="tapZone" onclick="tapHeat(event)">
+        <div class="volcano">🌋</div>
+        <div class="tapHint">ここをタップ！ 地熱 +1</div>
+      </div>
+      <div class="notice">地熱10でマグマ5を生成。マグマを貯めて、作りたい岩石を選ぶ。</div>
+    </div>
+
+    <div class="card">
+      <h3>資源</h3>
+      <div class="resource">
+        <div class="badge"><b id="heat">0</b><span>地熱</span></div>
+        <div class="badge"><b id="magma">0</b><span>マグマタンク</span></div>
+        <div class="badge"><b id="specimenCount">0</b><span>標本</span></div>
+      </div>
+      <p>
+        <button class="btn" onclick="makeMagma()">🔥 地熱10 → マグマ5</button>
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="card">
+      <h3>🪨 岩石生成炉</h3>
+      <div class="recipeGrid" id="recipes"></div>
+    </div>
+
+    <div class="card">
+      <h3>🪨 岩石在庫</h3>
+      <div id="rocks" class="list"></div>
+    </div>
+  </section>
+</div>
+
+<div class="grid">
+  <section>
+    <div class="card">
+      <h3>🔍 分析</h3>
+      <select id="rockSelect"></select>
+      <button class="btn blue" onclick="analyze()">岩石10個で詳細分析</button>
+      <div id="analysis" class="resultBox">未分析</div>
+      <div class="small">分析した岩石は消費される。分析結果から調査先を推理する。</div>
+    </div>
+
+    <div class="card">
+      <h3>🧭 仮説</h3>
+      <div id="hypothesis" class="resultBox">分析後に仮説候補が表示されます。</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="card">
+      <h3>⛏ 調査結果</h3>
+      <div id="survey" class="resultBox">まだ調査していません。</div>
+    </div>
+
+    <div class="card">
+      <h3>💎 標本図鑑</h3>
+      <div id="specimens" class="resultBox">なし</div>
+    </div>
+  </section>
+</div>
+</div>
+
+<script>
+let heat=0,magma=0;
+const rocks={"花崗岩":0,"閃緑岩":0,"はんれい岩":0,"流紋岩":0,"安山岩":0,"玄武岩":0};
+
+const recipes={
+"玄武岩":{cost:10,desc:"低SiO₂・地表付近で急冷。黒っぽい火山岩。"},
+"安山岩":{cost:20,desc:"中間質マグマ。火山帯でよく見られる火山岩。"},
+"流紋岩":{cost:30,desc:"高SiO₂・急冷。白っぽい火山岩。"},
+"はんれい岩":{cost:35,desc:"低SiO₂・地下でゆっくり冷却。玄武岩質の深成岩。"},
+"閃緑岩":{cost:45,desc:"中間質・地下でゆっくり冷却。安山岩に対応する深成岩。"},
+"花崗岩":{cost:50,desc:"高SiO₂・地下でゆっくり冷却。石英と長石が多い深成岩。"}
+};
+
+const analyses={
+"花崗岩":{text:"石英★★★★　長石★★★★★　黒雲母★★<br><span class='small'>石英と長石が多い。地下深くでゆっくり冷えた可能性。</span>",hyp:["石英脈","海嶺","マントル断片"],correct:"石英脈",reward:"山梨県産水晶"},
+"玄武岩":{text:"輝石★★★★　カンラン石★★★　斜長石★★★<br><span class='small'>黒っぽく、海洋地殻や火山活動と関係が深い。</span>",hyp:["海嶺","石英脈","鍾乳洞"],correct:"海嶺",reward:"枕状溶岩標本"},
+"安山岩":{text:"斜長石★★★★　角閃石★★★　輝石★★<br><span class='small'>中間質の火山岩。島弧火山帯との関係を考えたい。</span>",hyp:["火山弧","マントル断片","鍾乳洞"],correct:"火山弧",reward:"桜島産安山岩標本"},
+"はんれい岩":{text:"輝石★★★★　斜長石★★★★　カンラン石★★<br><span class='small'>地下でゆっくり冷えた苦鉄質岩。海洋地殻深部との関係がある。</span>",hyp:["海洋地殻深部","石英脈","石灰岩層"],correct:"海洋地殻深部",reward:"はんれい岩質累帯標本"}
+};
+
+let specimens=[];
+let audioCtx=null;
+
+function beep(type="tap"){
+  try{
+    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator();
+    const g=audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    const now=audioCtx.currentTime;
+    if(type==="tap"){o.frequency.setValueAtTime(180,now);o.frequency.exponentialRampToValueAtTime(90,now+.07);g.gain.setValueAtTime(.08,now);}
+    if(type==="make"){o.frequency.setValueAtTime(320,now);o.frequency.exponentialRampToValueAtTime(520,now+.12);g.gain.setValueAtTime(.09,now);}
+    if(type==="success"){o.frequency.setValueAtTime(480,now);o.frequency.exponentialRampToValueAtTime(880,now+.18);g.gain.setValueAtTime(.12,now);}
+    if(type==="fail"){o.frequency.setValueAtTime(180,now);o.frequency.exponentialRampToValueAtTime(80,now+.22);g.gain.setValueAtTime(.10,now);}
+    g.gain.exponentialRampToValueAtTime(.001,now+.22);
+    o.start(now); o.stop(now+.24);
+  }catch(e){}
+}
+function floatText(x,y,t){
+  const el=document.createElement("div");
+  el.className="float"; el.textContent=t; el.style.left=x+"px"; el.style.top=y+"px";
+  document.getElementById("tapZone").appendChild(el);
+  setTimeout(()=>el.remove(),850);
+}
+function tapHeat(e){
+  heat++; beep("tap");
+  const rect=document.getElementById("tapZone").getBoundingClientRect();
+  floatText(e.clientX-rect.left,e.clientY-rect.top,"+1 地熱");
+  update();
+}
+function makeMagma(){
+  if(heat<10){beep("fail"); alert("地熱不足"); return;}
+  heat-=10; magma+=5; beep("make"); update();
+}
+function craftRock(name){
+  const cost=recipes[name].cost;
+  if(magma<cost){beep("fail"); alert("マグマ不足：必要マグマ "+cost); return;}
+  magma-=cost; rocks[name]++; beep("make");
+  document.getElementById("survey").innerHTML="🪨 <b>"+name+"</b> を生成した。";
+  update();
+}
+function update(){
+  document.getElementById("heat").textContent=heat;
+  document.getElementById("magma").textContent=magma;
+  document.getElementById("specimenCount").textContent=specimens.length;
+
+  let rec="";
+  for(let k in recipes){
+    rec += "<div class='recipe'><div class='recipeTitle'>"+k+"</div><div class='recipeMeta'>"+recipes[k].desc+"</div><div class='cost'>必要マグマ "+recipes[k].cost+"</div><button class='btn red' onclick=\"craftRock('"+k+"')\">生成</button></div>";
+  }
+  document.getElementById("recipes").innerHTML=rec;
+
+  let txt="";
+  for(let k in rocks){
+    txt+="<div class='rockRow'><span>"+k+"</span><span class='count'>"+rocks[k]+"</span></div>";
+  }
+  document.getElementById("rocks").innerHTML=txt;
+
+  const sel=document.getElementById("rockSelect");
+  const current=sel.value;
+  sel.innerHTML="";
+  for(let k in rocks){
+    let op=document.createElement("option");
+    op.value=k; op.textContent=k+"（"+rocks[k]+"）";
+    sel.appendChild(op);
+  }
+  if(current) sel.value=current;
+
+  document.getElementById("specimens").innerHTML=specimens.length?specimens.map(s=>"✨ "+s).join("<br>"):"なし";
+}
+function analyze(){
+  const rock=document.getElementById("rockSelect").value;
+  if(rocks[rock]<10){beep("fail"); alert("その岩石が10個必要"); return;}
+  rocks[rock]-=10;
+
+  if(!analyses[rock]){
+    document.getElementById("analysis").innerHTML="<b>"+rock+"</b><br>分析データ未実装。";
+    document.getElementById("hypothesis").innerHTML="この岩石の仮説候補はまだない。";
+    beep("fail"); update(); return;
+  }
+
+  const d=analyses[rock];
+  document.getElementById("analysis").innerHTML="<b>"+rock+"</b><br>"+d.text;
+
+  let h="<div class='small'>分析結果から、もっともありそうな調査先を選ぶ。</div>";
+  d.hyp.forEach(v=>{
+    h += "<button class='btn ghost' onclick=\"survey('"+rock+"','"+v+"')\">"+v+"</button>";
+  });
+  document.getElementById("hypothesis").innerHTML=h;
+  beep("make"); update();
+}
+function survey(rock,h){
+  const d=analyses[rock];
+  if(h===d.correct){
+    document.getElementById("survey").innerHTML="<span class='success'>調査成功！</span><br>"+d.reward+" を発見した。";
+    specimens.push(d.reward); beep("success");
+  }else{
+    document.getElementById("survey").innerHTML="<span class='fail'>調査失敗。</span><br>有力な証拠は得られなかった。仮説を再検討しよう。";
+    beep("fail");
+  }
+  update();
+}
+update();
+</script>
+</body>
+</html>
