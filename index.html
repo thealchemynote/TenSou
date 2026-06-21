@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 PuzzleHub v1.2.1 Checked</title>
+<title>天地創造 PuzzleHub FINAL_BALANCE_SAFE</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -30,9 +30,27 @@ button.blue{background:#7bdff2}
 .overlay.show{display:flex}
 .modal{background:#20263d;border:2px solid #ffd166;border-radius:18px;padding:20px;text-align:center;max-width:360px;width:100%}
 </style>
+
+<style id="final-balance-safe-style">
+.cell.clearFlash{animation:finalClear .34s ease-out forwards!important}
+.cell.dropFlash{animation:finalDrop .30s ease-out!important}
+#board.boardPause{filter:brightness(.72);transition:filter .18s ease}
+@keyframes finalClear{
+  0%{transform:scale(1.12);filter:brightness(2)}
+  70%{transform:scale(.75);opacity:.35}
+  100%{transform:scale(.15);opacity:0}
+}
+@keyframes finalDrop{
+  0%{transform:translateY(-22px) scale(.86);opacity:.35}
+  75%{transform:translateY(4px) scale(1.04)}
+  100%{transform:translateY(0) scale(1);opacity:1}
+}
+.finalPatchNote{background:#0b1020;border:1px solid #ffd16666;border-radius:12px;padding:10px;margin:8px 0;color:#ffd166}
+</style>
+
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">PuzzleHub v1.2.1｜図鑑表示修正・エラーチェック済み</div></header>
+<header><h1>天地創造</h1><div class="small">FINAL BALANCE SAFE｜元素解放・難易度強化・演出調整</div></header>
 <div class="wrap">
 
 <section id="hub" class="screen active">
@@ -107,7 +125,7 @@ button.blue{background:#7bdff2}
 <section id="tavern" class="screen">
  <div class="card">
   <h2>🍺 酒場</h2>
-  <p class="small">仲間を雇うと、その専門に対応した元素を探索で回収できる。編成は4人まで。</p>
+  <p class="small">仲間ごとに回収できる元素が違う。序盤はSiO₂とMgのみ。Al・Fe・Ca・Naは仲間を増やして解放。編成は4人まで。</p>
   <div id="tavernList" class="map"></div>
   <button class="ghost" onclick="show('hub')">戻る</button>
  </div>
@@ -311,35 +329,59 @@ button.blue{background:#7bdff2}
 <script>
 const colors=["red","blueC","yellow","green"];
 const characters={
- mineralogist:{name:"鉱物学者",face:"👨‍🔬",cost:0,elements:["SiO₂","Al"],desc:"SiO₂とAlを回収できる。"},
- volcanologist:{name:"火山学者",face:"🌋",cost:0,elements:["Mg","Fe"],desc:"MgとFeを回収できる。"},
- oceanographer:{name:"海洋学者",face:"🌊",cost:300,elements:["Ca","Na"],desc:"NaとCaを回収できる。次の元素拡張用。"},
- appraiser:{name:"鑑定士",face:"🔍",cost:500,elements:[],desc:"将来は品質と売却額を上げる。今は編成枠。"}
+ mineralogist:{name:"鉱物学者",face:"👨‍🔬",cost:0,elements:["SiO₂"],desc:"SiO₂を回収できる。序盤の基礎担当。"},
+ volcanologist:{name:"火山学者",face:"🌋",cost:0,elements:["Mg"],desc:"Mgを回収できる。玄武岩質ステージで重要。"},
+ geochemist:{name:"地球化学者",face:"🧪",cost:900,elements:["Al"],desc:"Alを回収できる。長石・雲母系に必須。"},
+ oreScholar:{name:"鉱床学者",face:"🧲",cost:1400,elements:["Fe"],desc:"Feを回収できる。磁鉄鉱や苦鉄質鉱物に重要。"},
+ sedimentologist:{name:"堆積学者",face:"🏜️",cost:1800,elements:["Ca"],desc:"Caを回収できる。斜長石・角閃石に重要。"},
+ oceanographer:{name:"海洋学者",face:"🌊",cost:2200,elements:["Na"],desc:"Naを回収できる。曹長石や世界ステージで活躍。"},
+ gemologist:{name:"宝石学者",face:"💠",cost:5000,elements:[],desc:"伝説鉱物の発見率を上げる。"},
+ appraiser:{name:"鑑定士",face:"🔍",cost:1200,elements:[],desc:"品質・鑑定補助枠。今は編成戦略用。"}
 };
 let ownedChars=["mineralogist","volcanologist"];
 let party=["mineralogist","volcanologist"];
-let charLevels={mineralogist:1,volcanologist:1,oceanographer:1,appraiser:1};
+let charLevels={mineralogist:1,volcanologist:1,geochemist:1,oreScholar:1,sedimentologist:1,oceanographer:1,gemologist:1,appraiser:1};
 
 const growthRecipes={
  mineralogist:[
   null,
-  {title:"主任鉱物学者",money:800,minerals:{quartz:2},rocks:{},bonus:{"SiO₂":1,Al:1}},
-  {title:"鉱物学教授",money:2200,minerals:{quartz:4,kfeldspar:2},rocks:{granite:1},bonus:{"SiO₂":2,Al:2}}
+  {title:"主任鉱物学者",money:1200,minerals:{quartz:3},rocks:{},bonus:{"SiO₂":1}},
+  {title:"鉱物学教授",money:3200,minerals:{quartz:6,kfeldspar:2},rocks:{granite:1},bonus:{"SiO₂":2}}
  ],
  volcanologist:[
   null,
-  {title:"主任火山学者",money:800,minerals:{pyroxene:2},rocks:{},bonus:{Mg:1,Fe:1}},
-  {title:"火山研究教授",money:2200,minerals:{pyroxene:4,plagioclase:2},rocks:{basalt:1},bonus:{Mg:2,Fe:2}}
+  {title:"主任火山学者",money:1200,minerals:{pyroxene:3},rocks:{},bonus:{Mg:1}},
+  {title:"火山研究教授",money:3200,minerals:{pyroxene:5,olivine:2},rocks:{basalt:1},bonus:{Mg:2}}
+ ],
+ geochemist:[
+  null,
+  {title:"主任地球化学者",money:1500,minerals:{kfeldspar:2},rocks:{},bonus:{Al:1}},
+  {title:"地球化学教授",money:3800,minerals:{kfeldspar:4,muscovite:2},rocks:{granite:1},bonus:{Al:2}}
+ ],
+ oreScholar:[
+  null,
+  {title:"主任鉱床学者",money:1700,minerals:{magnetite:2},rocks:{},bonus:{Fe:1}},
+  {title:"鉱床研究教授",money:4200,minerals:{magnetite:4,pyroxene:2},rocks:{basalt:1},bonus:{Fe:2}}
+ ],
+ sedimentologist:[
+  null,
+  {title:"主任堆積学者",money:1800,minerals:{plagioclase:2},rocks:{},bonus:{Ca:1}},
+  {title:"地層解析教授",money:4400,minerals:{plagioclase:4,amphibole:2},rocks:{andesite:1},bonus:{Ca:2}}
  ],
  oceanographer:[
   null,
-  {title:"主任海洋学者",money:1000,minerals:{plagioclase:2},rocks:{},bonus:{Ca:1,Na:1}},
-  {title:"深海地質学者",money:2600,minerals:{plagioclase:3,albite:2},rocks:{basalt:1},bonus:{Ca:2,Na:2}}
+  {title:"主任海洋学者",money:2000,minerals:{albite:2},rocks:{},bonus:{Na:1}},
+  {title:"深海地質学者",money:5200,minerals:{albite:4,plagioclase:2},rocks:{basalt:1},bonus:{Na:2}}
+ ],
+ gemologist:[
+  null,
+  {title:"主任宝石学者",money:4000,minerals:{quartz:5},rocks:{},bonus:{}},
+  {title:"伝説鉱物研究者",money:9000,minerals:{quartz:8,albite:3},rocks:{rhyolite:1},bonus:{}}
  ],
  appraiser:[
   null,
-  {title:"主任鑑定士",money:1200,minerals:{quartz:2},rocks:{},bonus:{}},
-  {title:"伝説の鑑定士",money:3000,minerals:{quartz:3,kfeldspar:2},rocks:{granite:1},bonus:{}}
+  {title:"主任鑑定士",money:1600,minerals:{quartz:3},rocks:{},bonus:{}},
+  {title:"伝説の鑑定士",money:5000,minerals:{quartz:5,kfeldspar:2},rocks:{granite:1},bonus:{}}
  ]
 };
 function charTitle(id){
@@ -627,7 +669,8 @@ const legendaryInfo={
 };
 function rollLegendary(){
  Object.entries(legendaryInfo).forEach(([id,v])=>{
-  if(Math.random()<v.chance) legendary[id]++;
+  const gemBonus = party.includes("gemologist") ? 2.5 : 1;
+  if(Math.random()<v.chance*gemBonus) legendary[id]++;
  });
 }
 function legendsFound(){ return Object.values(legendary).reduce((a,b)=>a+(b>0?1:0),0);}
@@ -856,19 +899,19 @@ function renderGrowth(){
 }
 
 const stages={
- fuji:{firstBonus:300,name:"富士山",icon:"🗻",moves:20,reward:500,unlockCost:0,requires:null,weights:{"SiO₂":36,Al:22,Mg:14,Fe:14,Ca:10,Na:4},goals:{"SiO₂":38,Al:16},desc:"石英系鉱物が作りやすい。"},
- hawaii:{firstBonus:400,name:"ハワイ",icon:"🌋",moves:20,reward:650,unlockCost:0,requires:null,weights:{"SiO₂":18,Al:8,Mg:34,Fe:28,Ca:10,Na:2},goals:{Mg:36,Fe:22},desc:"カンラン石・輝石向き。"},
- sakurajima:{firstBonus:600,name:"桜島",icon:"🌋",moves:19,reward:850,unlockCost:2500,requires:"domesticPass",weights:{"SiO₂":30,Al:17,Mg:18,Fe:25,Ca:8,Na:2},goals:{Fe:30,Mg:22,"SiO₂":22},desc:"黒雲母・輝石向き。"},
- yamanashi:{firstBonus:700,name:"山梨花崗岩帯",icon:"💎",moves:19,reward:1000,unlockCost:3800,requires:"domesticPass",weights:{"SiO₂":45,Al:27,Mg:6,Fe:8,Ca:5,Na:9},goals:{"SiO₂":42,Al:24},desc:"長石・石英の産地。"},
- aso:{firstBonus:900,name:"阿蘇",icon:"🌋",moves:18,reward:1200,unlockCost:6500,requires:"domesticPass",weights:{"SiO₂":34,Al:18,Mg:16,Fe:18,Ca:10,Na:4},goals:{"SiO₂":32,Ca:18,Fe:18},desc:"角閃石を狙える。"},
- iceland:{firstBonus:1200,name:"アイスランド",icon:"🌋",moves:18,reward:1600,unlockCost:12000,requires:"airplane",weights:{"SiO₂":22,Al:10,Mg:28,Fe:24,Ca:12,Na:4},goals:{Mg:34,Fe:26,Ca:18},desc:"曹長石・玄武岩系の産地。"}
+ fuji:{firstBonus:300,name:"富士山",icon:"🗻",moves:14,reward:500,unlockCost:0,requires:null,weights:{"SiO₂":36,Al:22,Mg:14,Fe:14,Ca:10,Na:4},goals:{"SiO₂":58,Al:34},desc:"石英系鉱物が作りやすい。"},
+ hawaii:{firstBonus:400,name:"ハワイ",icon:"🌋",moves:14,reward:650,unlockCost:0,requires:null,weights:{"SiO₂":18,Al:8,Mg:34,Fe:28,Ca:10,Na:2},goals:{Mg:58,Fe:40},desc:"カンラン石・輝石向き。"},
+ sakurajima:{firstBonus:600,name:"桜島",icon:"🌋",moves:13,reward:850,unlockCost:2500,requires:"domesticPass",weights:{"SiO₂":30,Al:17,Mg:18,Fe:25,Ca:8,Na:2},goals:{Fe:54,Mg:42,"SiO₂":38},desc:"黒雲母・輝石向き。"},
+ yamanashi:{firstBonus:700,name:"山梨花崗岩帯",icon:"💎",moves:13,reward:1000,unlockCost:3800,requires:"domesticPass",weights:{"SiO₂":45,Al:27,Mg:6,Fe:8,Ca:5,Na:9},goals:{"SiO₂":64,Al:42},desc:"長石・石英の産地。"},
+ aso:{firstBonus:900,name:"阿蘇",icon:"🌋",moves:12,reward:1200,unlockCost:6500,requires:"domesticPass",weights:{"SiO₂":34,Al:18,Mg:16,Fe:18,Ca:10,Na:4},goals:{"SiO₂":54,Ca:34,Fe:34},desc:"角閃石を狙える。"},
+ iceland:{firstBonus:1200,name:"アイスランド",icon:"🌋",moves:12,reward:1600,unlockCost:12000,requires:"airplane",weights:{"SiO₂":22,Al:10,Mg:28,Fe:24,Ca:12,Na:4},goals:{Mg:60,Fe:48,Ca:34},desc:"曹長石・玄武岩系の産地。"}
 };
 const difficulties={
- sugar:{name:"激甘",moveBonus:6,goalRate:.65,rewardRate:.35,colors:["red","blueC","yellow","green"]},
- easy:{name:"やさしい",moveBonus:3,goalRate:.85,rewardRate:.65,colors:["red","blueC","yellow","green"]},
- normal:{name:"ふつう",moveBonus:0,goalRate:1.0,rewardRate:1.1,colors:["red","blueC","yellow","green"]},
- hard:{name:"むずかしい",moveBonus:-4,goalRate:1.35,rewardRate:1.8,colors:["red","blueC","yellow","green","white"]},
- extreme:{name:"激ムズ",moveBonus:-6,goalRate:1.75,rewardRate:2.9,colors:["red","blueC","yellow","green","white","black"]}
+ sugar:{name:"激甘",moveBonus:4,goalRate:.55,rewardRate:.30,colors:["red","blueC","yellow","green"]},
+ easy:{name:"やさしい",moveBonus:2,goalRate:.75,rewardRate:.60,colors:["red","blueC","yellow","green"]},
+ normal:{name:"ふつう",moveBonus:0,goalRate:1.0,rewardRate:1.15,colors:["red","blueC","yellow","green"]},
+ hard:{name:"むずかしい",moveBonus:-3,goalRate:1.35,rewardRate:1.9,colors:["red","blueC","yellow","green","white"]},
+ extreme:{name:"激ムズ",moveBonus:-5,goalRate:1.75,rewardRate:3.0,colors:["red","blueC","yellow","green","white","black"]}
 };
 
 let inv={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
@@ -899,11 +942,11 @@ let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_puzzlehub_v08";
+const SAVE_KEY="tenchi_souzou_final_balance_safe_v1";
 let saveReady=false;
 function gameData(){
  return {
-  version:"v0.8",
+  version:"FINAL_BALANCE_SAFE",
   money,
   inv,
   minerals,
@@ -1014,7 +1057,7 @@ function resetSave(){
  legendary={diamond:0,ruby:0,sapphire:0,emerald:0,opal:0};
  ownedChars=["mineralogist","volcanologist"];
  party=["mineralogist","volcanologist"];
- charLevels={mineralogist:1,volcanologist:1,oceanographer:1,appraiser:1};
+ charLevels={mineralogist:1,volcanologist:1,geochemist:1,oreScholar:1,sedimentologist:1,oceanographer:1,gemologist:1,appraiser:1};
  unlockedStages=["fuji","hawaii"];
  difficulty="normal";
  saveReady=true;
@@ -1393,7 +1436,7 @@ function draw(){
  b.innerHTML="";
  for(let y=0;y<6;y++)for(let x=0;x<6;x++){
   const d=document.createElement("div");
-  d.className="cell "+board[y][x].color+(board[y][x].special==="bomb"?" bombCell":"")+(board[y][x].special==="rainbow"?" rainbowCell":"");
+  d.className="cell dropFlash "+board[y][x].color+(board[y][x].special==="bomb"?" bombCell":"")+(board[y][x].special==="rainbow"?" rainbowCell":"");
   d.dataset.x=x; d.dataset.y=y; d.textContent=(board[y][x].special==="bomb"?"💥":board[y][x].special==="rainbow"?"🌈":board[y][x].atom);
   b.appendChild(d);
  }
@@ -1459,6 +1502,20 @@ function sfxClear(n){
 function sfxSuccess(){melody([[420,.08],[560,.08],[740,.12],[980,.18]]);}
 function sfxEnding(){melody([[330,.1],[440,.1],[550,.1],[660,.1],[880,.25]]);}
 
+
+function markClearing(list){
+ list.forEach(p=>{
+  const el=document.querySelector(`.cell[data-x="${p.x}"][data-y="${p.y}"]`);
+  if(el)el.classList.add("clearFlash");
+ });
+ const boardEl=document.getElementById("board");
+ if(boardEl)boardEl.classList.add("boardPause");
+}
+function unpauseBoard(){
+ const boardEl=document.getElementById("board");
+ if(boardEl)boardEl.classList.remove("boardPause");
+}
+
 function near(a,b){return Math.abs(a.x-b.x)<=1 && Math.abs(a.y-b.y)<=1}
 document.addEventListener("pointerdown",e=>{
  const boardEl=document.getElementById("board");
@@ -1512,6 +1569,7 @@ window.addEventListener("pointerup",()=>{
     }
   }
  });
+ markClearing(clearList);
  clearList.forEach(p=>{
   if(!board[p.y][p.x])return;
   const a=board[p.y][p.x].atom;
@@ -1529,6 +1587,7 @@ window.addEventListener("pointerup",()=>{
    board[first.y][first.x]={color:currentColor==='rainbow'?rand(difficulties[difficulty].colors):currentColor,atom:atom(),special:path.length>=8?'rainbow':'bomb'};
  }
  collapse();
+ unpauseBoard();
  let gtxt=Object.entries(gained).map(([k,v])=>k+"+"+v).join(" ");
  let mtxt=Object.entries(missed).map(([k,v])=>k+"×"+v).join(" ");
  document.getElementById("log").innerHTML=path.length+"個消去！ "+(path.length>=8?"🌈虹結晶生成！ ":path.length>=5?"💥爆発結晶生成！ ":"")+(gtxt?gtxt:"取得なし")+(mtxt?" <span class='miss'>未回収 "+mtxt+"</span>":"");
