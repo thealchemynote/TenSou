@@ -100,7 +100,10 @@ select{width:100%;padding:10px;border-radius:12px;border:1px solid #92764d;backg
       </div>
       <p>
         <button class="btn" onclick="makeMagma()">🔥 地熱10 → マグマ5</button>
+        <button class="btn blue" onclick="manualSave()">💾 セーブ</button>
+        <button class="btn ghost" onclick="resetSave()">🗑 リセット</button>
       </p>
+      <div class="small" id="saveStatus">自動セーブ：未実行</div>
     </div>
   </section>
 
@@ -168,6 +171,54 @@ const analyses={
 };
 
 let specimens=[];
+const SAVE_KEY="tenchi_souzou_v0_3_save";
+
+function saveGame(){
+  const data={heat,magma,rocks,specimens};
+  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  const el=document.getElementById("saveStatus");
+  if(el){
+    const now=new Date();
+    el.textContent="自動セーブ済み：" + now.toLocaleTimeString();
+  }
+}
+function manualSave(){
+  saveGame();
+  beep("success");
+  alert("セーブしました");
+}
+function loadGame(){
+  try{
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(!raw) return;
+    const data=JSON.parse(raw);
+    heat=Number(data.heat)||0;
+    magma=Number(data.magma)||0;
+    if(data.rocks){
+      for(let k in rocks){
+        rocks[k]=Number(data.rocks[k])||0;
+      }
+    }
+    if(Array.isArray(data.specimens)){
+      specimens=data.specimens;
+    }
+    const el=document.getElementById("saveStatus");
+    if(el) el.textContent="セーブデータを読み込みました";
+  }catch(e){
+    console.warn("save load error", e);
+  }
+}
+function resetSave(){
+  if(!confirm("セーブデータを削除して最初から始めますか？")) return;
+  localStorage.removeItem(SAVE_KEY);
+  heat=0; magma=0; specimens=[];
+  for(let k in rocks){rocks[k]=0;}
+  document.getElementById("analysis").innerHTML="未分析";
+  document.getElementById("hypothesis").innerHTML="分析後に仮説候補が表示されます。";
+  document.getElementById("survey").innerHTML="まだ調査していません。";
+  update();
+  saveGame();
+}
 let audioCtx=null;
 
 function beep(type="tap"){
@@ -236,6 +287,7 @@ function update(){
   if(current) sel.value=current;
 
   document.getElementById("specimens").innerHTML=specimens.length?specimens.map(s=>"✨ "+s).join("<br>"):"なし";
+  saveGame();
 }
 function analyze(){
   const rock=document.getElementById("rockSelect").value;
@@ -269,6 +321,7 @@ function survey(rock,h){
   }
   update();
 }
+loadGame();
 update();
 </script>
 </body>
