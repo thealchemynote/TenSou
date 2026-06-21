@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 FINAL_COMPANIONS_EQUIP_EVOLVE</title>
+<title>天地創造 COMPANIONS_EQUIP_EVOLVE_FIXED</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -54,9 +54,16 @@ button.blue{background:#7bdff2}
 .roleTag{display:inline-block;background:#85f0a322;border:1px solid #85f0a366;color:#a8ffc0;border-radius:999px;padding:3px 8px;margin:3px;font-size:11px}
 </style>
 
+
+<style id="mission-result-fix-style">
+.resultGain{color:#85f0a3;font-weight:900}
+.resultMiss{color:#ff9e8b;font-weight:900}
+.resultPanel{background:#0b1020;border:1px solid #ffffff28;border-radius:12px;padding:10px;margin:8px 0;text-align:left}
+</style>
+
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">FINAL+｜仲間拡張・装備進化システム</div></header>
+<header><h1>天地創造</h1><div class="small">FINAL+FIX｜ミッション判定修正・獲得結果表示</div></header>
 <div class="wrap">
 
 <section id="hub" class="screen active">
@@ -115,7 +122,7 @@ button.blue{background:#7bdff2}
   <div id="mission" class="card"></div><div id="difficultyNotice" class="small" style="text-align:center"></div>
   <button class="ghost" onclick="show('stages')">探索をやめる</button>
  </div>
- <div id="log" class="card">同じ色を3個以上なぞる。斜めOK。</div>
+ <div id="log" class="card">同じ色を3個以上なぞる。斜めOK。ミッション進行は全消去分、持ち帰り素材は仲間依存。</div>
  <div id="board"></div>
  <div id="runInv" class="card"></div>
 </section>
@@ -1002,17 +1009,19 @@ let completedCongress={};
 let endingCleared=false;
 let legendary={diamond:0,ruby:0,sapphire:0,emerald:0,opal:0};
 let run={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+let runCollected={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+let runMissed={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
 let money=0, board=[], current=null, moves=0, selecting=false, path=[], currentColor=null;
 let difficulty='normal';
 let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_companions_equip_evolve_v1";
+const SAVE_KEY="tenchi_souzou_companions_equip_evolve_fixed_v1";
 let saveReady=false;
 function gameData(){
  return {
-  version:"COMPANIONS_EQUIP_EVOLVE",
+  version:"COMPANIONS_EQUIP_EVOLVE_FIXED",
   money,
   inv,
   minerals,
@@ -1190,6 +1199,8 @@ function startStage(id){
  if(!unlockedStages.includes(id)){alert('まだ解放されていません');return;}
  current=id; moves=Math.max(5, stages[id].moves + difficulties[difficulty].moveBonus);
  run={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+ runCollected={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+ runMissed={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
  comboMultiplier=1;
  initBoard();
  show("play");
@@ -1546,7 +1557,7 @@ function draw(){
  document.getElementById("reward").textContent=effectiveReward()+"G";
  document.getElementById("comboView").textContent="x"+comboMultiplier.toFixed(1);
  document.getElementById("difficultyNotice").textContent="難易度："+difficulties[difficulty].name+" / 目標倍率 x"+difficulties[difficulty].goalRate+" / 手数補正 "+difficulties[difficulty].moveBonus;
- document.getElementById("runInv").textContent="今回："+Object.entries(run).map(([k,v])=>k+":"+v).join(" / ");
+ document.getElementById("runInv").innerHTML="<b>ミッション進行</b>："+Object.entries(run).map(([k,v])=>k+":"+v).join(" / ")+"<br><b class='resultGain'>持ち帰り予定</b>："+Object.entries(runCollected).map(([k,v])=>k+":"+v).join(" / ")+"<br><b class='resultMiss'>未回収</b>："+Object.entries(runMissed).filter(([k,v])=>v>0).map(([k,v])=>k+":"+v).join(" / ");
  document.getElementById("mission").innerHTML="目標："+Object.entries(effectiveGoals()).map(([k,v])=>{
   const got=run[k]||0;
   return "<span class='"+(got>=v?"ok":"bad")+"'>"+k+" "+got+"/"+v+"</span>";
@@ -1675,12 +1686,14 @@ window.addEventListener("pointerup",()=>{
  clearList.forEach(p=>{
   if(!board[p.y][p.x])return;
   const a=board[p.y][p.x].atom;
+  const bonus=Math.max(1,Math.round((1+equipBoost(a)+charBonus(a)+labCollectBonus())*comboMultiplier));
+  run[a]+=bonus; // ミッション判定用。仲間がいなくても進む。
   if(canCollect(a)){
-    const bonus=Math.max(1,Math.round((1+equipBoost(a)+charBonus(a)+labCollectBonus())*comboMultiplier));
-    run[a]+=bonus;
+    runCollected[a]=(runCollected[a]||0)+bonus;
     gained[a]=(gained[a]||0)+bonus;
   }else{
-    missed[a]=(missed[a]||0)+1;
+    runMissed[a]=(runMissed[a]||0)+bonus;
+    missed[a]=(missed[a]||0)+bonus;
   }
   board[p.y][p.x]=null;
  });
@@ -1714,7 +1727,7 @@ function success(){
 }
 function finish(ok){
  if(ok){
-  Object.keys(inv).forEach(k=>inv[k]+=run[k]);
+  Object.keys(inv).forEach(k=>inv[k]+=(runCollected[k]||0));
   money+=effectiveReward();
   markDiscovery('stages',current);
   saveGame();
@@ -1728,7 +1741,9 @@ function finish(ok){
   updateStageRecord(current,rank);
   rollLegendary();
   clearedDifficulties[difficulty]=true;
-  document.getElementById("modalText").innerHTML=effectiveReward()+"Gと回収できた素材を持ち帰った。"+(firstBonus?"<br>初回調査報酬："+firstBonus+"G":"")+"<br>探索ランク："+rank;
+  const gainText=Object.entries(runCollected).filter(([k,v])=>v>0).map(([k,v])=>k+"+"+v).join(" / ") || "なし";
+  const missText=Object.entries(runMissed).filter(([k,v])=>v>0).map(([k,v])=>k+"×"+v).join(" / ") || "なし";
+  document.getElementById("modalText").innerHTML=effectiveReward()+"Gを獲得。"+(firstBonus?"<br>初回調査報酬："+firstBonus+"G":"")+"<br>探索ランク："+rank+"<div class='resultPanel'><div class='resultGain'>持ち帰れた素材： "+gainText+"</div><div class='resultMiss'>仲間不足で回収できなかった素材： "+missText+"</div></div>";
   sfxSuccess(); toast("探索成功！");
  }else{
   document.getElementById("modalTitle").textContent="探索失敗";
