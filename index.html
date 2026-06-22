@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 v1.4i MINERAL_RECIPE_VISIBLE</title>
+<title>天地創造 v1.4j RECIPE_VISIBLE_FIX</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -364,9 +364,35 @@ button.blue{background:#7bdff2}
 }
 </style>
 
+
+<style id="v14j-recipe-position-fix-style">
+#mineralCraft .craftCard{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-between!important;
+  min-height:118px!important;
+}
+#mineralCraft .recipeMini{
+  display:block!important;
+  color:#ffd166!important;
+  font-size:10px!important;
+  line-height:1.18!important;
+  margin:4px 0 3px!important;
+  min-height:24px!important;
+}
+#mineralCraft .costLine{
+  display:block!important;
+  color:#ffd166!important;
+  margin:2px 0!important;
+}
+#mineralCraft .craftCard button{
+  margin-top:3px!important;
+}
+</style>
+
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">v1.4i｜鉱物レシピ表示</div></header>
+<header><h1>天地創造</h1><div class="small">v1.4j｜鉱物レシピ位置修正</div></header>
 <div class="wrap">
 
 
@@ -374,7 +400,7 @@ button.blue{background:#7bdff2}
  <div class="homeHero">
   <div class="homeCard">
    <div class="homeTitle">天地創造</div>
-   <div class="homeSub">PuzzleHub v1.4i</div>
+   <div class="homeSub">PuzzleHub v1.4j</div>
    <div id="homeSaveDate" class="saveDate">セーブデータ確認中</div>
    <button class="homeBtn" onclick="startNewGameFromHome()">最初から始める</button>
    <button id="continueBtn" class="homeBtn blue" onclick="continueFromSave()">セーブから始める</button>
@@ -502,7 +528,6 @@ button.blue{background:#7bdff2}
   <h3>岩石工房</h3>
   <div id="rockResult" class="resultRockBox">まだ岩石を生成していません。</div>
   <div id="rockWorkshop" class="craftGrid"></div>
-  <h3>変成炉</h3>
   <div id="metamorphicCraft" class="craftGrid"></div>
   <h3>岩石売却</h3>
   <div id="rockSell" class="craftGrid"></div>
@@ -677,7 +702,7 @@ button.blue{background:#7bdff2}
 
 <section id="save" class="screen">
  <div class="card savePanel">
-  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.4i MINERAL RECIPE VISIBLE</div>
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.4j RECIPE VISIBLE FIX</div>
   <p>
    <button onclick="manualSave()">セーブ</button>
    <button onclick="exportBackup()">バックアップ出力</button>
@@ -1628,13 +1653,13 @@ let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_v1_4i_mineral_recipe_visible";
+const SAVE_KEY="tenchi_souzou_v1_4j_recipe_visible_fix";
 let saveReady=false;
 let soundEnabled=true;
 let vibrationEnabled=true;
 function gameData(){
  return {
-  version:"V1_4I_MINERAL_RECIPE_VISIBLE",
+  version:"V1_4J_RECIPE_VISIBLE_FIX",
   savedAt:new Date().toISOString(),
   money,
   inv,
@@ -2067,7 +2092,7 @@ function unlockStage(id){
 function renderFinalNotice(){
  const el=document.getElementById("finalNotice");
  if(!el)return;
- el.innerHTML="<b>天地創造 v1.4i MINERAL RECIPE VISIBLE</b><br><span class='small'>鉱物クラフトに元素レシピを表示。</span>";
+ el.innerHTML="<b>天地創造 v1.4j RECIPE VISIBLE FIX</b><br><span class='small'>鉱物クラフトの作るボタン上にレシピを表示し、不要な変成炉見出しを削除。</span>";
 }
 
 function renderAll(){
@@ -2874,7 +2899,7 @@ function renderCraft(){
    + Object.entries(rockRecipes).map(([k,r])=>"<div class='stockMini'><b>"+(rocks[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("");
  }
  const m=document.getElementById("mineralCraft");
- if(m)m.innerHTML=Object.entries(mineralRecipes).map(([id,r])=>"<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='costLine'><span class='recipeMini'>"+compactElementCost(r.cost)+"</span></p><p class='small'>×"+(minerals[id]||0)+"</p><button onclick=\"craftMineral('"+id+"')\">作る</button></div>").join("");
+ if(m)m.innerHTML=Object.entries(mineralRecipes).map(([id,r])=>"<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='small'>×"+(minerals[id]||0)+"</p><p class='costLine'><span class='recipeMini'>"+compactElementCost(r.cost)+"</span></p><button onclick=\"craftMineral('"+id+"')\">作る</button></div>").join("");
  const rw=document.getElementById("rockWorkshop");
  if(rw){
   rw.innerHTML=machineWorkshopHtml();
