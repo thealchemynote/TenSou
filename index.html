@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 v1.1b GEO_SCIENTISTS</title>
+<title>天地創造 v1.2 HOME_SCREEN</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -144,12 +144,43 @@ button.blue{background:#7bdff2}
 .systemWarn{color:#ffcf70;font-weight:900}
 </style>
 
+
+<style id="v12-home-style">
+.homeHero{min-height:78vh;display:grid;place-items:center}
+.homeCard{background:linear-gradient(180deg,#20263d,#0b1020);border:2px solid #ffd166;border-radius:24px;padding:24px;text-align:center;box-shadow:0 0 34px #ffd16644;max-width:520px;width:100%}
+.homeTitle{font-size:38px;letter-spacing:.16em;color:#ffd166;text-shadow:0 0 18px #ffd16688;margin:4px 0 12px}
+.homeSub{color:#c9c9c9;margin-bottom:16px}
+.homeBtn{display:block;width:100%;margin:10px 0;padding:14px;font-size:16px}
+.toggleOn{background:#85f0a3!important;color:#102!important}
+.toggleOff{background:#ffffff18!important;color:#fff!important;border:1px solid #ffffff33!important}
+.saveDate{background:#111827;border:1px solid #ffffff24;border-radius:12px;padding:10px;margin:12px 0;color:#c9c9c9}
+</style>
+
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">v1.1b｜鉱物系元素に修正</div></header>
+<header><h1>天地創造</h1><div class="small">v1.2｜ホーム画面追加</div></header>
 <div class="wrap">
 
-<section id="hub" class="screen active">
+
+<section id="home" class="screen active">
+ <div class="homeHero">
+  <div class="homeCard">
+   <div class="homeTitle">天地創造</div>
+   <div class="homeSub">PuzzleHub v1.2</div>
+   <div id="homeSaveDate" class="saveDate">セーブデータ確認中</div>
+   <button class="homeBtn" onclick="startNewGameFromHome()">最初から始める</button>
+   <button id="continueBtn" class="homeBtn blue" onclick="continueFromSave()">セーブから始める</button>
+   <button class="homeBtn ghost" onclick="openImportFile()">セーブデータ読み込み</button>
+   <div class="row">
+    <button id="soundToggleBtn" onclick="toggleSound()">音声 ON</button>
+    <button id="vibToggleBtn" onclick="toggleVibration()">バイブ ON</button>
+   </div>
+   <input type="file" id="homeImportFile" accept="application/json,.json" style="display:none" onchange="importBackup(event)">
+  </div>
+ </div>
+</section>
+
+<section id="hub" class="screen">
  <div class="card">
   <h2>🌍 拠点マップ</h2>
   <p>資金：<b id="money">0</b> G</p><div id="partyView" class="partyGrid"></div>
@@ -427,7 +458,7 @@ button.blue{background:#7bdff2}
 
 <section id="save" class="screen">
  <div class="card savePanel">
-  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.1b GEO SCIENTISTS</div>
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.1c SOUND PLUS</div>
   <p>
    <button onclick="manualSave()">セーブ</button>
    <button onclick="exportBackup()">バックアップ出力</button>
@@ -682,6 +713,7 @@ function evolveChar(id){
  pay(minerals,next.minerals||{});
  payRocks(next.rocks||{});
  charLevels[id]=lv+1;
+ sfxEvolve();
  saveGame();
  renderAll();
 }
@@ -727,6 +759,7 @@ function claimMuseumIncome(){
  if(inc<=0){alert("展示品がありません");return;}
  museumIncomeBank+=inc;
  money+=inc;
+ sfxQuest();
  saveGame();
  renderAll();
  alert("展示収入 "+inc+"G を受け取りました");
@@ -841,6 +874,7 @@ function completeOrder(id){
  if(!orderCanPay(o)){alert("納品素材が足りません");return;}
  orderPay(o);
  completedOrders[id]=true;
+ sfxQuest();
  money+=o.reward;
  saveGame();
  renderAll();
@@ -884,6 +918,7 @@ function writePaper(id){
  if(p.req.minerals)pay(minerals,p.req.minerals);
  if(p.req.rocks)payRocks(p.req.rocks);
  completedPapers[id]=true;
+ sfxQuest();
  money+=p.reward;
  saveGame(); renderAll();
  alert("論文完成！ 報酬 "+p.reward+"G");
@@ -906,6 +941,7 @@ function presentPaper(id){
  if(!p || !completedPapers[id]){alert("先に論文を完成させてください");return;}
  if(presentedPapers[id])return;
  presentedPapers[id]=true;
+ sfxQuest();
  const gain = id==="oceanRidge"?8:id==="volcanicArc"?5:3;
  prestige += gain;
  money += gain*500;
@@ -975,6 +1011,7 @@ function claimAward(id){
  if(!a || claimedAwards[id])return;
  if(!a.check()){alert("条件未達成");return;}
  claimedAwards[id]=true;
+ sfxUnlock();
  money+=a.reward;
  saveGame(); renderAll();
  alert(a.title+"を獲得！");
@@ -1047,6 +1084,7 @@ function attendCongress(id){
  money+=c.rewardMoney;
  prestige+=c.rewardPrestige;
  completedCongress[id]=true;
+ sfxUnlock();
  saveGame(); renderAll();
  alert(c.title+" 発表成功！");
 }
@@ -1100,6 +1138,7 @@ function claimQuest(id){
  if(!q || claimedQuests[id])return;
  if(!q.check()){alert("まだ達成していません");return;}
  claimedQuests[id]=true;
+ sfxQuest();
  money+=Math.round(q.reward*questRewardRate()*allIncomeRate());
  saveGame();
  renderAll();
@@ -1217,11 +1256,14 @@ let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_v1_1b_geo_scientists";
+const SAVE_KEY="tenchi_souzou_v1_2_home_screen";
 let saveReady=false;
+let soundEnabled=true;
+let vibrationEnabled=true;
 function gameData(){
  return {
-  version:"V1_1B_GEO_SCIENTISTS",
+  version:"V1_2_HOME_SCREEN",
+  savedAt:new Date().toISOString(),
   money,
   inv,
   minerals,
@@ -1252,7 +1294,9 @@ function gameData(){
   completedTeamMissions,
   unlockedStages,
   difficulty,
-  tavernFilter
+  tavernFilter,
+  soundEnabled,
+  vibrationEnabled
  };
 }
 function applyData(data){
@@ -1290,6 +1334,8 @@ function applyData(data){
  if(unlockedStages.length===0)unlockedStages=["fuji","hawaii"];
  if(data.difficulty && difficulties[data.difficulty])difficulty=data.difficulty;
  if(data.tavernFilter)tavernFilter=data.tavernFilter;
+ if(typeof data.soundEnabled==="boolean")soundEnabled=data.soundEnabled;
+ if(typeof data.vibrationEnabled==="boolean")vibrationEnabled=data.vibrationEnabled;
 }
 function saveGame(){
  try{
@@ -1297,6 +1343,7 @@ function saveGame(){
   localStorage.setItem(SAVE_KEY,JSON.stringify(gameData()));
   const s=document.getElementById("saveStatus");
   if(s)s.textContent="自動セーブ済み："+new Date().toLocaleTimeString();
+  renderHomeStatus();
  }catch(e){console.warn(e);}
 }
 function manualSave(){
@@ -1314,40 +1361,11 @@ function loadGame(){
  }catch(e){console.warn(e);}
 }
 function resetSave(){
- if(!confirm("セーブデータを削除して最初から始めますか？"))return;
- localStorage.removeItem(SAVE_KEY);
- money=0;
- Object.keys(inv).forEach(k=>inv[k]=0);
- Object.keys(minerals).forEach(k=>minerals[k]=0);
- Object.keys(rocks).forEach(k=>rocks[k]=0);
- Object.keys(equipment).forEach(k=>equipment[k]=false);
- discovered={minerals:{},rocks:{},stages:{}};
- claimedQuests={};
- transports={domesticPass:false,airplane:false,ship:false};
- stageRecords={};
- completedOrders={};
- clearedDifficulties={};
- labLevel=1;
- museumSlots=[null,null,null];
- museumIncomeBank=0;
- unlockedRegions={japan:true,pacific:false,world:false};
- completedPapers={};
- presentedPapers={};
- prestige=0;
- claimedAwards={};
- completedCongress={};
- endingCleared=false;
- legendary={diamond:0,ruby:0,sapphire:0,emerald:0,opal:0};
- ownedChars=["mineralogist","volcanologist"];
- party=["mineralogist","volcanologist"];
- charLevels={mineralogist:1,volcanologist:1,geochemist:1,oreScholar:1,sedimentologist:1,oceanographer:1,gemologist:1,metamorphic:1,fieldScout:1,curator:1,secretary:1,photographer:1,professor:1,international:1,deepsea:1,polar:1,planetary:1,appraiser:1,nemo:1,magellan:1,plato:1,archimedes:1,darwin:1,humboldt:1};
- unlockedStages=["fuji","hawaii"];
- difficulty="normal";
- tavernFilter="all";
+ if(!resetGameState(true))return;
  saveReady=true;
  saveGame();
  renderAll();
-saveGame();
+ renderHomeStatus();
 }
 function exportBackup(){
  try{
@@ -1365,7 +1383,8 @@ function exportBackup(){
  }catch(e){alert("バックアップ出力に失敗しました");console.warn(e);}
 }
 function openImportFile(){
- const input=document.getElementById("importFile");
+ const homeActive=document.getElementById("home")?.classList.contains("active");
+ const input=homeActive ? document.getElementById("homeImportFile") : document.getElementById("importFile");
  if(input){input.value="";input.click();}
 }
 function importBackup(event){
@@ -1375,8 +1394,9 @@ function importBackup(event){
  reader.onload=function(e){
   try{
    applyData(JSON.parse(e.target.result));
-   saveReady=true; saveGame(); renderAll();
+   saveReady=true; saveGame(); renderAll(); renderHomeStatus();
    alert("セーブデータを読み込みました");
+   show("hub");
   }catch(err){
    alert("読み込み失敗：JSON形式を確認してください");
    console.warn(err);
@@ -1403,10 +1423,95 @@ function testSoundVib(){
  updateSoundStatus();
 }
 
+
+function savedAtText(){
+ try{
+  const raw=localStorage.getItem(SAVE_KEY);
+  if(!raw)return "セーブデータなし";
+  const data=JSON.parse(raw);
+  if(!data.savedAt)return "セーブデータあり / 保存日時不明";
+  return "最終セーブ："+new Date(data.savedAt).toLocaleString();
+ }catch(e){return "セーブデータの確認に失敗";}
+}
+function hasSaveData(){
+ try{return !!localStorage.getItem(SAVE_KEY);}catch(e){return false;}
+}
+function renderHomeStatus(){
+ const d=document.getElementById("homeSaveDate");
+ if(d)d.textContent=savedAtText();
+ const c=document.getElementById("continueBtn");
+ if(c){c.disabled=!hasSaveData(); c.textContent=hasSaveData()?"セーブから始める":"セーブなし";}
+ const sb=document.getElementById("soundToggleBtn");
+ if(sb){sb.textContent="音声 "+(soundEnabled?"ON":"OFF"); sb.className=soundEnabled?"toggleOn":"toggleOff";}
+ const vb=document.getElementById("vibToggleBtn");
+ if(vb){vb.textContent="バイブ "+(vibrationEnabled?"ON":"OFF"); vb.className=vibrationEnabled?"toggleOn":"toggleOff";}
+}
+function startNewGameFromHome(){
+ if(hasSaveData() && !confirm("現在のセーブデータを消して最初から始めますか？"))return;
+ resetGameState(false);
+ saveReady=true;
+ saveGame();
+ show("hub");
+}
+function continueFromSave(){
+ loadGame();
+ saveReady=true;
+ show("hub");
+}
+function toggleSound(){
+ soundEnabled=!soundEnabled;
+ if(soundEnabled){initAudio(); sfxUnlock();}
+ saveReady=true; saveGame(); renderHomeStatus();
+}
+function toggleVibration(){
+ vibrationEnabled=!vibrationEnabled;
+ if(vibrationEnabled)vib([20,20,20]);
+ saveReady=true; saveGame(); renderHomeStatus();
+}
+function resetGameState(confirmFirst=true){
+ if(confirmFirst && !confirm("セーブデータを削除して最初から始めますか？"))return false;
+ try{localStorage.removeItem(SAVE_KEY);}catch(e){}
+ money=0;
+ Object.keys(inv).forEach(k=>inv[k]=0);
+ Object.keys(minerals).forEach(k=>minerals[k]=0);
+ Object.keys(rocks).forEach(k=>rocks[k]=0);
+ Object.keys(equipment).forEach(k=>equipment[k]=false);
+ discovered={minerals:{},rocks:{},stages:{}};
+ claimedQuests={};
+ transports={domesticPass:false,airplane:false,ship:false};
+ stageRecords={};
+ completedOrders={};
+ clearedDifficulties={};
+ labLevel=1;
+ museumSlots=[null,null,null];
+ museumIncomeBank=0;
+ unlockedRegions={japan:true,pacific:false,world:false};
+ completedPapers={};
+ presentedPapers={};
+ prestige=0;
+ claimedAwards={};
+ completedCongress={};
+ endingCleared=false;
+ legendary={diamond:0,ruby:0,sapphire:0,emerald:0,opal:0};
+ ownedChars=["mineralogist","volcanologist"];
+ party=["mineralogist","volcanologist"];
+ charLevels={mineralogist:1,volcanologist:1,geochemist:1,oreScholar:1,sedimentologist:1,oceanographer:1,gemologist:1,metamorphic:1,fieldScout:1,curator:1,secretary:1,photographer:1,professor:1,international:1,deepsea:1,polar:1,planetary:1,appraiser:1,nemo:1,magellan:1,plato:1,archimedes:1,darwin:1,humboldt:1,dalton:1,mendeleev:1,avogadro:1,newton:1,einstein:1,gaia:1};
+ charExp={};
+ unlockedSecrets={};
+ completedTeamMissions={};
+ unlockedStages=["fuji","hawaii"];
+ difficulty="normal";
+ tavernFilter="all";
+ current=null;
+ renderAll();
+ return true;
+}
+
 function show(id){
  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
  document.getElementById(id).classList.add("active");
  renderAll();
+ renderHomeStatus();
 }
 function rand(arr){return arr[Math.floor(Math.random()*arr.length)]}
 function atom(){
@@ -1430,6 +1535,7 @@ function startStage(id){
  comboMultiplier=1;
  initBoard();
  show("play");
+ sfxStageUnlock();
  document.getElementById("stageName").textContent=stages[id].icon+" "+stages[id].name;
  renderAll();
 }
@@ -1469,6 +1575,7 @@ function buyTransport(id){
  if(money<t.cost){alert("資金不足");return;}
  money-=t.cost;
  transports[id]=true;
+ sfxStageUnlock();
  saveGame();
  renderAll();
 }
@@ -1520,6 +1627,7 @@ function unlockStage(id){
  if(money<s.unlockCost){alert("資金不足");return;}
  money-=s.unlockCost;
  unlockedStages.push(id);
+ sfxStageUnlock();
  renderAll();
  saveGame();
 }
@@ -1528,7 +1636,7 @@ function unlockStage(id){
 function renderFinalNotice(){
  const el=document.getElementById("finalNotice");
  if(!el)return;
- el.innerHTML="<b>天地創造 v1.1b GEO SCIENTISTS</b><br><span class='small'>探索・クラフト・仲間育成・施設効果・偉人・チーム実績を統合。</span>";
+ el.innerHTML="<b>天地創造 v1.1c SOUND PLUS</b><br><span class='small'>探索・クラフト・仲間育成・偉人・チーム実績・サウンド演出を統合。</span>";
 }
 
 function renderAll(){
@@ -1619,6 +1727,7 @@ function developEquipment(id){
  money-=actualCost;
  pay(minerals,e.cost);
  equipment[id]=true;
+ sfxEquip();
  saveGame();
  renderAll();
 }
@@ -1646,6 +1755,7 @@ function craftMineral(id){
  pay(inv,r.cost);
  minerals[id]=(minerals[id]||0)+1+regionalBonus(id)+(id==="muscovite"&&partyHas("metamorphic")?partyLevel("metamorphic"):0);
  markDiscovery('minerals',id);
+ sfxCraft();
  saveGame();
  document.getElementById("log") && (document.getElementById("log").textContent=r.name+"をクラフトした！");
  renderAll();
@@ -1656,6 +1766,7 @@ function craftRock(id){
  pay(minerals,r.cost);
  rocks[id]=(rocks[id]||0)+1+(id==="schist"&&partyLevel("metamorphic")>=2?1:0);
  markDiscovery('rocks',id);
+ sfxCraft();
  saveGame();
  document.getElementById("log") && (document.getElementById("log").textContent=r.name+"を生成した！");
  renderAll();
@@ -1813,6 +1924,7 @@ function recordTeamMissions(){
    completedTeamMissions[id]=true;
    const r=teamMissionCatalog[id]?.reward||0;
    money+=r;
+   sfxTeam();
    toast("チーム実績："+teamCatalog[id].name);
   }
  });
@@ -2055,6 +2167,7 @@ function checkSecretUnlocks(){
    if(!ownedChars.includes(id))ownedChars.push(id);
    if(charLevels[id]==null)charLevels[id]=1;
    if(charExp[id]==null)charExp[id]=0;
+   sfxUnlock();
    toast(s.name+"が仲間になった！");
   }
  });
@@ -2131,6 +2244,7 @@ function hireChar(id){
  if(money<c.cost){alert("資金不足");return;}
  money-=c.cost;
  ownedChars.push(id);
+ sfxHire();
  if(charOrg(id)==="探索隊" && party.length<4)party.push(id);
  saveGame();
  renderAll();
@@ -2169,54 +2283,96 @@ function initAudio(){
  try{
   if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
   if(audioCtx.state==="suspended")audioCtx.resume();
+  // 無音ノック。Chrome/iOSで最初のユーザー操作後に音を通すため。
+  if(audioCtx && !window.__audioPrimed){
+   const g=audioCtx.createGain();
+   g.gain.value=0.0001;
+   const o=audioCtx.createOscillator();
+   o.frequency.value=220;
+   o.connect(g); g.connect(audioCtx.destination);
+   o.start(); o.stop(audioCtx.currentTime+0.02);
+   window.__audioPrimed=true;
+  }
   setTimeout(updateSoundStatus,50);
  }catch(e){}
 }
-function tone(f,d){
+function tone(f,d=.08,type="sine",vol=.055,delay=0){
+ if(!soundEnabled)return;
  try{
+  initAudio();
   if(!audioCtx)return;
   const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-  o.frequency.value=f; o.connect(g); g.connect(audioCtx.destination);
-  const t=audioCtx.currentTime;
-  g.gain.setValueAtTime(.06,t); g.gain.exponentialRampToValueAtTime(.001,t+d);
-  o.start(t); o.stop(t+d);
+  o.type=type;
+  o.frequency.value=f;
+  o.connect(g); g.connect(audioCtx.destination);
+  const t=audioCtx.currentTime+delay;
+  g.gain.setValueAtTime(Math.max(0.0001,vol),t);
+  g.gain.exponentialRampToValueAtTime(.001,t+d);
+  o.start(t); o.stop(t+d+.02);
  }catch(e){}
 }
+function noise(d=.08,vol=.04,delay=0){
+ if(!soundEnabled)return;
+ try{
+  initAudio();
+  if(!audioCtx)return;
+  const buffer=audioCtx.createBuffer(1, audioCtx.sampleRate*d, audioCtx.sampleRate);
+  const data=buffer.getChannelData(0);
+  for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*(1-i/data.length);
+  const src=audioCtx.createBufferSource(), g=audioCtx.createGain();
+  src.buffer=buffer; src.connect(g); g.connect(audioCtx.destination);
+  const t=audioCtx.currentTime+delay;
+  g.gain.setValueAtTime(vol,t);
+  g.gain.exponentialRampToValueAtTime(.001,t+d);
+  src.start(t); src.stop(t+d+.02);
+ }catch(e){}
+}
+function melody(notes,step=80){
+ initAudio();
+ notes.forEach((n,i)=>setTimeout(()=>tone(n[0],n[1]||.08,n[2]||"sine",n[3]||.055),i*step));
+}
 function beep(kind){
- if(kind==="pick") tone(500,.04);
- if(kind==="clear"){tone(260,.06);setTimeout(()=>tone(650,.08),70)}
- if(kind==="fail") tone(150,.12);
- if(kind==="win"){tone(520,.08);setTimeout(()=>tone(800,.12),90)}
+ if(kind==="pick") sfxTrace();
+ if(kind==="clear") sfxClear(3);
+ if(kind==="fail") sfxError();
+ if(kind==="win") sfxSuccess();
 }
-function vib(p){try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}}
+function vib(p){try{if(vibrationEnabled&&navigator.vibrate)navigator.vibrate(p)}catch(e){}}
 
-function toast(msg){
- const t=document.getElementById("toast");
- if(!t)return;
- t.textContent=msg;
- t.classList.add("show");
- setTimeout(()=>t.classList.remove("show"),1200);
-}
-function spark(msg,x=window.innerWidth/2,y=window.innerHeight/2){
- const s=document.createElement("div");
- s.className="spark";
- s.textContent=msg;
- s.style.left=x+"px";
- s.style.top=y+"px";
- document.body.appendChild(s);
- setTimeout(()=>s.remove(),900);
-}
-function melody(notes){
- if(!audioCtx)return;
- notes.forEach((n,i)=>setTimeout(()=>tone(n[0],n[1]||.08),i*80));
+function sfxTrace(){ tone(520,.035,"triangle",.035); }
+function sfxTraceAdd(n){
+ const f=500+Math.min(10,n)*32;
+ tone(f,.035,"triangle",.032);
 }
 function sfxClear(n){
- if(n>=8) melody([[330,.06],[520,.06],[780,.12]]);
- else if(n>=5) melody([[260,.05],[520,.09]]);
- else melody([[300,.05],[560,.07]]);
+ if(n>=8) sfxRainbow();
+ else if(n>=5) sfxBomb();
+ else melody([[310,.05,"triangle",.045],[620,.07,"triangle",.05]],65);
 }
-function sfxSuccess(){melody([[420,.08],[560,.08],[740,.12],[980,.18]]);}
-function sfxEnding(){melody([[330,.1],[440,.1],[550,.1],[660,.1],[880,.25]]);}
+function sfxBomb(){
+ noise(.12,.06,0);
+ tone(120,.08,"sawtooth",.035,0);
+ tone(240,.08,"square",.03,.04);
+ tone(520,.08,"triangle",.04,.08);
+}
+function sfxRainbow(){
+ melody([[520,.06,"sine",.05],[660,.06,"sine",.05],[780,.07,"sine",.055],[1040,.12,"triangle",.06]],55);
+}
+function sfxSuccess(){melody([[420,.08,"triangle",.05],[560,.08,"triangle",.055],[740,.12,"sine",.06],[980,.18,"sine",.065]],85);}
+function sfxGameOver(){melody([[260,.12,"sawtooth",.05],[210,.14,"sawtooth",.045],[160,.20,"sawtooth",.04]],120);}
+function sfxError(){tone(150,.12,"sawtooth",.05);}
+function sfxUnlock(){melody([[440,.06,"triangle",.05],[660,.08,"triangle",.055],[880,.14,"sine",.06]],75);}
+function sfxHire(){melody([[330,.05,"triangle",.04],[500,.06,"triangle",.05],[660,.09,"sine",.055]],70);}
+function sfxStageUnlock(){melody([[300,.06,"triangle",.045],[450,.07,"triangle",.05],[620,.08,"triangle",.055],[840,.12,"sine",.06]],70);}
+function sfxCraft(){melody([[260,.04,"square",.035],[390,.05,"triangle",.045],[520,.08,"triangle",.05]],65);}
+function sfxEquip(){melody([[220,.05,"square",.04],[440,.06,"triangle",.05],[700,.10,"sine",.055]],75);}
+function sfxEvolve(){melody([[500,.06,"triangle",.05],[650,.06,"triangle",.055],[820,.08,"triangle",.06],[1100,.16,"sine",.065]],70);}
+function sfxQuest(){melody([[420,.06,"triangle",.05],[630,.09,"sine",.055]],80);}
+function sfxTeam(){melody([[360,.06,"triangle",.045],[540,.06,"triangle",.05],[720,.1,"sine",.055]],75);}
+function sfxEnding(){melody([[330,.1,"triangle",.05],[440,.1,"triangle",.055],[550,.1,"triangle",.06],[660,.1,"sine",.06],[880,.25,"sine",.07]],95);}
+document.addEventListener("pointerdown",()=>initAudio(),{once:false});
+document.addEventListener("touchstart",()=>initAudio(),{once:false});
+document.addEventListener("click",()=>initAudio(),{once:false});
 
 
 function markClearing(list){
@@ -2242,7 +2398,7 @@ document.addEventListener("pointerdown",e=>{
  currentColor=board[+c.dataset.y][+c.dataset.x].special==='rainbow'?'rainbow':board[+c.dataset.y][+c.dataset.x].color;
  c.classList.add("sel");
  path.push({x:+c.dataset.x,y:+c.dataset.y});
- beep("pick"); vib(8);
+ sfxTraceAdd(1); vib(8);
 });
 document.addEventListener("pointermove",e=>{
  if(!selecting)return;
@@ -2255,14 +2411,14 @@ document.addEventListener("pointermove",e=>{
  if(!near(path[path.length-1],{x,y}))return;
  c.classList.add("sel");
  path.push({x,y});
- beep("pick"); vib(5);
+ sfxTraceAdd(path.length); vib(5);
 });
 window.addEventListener("pointerup",()=>{
  if(!selecting)return;
  selecting=false;
  if(path.length<3){ comboMultiplier=1;
   document.getElementById("log").textContent="3個以上必要";
-  beep("fail"); toast("探索失敗"); vib(20); draw(); return;
+  sfxError(); toast("探索失敗"); vib(20); draw(); return;
  }
  moves--;
  if(path.length>=8) comboMultiplier=Math.min(5,comboMultiplier+1.0);
@@ -2368,7 +2524,7 @@ function finish(ok){
  }else{
   document.getElementById("modalTitle").textContent="探索失敗";
   document.getElementById("modalText").innerHTML="手数がなくなった。素材は持ち帰れなかった。";
-  beep("fail");
+  sfxGameOver();
  }
  document.getElementById("modal").classList.add("show");
 }
@@ -2380,7 +2536,7 @@ function closeModal(){
 loadGame();
 saveReady=true;
 renderAll();
-saveGame();
+renderHomeStatus();
 </script>
 </body>
 </html>
