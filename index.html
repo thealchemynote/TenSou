@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 v1.0 FINAL</title>
+<title>天地創造 v1.1b GEO_SCIENTISTS</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -146,7 +146,7 @@ button.blue{background:#7bdff2}
 
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">v1.0 FINAL｜統合完成版</div></header>
+<header><h1>天地創造</h1><div class="small">v1.1b｜鉱物系元素に修正</div></header>
 <div class="wrap">
 
 <section id="hub" class="screen active">
@@ -427,7 +427,7 @@ button.blue{background:#7bdff2}
 
 <section id="save" class="screen">
  <div class="card savePanel">
-  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.0 FINAL</div>
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.1b GEO SCIENTISTS</div>
   <p>
    <button onclick="manualSave()">セーブ</button>
    <button onclick="exportBackup()">バックアップ出力</button>
@@ -471,11 +471,17 @@ const characters={
  deepsea:{name:"深海探査員",face:"🚢",cost:13000,elements:["Ca","Na"],role:"深海",desc:"CaとNaを回収できる。"},
  polar:{name:"極地研究者",face:"❄️",cost:14000,elements:[],role:"レア",desc:"レア鉱物・伝説鉱物の発見を補助。"},
  planetary:{name:"惑星地質学者",face:"☄️",cost:20000,elements:[],role:"最終",desc:"最終研究向けの終盤仲間。"},
+ dalton:{name:"ドルトン",face:"⚛️",cost:0,elements:["SiO₂","Fe"],role:"偉人",secret:true,desc:"SiO₂とFeを回収できる。鉱物系元素の回収量を上げる。"},
+ mendeleev:{name:"メンデレーエフ",face:"🧪",cost:0,elements:["Na","Mg","Al","SiO₂","Fe","Ca"],role:"偉人",secret:true,desc:"鉱物系主要元素を広く回収できる。元素系報酬を上げる。"},
+ avogadro:{name:"アボガドロ",face:"🔢",cost:0,elements:["Na","Ca"],role:"偉人",secret:true,desc:"NaとCaを回収できる。鉱物系元素の回収量を上げる。"},
+ newton:{name:"ニュートン",face:"🍎",cost:0,elements:["Fe","SiO₂"],role:"偉人",secret:true,desc:"FeとSiO₂を回収できる。探索報酬を上げる。"},
+ einstein:{name:"アインシュタイン",face:"🌌",cost:0,elements:["Al","SiO₂","Fe"],role:"偉人",secret:true,desc:"Al・SiO₂・Feを回収できる。全体収入とEXPを上げる。"},
+ gaia:{name:"ガイア",face:"🌍",cost:0,elements:["Na","Mg","Al","SiO₂","Fe","Ca"],role:"偉人",secret:true,desc:"鉱物系主要元素をすべて回収できる。最終隠し存在。"},
  appraiser:{name:"鑑定士",face:"🔍",cost:1200,elements:[],role:"鑑定",desc:"品質・鑑定補助枠。今は編成戦略用。"}
 };
 let ownedChars=["mineralogist","volcanologist"];
 let party=["mineralogist","volcanologist"];
-let charLevels={mineralogist:1,volcanologist:1,geochemist:1,oreScholar:1,sedimentologist:1,oceanographer:1,gemologist:1,metamorphic:1,fieldScout:1,curator:1,secretary:1,photographer:1,professor:1,international:1,deepsea:1,polar:1,planetary:1,appraiser:1,nemo:1,magellan:1,plato:1,archimedes:1,darwin:1,humboldt:1};
+let charLevels={mineralogist:1,volcanologist:1,geochemist:1,oreScholar:1,sedimentologist:1,oceanographer:1,gemologist:1,metamorphic:1,fieldScout:1,curator:1,secretary:1,photographer:1,professor:1,international:1,deepsea:1,polar:1,planetary:1,appraiser:1,nemo:1,magellan:1,plato:1,archimedes:1,darwin:1,humboldt:1,dalton:1,mendeleev:1,avogadro:1,newton:1,einstein:1,gaia:1};
 let charExp={};
 let lastExpResults=[];
 let unlockedSecrets={};
@@ -484,8 +490,8 @@ let completedTeamMissions={};
 const growthRecipes={
  mineralogist:[
   null,
-  {title:"主任鉱物学者",money:600,equip:"loupe",minerals:{quartz:2},rocks:{},bonus:{"SiO₂":1}},
-  {title:"鉱物学教授",money:2500,equip:"polar",minerals:{quartz:4,kfeldspar:2},rocks:{granite:1},bonus:{"SiO₂":2}}
+  {title:"鉱物修士",money:600,equip:"loupe",minerals:{quartz:2},rocks:{},bonus:{"SiO₂":1}},
+  {title:"鉱物研究員",money:2500,equip:"polar",minerals:{quartz:4,kfeldspar:2},rocks:{granite:1},bonus:{"SiO₂":2}}
  ],
  volcanologist:[
   null,
@@ -494,8 +500,8 @@ const growthRecipes={
  ],
  geochemist:[
   null,
-  {title:"主任地球化学者",money:900,equip:"geochemKit",minerals:{kfeldspar:2},rocks:{},bonus:{Al:1}},
-  {title:"地球化学教授",money:3200,equip:"polar",minerals:{kfeldspar:4,muscovite:2},rocks:{granite:1},bonus:{Al:2}}
+  {title:"地球化学修士",money:900,equip:"geochemKit",minerals:{kfeldspar:2},rocks:{},bonus:{Al:1}},
+  {title:"地球化学研究員",money:3200,equip:"polar",minerals:{kfeldspar:4,muscovite:2},rocks:{granite:1},bonus:{Al:2}}
  ],
  oreScholar:[
   null,
@@ -509,8 +515,8 @@ const growthRecipes={
  ],
  oceanographer:[
   null,
-  {title:"主任海洋学者",money:1400,equip:"sampler",minerals:{albite:2},rocks:{},bonus:{Na:1}},
-  {title:"深海地質学者",money:4200,equip:"deepseaROV",minerals:{albite:4,plagioclase:2},rocks:{basalt:1},bonus:{Na:2}}
+  {title:"海洋修士",money:1400,equip:"sampler",minerals:{albite:2},rocks:{},bonus:{Na:1}},
+  {title:"海洋研究員",money:4200,equip:"deepseaROV",minerals:{albite:4,plagioclase:2},rocks:{basalt:1},bonus:{Na:2}}
  ],
  gemologist:[
   null,
@@ -564,8 +570,8 @@ const growthRecipes={
  ],
  planetary:[
   null,
-  {title:"主任惑星地質学者",money:16000,equip:"planetaryProbe",minerals:{olivine:5,magnetite:5},rocks:{peridotite:2},bonus:{}},
-  {title:"惑星地質学教授",money:40000,equip:"electronScope",minerals:{quartz:10,magnetite:8},rocks:{peridotite:3,rhyolite:2},bonus:{}}
+  {title:"惑星修士",money:16000,equip:"planetaryProbe",minerals:{olivine:5,magnetite:5},rocks:{peridotite:2},bonus:{}},
+  {title:"惑星研究員",money:40000,equip:"electronScope",minerals:{quartz:10,magnetite:8},rocks:{peridotite:3,rhyolite:2},bonus:{}}
  ],
  nemo:[
   null,
@@ -597,14 +603,52 @@ const growthRecipes={
   {title:"世界博物学者",money:9000,equip:"globalKit",minerals:{quartz:6,albite:3},rocks:{granite:1},bonus:{}},
   {title:"総合自然探検家",money:24000,equip:"planetaryProbe",minerals:{magnetite:5,muscovite:5},rocks:{schist:2},bonus:{}}
  ],
+ dalton:[
+  null,
+  {title:"原子論の研究者",money:12000,equip:"geochemKit",minerals:{quartz:4},rocks:{},bonus:{"SiO₂":1,Fe:1}},
+  {title:"原子論の祖",money:26000,equip:"electronScope",minerals:{quartz:8,magnetite:3},rocks:{rhyolite:1},bonus:{"SiO₂":2,Fe:2}}
+ ],
+ mendeleev:[
+  null,
+  {title:"周期表の研究者",money:16000,equip:"paperDesk",minerals:{kfeldspar:4,magnetite:3},rocks:{granite:1},bonus:{Na:1,Mg:1,Al:1,Fe:1}},
+  {title:"周期表の完成者",money:36000,equip:"electronScope",minerals:{quartz:8,muscovite:4},rocks:{schist:2},bonus:{"SiO₂":1,Na:2,Mg:2,Al:2,Fe:2,Ca:2}}
+ ],
+ avogadro:[
+  null,
+  {title:"分子論の研究者",money:14000,equip:"spectroscope",minerals:{quartz:5,albite:3},rocks:{},bonus:{Na:1,Ca:1}},
+  {title:"分子論の巨人",money:30000,equip:"electronScope",minerals:{quartz:8,albite:5},rocks:{rhyolite:1},bonus:{Na:2,Ca:2}}
+ ],
+ newton:[
+  null,
+  {title:"自然哲学者",money:18000,equip:"fieldDrone",minerals:{magnetite:5,quartz:5},rocks:{gabbro:1},bonus:{Fe:1,"SiO₂":1}},
+  {title:"万有引力の巨人",money:42000,equip:"planetaryProbe",minerals:{magnetite:8,quartz:10},rocks:{peridotite:2},bonus:{Fe:2,"SiO₂":2}}
+ ],
+ einstein:[
+  null,
+  {title:"相対論研究者",money:30000,equip:"electronScope",minerals:{quartz:10,magnetite:5},rocks:{rhyolite:2},bonus:{Al:1,"SiO₂":1,Fe:1}},
+  {title:"時空の理論家",money:70000,equip:"planetaryProbe",minerals:{quartz:15,magnetite:10,muscovite:6},rocks:{peridotite:3,schist:2},bonus:{Al:2,"SiO₂":2,Fe:2}}
+ ],
+ gaia:[
+  null,
+  {title:"地球の意志",money:50000,equip:"planetaryProbe",minerals:{quartz:15,olivine:8,muscovite:6},rocks:{peridotite:3,schist:3},bonus:{Na:1,Mg:1,Al:1,"SiO₂":1,Fe:1,Ca:1}},
+  {title:"天地創造の化身",money:120000,equip:"electronScope",minerals:{quartz:25,magnetite:12,muscovite:12,olivine:12},rocks:{peridotite:5,schist:5,gabbro:3},bonus:{Na:3,Mg:3,Al:3,"SiO₂":3,Fe:3,Ca:3}}
+ ],
  appraiser:[
   null,
   {title:"主任鑑定士",money:1500,equip:"spectroscope",minerals:{quartz:3},rocks:{},bonus:{}},
   {title:"伝説の鑑定士",money:5200,equip:"electronScope",minerals:{quartz:5,kfeldspar:2},rocks:{granite:1},bonus:{}}
  ]
 };
+
 function charTitle(id){
  const lv=charLevels[id]||1;
+ const titleMap={
+  mineralogist:["鉱物学士","鉱物修士","鉱物研究員","鉱物博士","鉱物学者ダナ"],
+  geochemist:["地球化学学士","地球化学修士","地球化学研究員","地球化学博士","地球化学者ゴールドシュミット"],
+  oceanographer:["海洋学士","海洋修士","海洋研究員","海洋博士","海洋学者クストー"],
+  planetary:["惑星学士","惑星修士","惑星研究員","惑星博士","惑星地質学者シューメーカー"]
+ };
+ if(titleMap[id])return titleMap[id][Math.max(1,Math.min(5,lv))-1];
  if(lv===1)return characters[id].name;
  return growthRecipes[id] && growthRecipes[id][lv-1] ? growthRecipes[id][lv-1].title : characters[id].name;
 }
@@ -1056,7 +1100,7 @@ function claimQuest(id){
  if(!q || claimedQuests[id])return;
  if(!q.check()){alert("まだ達成していません");return;}
  claimedQuests[id]=true;
- money+=q.reward;
+ money+=Math.round(q.reward*questRewardRate()*allIncomeRate());
  saveGame();
  renderAll();
 }
@@ -1066,7 +1110,7 @@ function renderQuests(){
  box.innerHTML=Object.entries(quests).map(([id,q])=>{
   const done=q.check();
   const claimed=!!claimedQuests[id];
-  return "<div class='questCard "+(claimed?'claimed':done?'done':'')+"'><b>"+q.title+"</b><p class='small'>"+q.desc+"</p><p class='questReward'>報酬 "+q.reward+"G</p>"+(claimed?"<span class='boost'>受取済み</span>":done?"<button onclick=\"claimQuest('"+id+"')\">受け取る</button>":"<span class='small'>未達成</span>")+"</div>";
+  return "<div class='questCard "+(claimed?'claimed':done?'done':'')+"'><b>"+q.title+"</b><p class='small'>"+q.desc+"</p><p class='questReward'>報酬 "+Math.round(q.reward*questRewardRate()*allIncomeRate())+"G</p>"+(claimed?"<span class='boost'>受取済み</span>":done?"<button onclick=\"claimQuest('"+id+"')\">受け取る</button>":"<span class='small'>未達成</span>")+"</div>";
  }).join("");
 }
 
@@ -1173,11 +1217,11 @@ let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_v1_final";
+const SAVE_KEY="tenchi_souzou_v1_1b_geo_scientists";
 let saveReady=false;
 function gameData(){
  return {
-  version:"V1_FINAL",
+  version:"V1_1B_GEO_SCIENTISTS",
   money,
   inv,
   minerals,
@@ -1243,10 +1287,7 @@ function applyData(data){
  if(data.completedTeamMissions){completedTeamMissions=data.completedTeamMissions||{};}
  if(party.length===0)party=["mineralogist"];
  if(Array.isArray(data.unlockedStages))unlockedStages=data.unlockedStages.filter(id=>stages[id]);
- if(unlockedStages.length===0)charExp={};
- unlockedSecrets={};
- completedTeamMissions={};
- unlockedStages=["fuji","hawaii"];
+ if(unlockedStages.length===0)unlockedStages=["fuji","hawaii"];
  if(data.difficulty && difficulties[data.difficulty])difficulty=data.difficulty;
  if(data.tavernFilter)tavernFilter=data.tavernFilter;
 }
@@ -1382,7 +1423,7 @@ function initBoard(){
 }
 function startStage(id){
  if(!unlockedStages.includes(id)){alert('まだ解放されていません');return;}
- current=id; moves=Math.max(5, stages[id].moves + difficulties[difficulty].moveBonus);
+ current=id; moves=Math.max(5, stages[id].moves + difficulties[difficulty].moveBonus + newtonMoveBonus());
  run={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
  runCollected={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
  runMissed={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
@@ -1406,7 +1447,7 @@ function effectiveGoals(stageId=current){
  return out;
 }
 function effectiveReward(stageId=current){
- return Math.round(stages[stageId].reward*difficulties[difficulty].rewardRate*labRewardRate()*fieldRewardRate()*secretRewardRate());
+ return Math.round(stages[stageId].reward*difficulties[difficulty].rewardRate*labRewardRate()*fieldRewardRate()*secretRewardRate()*allIncomeRate());
 }
 
 
@@ -1487,7 +1528,7 @@ function unlockStage(id){
 function renderFinalNotice(){
  const el=document.getElementById("finalNotice");
  if(!el)return;
- el.innerHTML="<b>天地創造 v1.0 FINAL</b><br><span class='small'>探索・クラフト・仲間育成・施設効果・偉人・チーム実績を統合。</span>";
+ el.innerHTML="<b>天地創造 v1.1b GEO SCIENTISTS</b><br><span class='small'>探索・クラフト・仲間育成・施設効果・偉人・チーム実績を統合。</span>";
 }
 
 function renderAll(){
@@ -1685,7 +1726,11 @@ const teamCatalog={
  nemoTeam:{name:"ノーチラス号",members:["nemo","deepsea","oceanographer"],effect:"深海・伝説鉱物率+100%",type:"legend",rate:1.0},
  magellanTeam:{name:"世界航路隊",members:["magellan","international","humboldt"],effect:"探索報酬+40%",type:"reward",rate:.40},
  academyTeam:{name:"アカデメイア",members:["plato","professor","secretary"],effect:"論文研究費-30%",type:"paper",rate:.30},
- inventionTeam:{name:"発明工房",members:["archimedes","geochemist"],effect:"装備開発費-20%",type:"equipment",rate:.20}
+ inventionTeam:{name:"発明工房",members:["archimedes","geochemist"],effect:"装備開発費-20%",type:"equipment",rate:.20},
+ atomicTeam:{name:"原子論チーム",members:["dalton","avogadro"],effect:"鉱物系元素回収+15%",type:"allCollect",rate:.15},
+ periodicTeam:{name:"周期表チーム",members:["dalton","mendeleev","geochemist"],effect:"Al・Na・Mg・Fe回収+25%",type:"collect",atoms:["Al","Na","Mg","Fe"],rate:.25},
+ physicsTeam:{name:"物理学チーム",members:["newton","einstein"],effect:"探索報酬+30%",type:"reward",rate:.30},
+ earthTeam:{name:"天地創造チーム",members:["gaia","einstein","darwin","humboldt"],effect:"鉱物系元素回収+50%",type:"allCollect",rate:.50}
 };
 function hasTeam(id){
  const t=teamCatalog[id];
@@ -1699,6 +1744,7 @@ function teamCollectBonus(atomName){
  activeTeams().forEach(id=>{
   const t=teamCatalog[id];
   if(t.type==="collect" && t.atoms && t.atoms.includes(atomName))r+=t.rate;
+  if(t.type==="allCollect")r+=t.rate;
  });
  return r;
 }
@@ -1755,7 +1801,11 @@ const teamMissionCatalog={
  nemoTeam:{reward:9000,desc:"ノーチラス号で探索成功"},
  magellanTeam:{reward:9000,desc:"世界航路隊で探索成功"},
  academyTeam:{reward:9000,desc:"アカデメイアで探索成功"},
- inventionTeam:{reward:9000,desc:"発明工房で探索成功"}
+ inventionTeam:{reward:9000,desc:"発明工房で探索成功"},
+ atomicTeam:{reward:12000,desc:"原子論チームで探索成功"},
+ periodicTeam:{reward:15000,desc:"周期表チームで探索成功"},
+ physicsTeam:{reward:18000,desc:"物理学チームで探索成功"},
+ earthTeam:{reward:30000,desc:"天地創造チームで探索成功"}
 };
 function recordTeamMissions(){
  activeTeams().forEach(id=>{
@@ -1815,6 +1865,7 @@ function legendaryRateBonus(){
 
 function charOrg(id){
  const r=characters[id]?.role||"探索";
+ if(r==="偉人")return "偉人";
  if(["研究所","論文","世界","万能","岩石"].includes(r))return "研究所";
  if(["博物館","図鑑","鑑定"].includes(r))return "博物館";
  return "探索隊";
@@ -1842,7 +1893,7 @@ function gainOrganizationExp(){
   const org=charOrg(id);
   const base = org==="探索隊" ? 5 : 4;
   const bonus = org==="研究所" ? professorBoost : 0;
-  gainCharExp(id,base+bonus+secretExpBonus());
+  gainCharExp(id,Math.round((base+bonus+secretExpBonus())*allExpRate()));
  });
 }
 function expBar(id){
@@ -1892,6 +1943,36 @@ function renderParty(){
 }
 
 
+
+function totalElementCount(){
+ return Object.values(inv||{}).reduce((a,b)=>a+(Number(b)||0),0);
+}
+function hiddenCollectRate(){
+ let r=0;
+ if(ownedChars.includes("dalton"))r+=0.10;
+ if(ownedChars.includes("avogadro"))r+=0.20;
+ if(ownedChars.includes("gaia"))r+=0.25;
+ return r;
+}
+function allIncomeRate(){
+ let r=1;
+ if(ownedChars.includes("einstein"))r+=0.15;
+ if(ownedChars.includes("gaia"))r+=0.25;
+ return r;
+}
+function allExpRate(){
+ let r=1;
+ if(ownedChars.includes("einstein"))r+=0.15;
+ if(ownedChars.includes("gaia"))r+=0.25;
+ return r;
+}
+function questRewardRate(){
+ return ownedChars.includes("mendeleev") ? 1.30 : 1;
+}
+function newtonMoveBonus(){
+ return ownedChars.includes("newton") ? 1 : 0;
+}
+
 function secretRewardRate(){
  let r=1;
  if(ownedChars.includes("magellan"))r+=0.20*(charLevels.magellan||1);
@@ -1929,7 +2010,13 @@ function facilityEffectValue(id){
   plato:"論文研究費DOWN",
   archimedes:"装備開発費DOWN",
   darwin:"EXP補助",
-  humboldt:"探索報酬 +"+(8*lv)+"%"
+  humboldt:"探索報酬 +"+(8*lv)+"%",
+  dalton:"鉱物系元素回収 +10%",
+  mendeleev:"依頼報酬 +30%",
+  avogadro:"鉱物系元素回収 +20%",
+  newton:"探索報酬・手数 +1",
+  einstein:"全収入・全EXP +15%",
+  gaia:"鉱物系元素・全報酬・全EXP +25%"
  };
  return map[id]||null;
 }
@@ -1951,7 +2038,15 @@ const secretCatalog={
  plato:{name:"プラトン",condition:"論文3本・大学教授Lv3",check:()=> Object.keys(completedPapers||{}).length>=3 && (charLevels.professor||1)>=3},
  archimedes:{name:"アルキメデス",condition:"装備8種開発・地球化学者Lv3",check:()=> Object.values(equipment||{}).filter(Boolean).length>=8 && (charLevels.geochemist||1)>=3},
  darwin:{name:"ダーウィン",condition:"仲間5人がLv3以上・進化研究の到達",check:()=> Object.values(charLevels||{}).filter(v=>v>=3).length>=5},
- humboldt:{name:"フンボルト",condition:"図鑑達成率50%以上・フィールド調査員Lv3",check:()=> ((mineralsFoundSafe()+rocksFoundSafe()+stagesFoundSafe())/(Object.keys(mineralRecipes).length+Object.keys(rockRecipes).length+Object.keys(stages).length))>=.5 && (charLevels.fieldScout||1)>=3}
+ humboldt:{name:"フンボルト",condition:"図鑑達成率50%以上・フィールド調査員Lv3",check:()=> ((mineralsFoundSafe()+rocksFoundSafe()+stagesFoundSafe())/(Object.keys(mineralRecipes).length+Object.keys(rockRecipes).length+Object.keys(stages).length))>=.5 && (charLevels.fieldScout||1)>=3},
+
+ dalton:{name:"ドルトン",condition:"鉱物図鑑3種・地球化学者Lv2",check:()=> mineralsFoundSafe()>=3 && (charLevels.geochemist||1)>=2},
+ mendeleev:{name:"メンデレーエフ",condition:"鉱物図鑑8種・ドルトン解放",check:()=> mineralsFoundSafe()>=8 && !!unlockedSecrets.dalton},
+ avogadro:{name:"アボガドロ",condition:"ドルトン解放・論文2本",check:()=> !!unlockedSecrets.dalton && Object.keys(completedPapers||{}).length>=2},
+ newton:{name:"ニュートン",condition:"探索記録8地点・惑星修士以上",check:()=> stagesFoundSafe()>=8 && (charLevels.planetary||1)>=2},
+ einstein:{name:"アインシュタイン",condition:"隠し偉人10人解放",check:()=> Object.keys(unlockedSecrets||{}).filter(k=>unlockedSecrets[k]&&k!=="einstein"&&k!=="gaia").length>=10},
+ gaia:{name:"ガイア",condition:"アインシュタイン解放・図鑑100%・エンディング到達",check:()=> !!unlockedSecrets.einstein && endingCleared && ((mineralsFoundSafe()+rocksFoundSafe()+stagesFoundSafe())/(Object.keys(mineralRecipes).length+Object.keys(rockRecipes).length+Object.keys(stages).length))>=1}
+
 };
 function checkSecretUnlocks(){
  Object.entries(secretCatalog).forEach(([id,s])=>{
@@ -1969,6 +2064,7 @@ function renderSecrets(){
  if(!box)return;
  box.innerHTML=Object.entries(secretCatalog).map(([id,s])=>{
   const c=characters[id];
+  if(!c)return "";
   const ok=!!unlockedSecrets[id] || ownedChars.includes(id);
   return "<div class='secretCard "+(ok?'unlocked':'')+"'><div class='big'>"+(ok?c.face:"？？？")+"</div><div class='secretName'>"+(ok?c.name:"？？？")+"</div><p class='secretCondition'>条件："+s.condition+"</p><p>"+(ok?"<span class='boost'>解放済み</span>":"未解放")+"</p></div>";
  }).join("");
@@ -2193,7 +2289,7 @@ window.addEventListener("pointerup",()=>{
  clearList.forEach(p=>{
   if(!board[p.y][p.x])return;
   const a=board[p.y][p.x].atom;
-  const bonus=Math.max(1,Math.round((1+equipBoost(a)+charBonus(a)+labCollectBonus())*(1+teamCollectBonus(a))*comboMultiplier));
+  const bonus=Math.max(1,Math.round((1+equipBoost(a)+charBonus(a)+labCollectBonus())*(1+teamCollectBonus(a)+hiddenCollectRate())*comboMultiplier));
   run[a]+=bonus; // ミッション判定用。仲間がいなくても進む。
   if(canCollect(a)){
     runCollected[a]=(runCollected[a]||0)+bonus;
