@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 v1.2 HOME_SCREEN</title>
+<title>天地創造 v1.2f SYSTEM_CHECK_FIX</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -156,9 +156,22 @@ button.blue{background:#7bdff2}
 .saveDate{background:#111827;border:1px solid #ffffff24;border-radius:12px;padding:10px;margin:12px 0;color:#c9c9c9}
 </style>
 
+
+<style id="v12c-clear-ui-fix-style">
+.playStats{display:grid!important;grid-template-columns:repeat(3,1fr);gap:8px;align-items:stretch}
+.playStats .box{min-width:0!important;padding:10px 6px}
+.playStats .box b{font-size:clamp(20px,6vw,30px)}
+.playStats .small{font-size:11px}
+@media(max-width:380px){
+ .playStats{gap:5px}
+ .playStats .box{padding:8px 4px}
+ .playStats .box b{font-size:22px}
+}
+</style>
+
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">v1.2｜ホーム画面追加</div></header>
+<header><h1>天地創造</h1><div class="small">v1.2f｜システム点検修正</div></header>
 <div class="wrap">
 
 
@@ -166,7 +179,7 @@ button.blue{background:#7bdff2}
  <div class="homeHero">
   <div class="homeCard">
    <div class="homeTitle">天地創造</div>
-   <div class="homeSub">PuzzleHub v1.2</div>
+   <div class="homeSub">PuzzleHub v1.2f</div>
    <div id="homeSaveDate" class="saveDate">セーブデータ確認中</div>
    <button class="homeBtn" onclick="startNewGameFromHome()">最初から始める</button>
    <button id="continueBtn" class="homeBtn blue" onclick="continueFromSave()">セーブから始める</button>
@@ -233,7 +246,7 @@ button.blue{background:#7bdff2}
 <section id="play" class="screen">
  <div class="card">
   <h2 id="stageName">探索</h2><div id="stageParty" class="small"></div>
-  <div class="row"><div class="box"><b id="moves">20</b><span class="small">残り手数</span></div><div class="box"><b id="reward">0G</b><span class="small">報酬</span></div><div class="box"><b id="comboView">x1.0</b><span class="small">倍率</span></div></div>
+  <div class="row playStats"><div class="box"><b id="moves">20</b><span class="small">残り手数</span></div><div class="box"><b id="comboView">x1.0</b><span class="small">倍率</span></div><div class="box"><b id="reward">0G</b><span class="small">報酬</span></div></div>
   <div id="mission" class="card"></div><div id="difficultyNotice" class="small" style="text-align:center"></div>
   <button class="ghost" onclick="show('stages')">探索をやめる</button>
  </div>
@@ -250,20 +263,10 @@ button.blue{background:#7bdff2}
  </div>
 </section>
 
-
-<div class="card">
-<h3>組織</h3>
-<p>
-探索隊：パーティに入れて探索成功するとEXP+5<br>
-研究所：効果は雇用だけで発動。ただしEXPはパーティ参加時のみ<br>
-博物館：効果は雇用だけで発動。ただしEXPはパーティ参加時のみ
-</p>
-</div>
-
 <section id="tavern" class="screen">
  <div class="card">
   <h2>🍺 酒場</h2>
-  <p class="small">仲間ごとに回収できる元素が違う。施設スタッフもEXP目的でパーティ参加できる。編成は4人まで。</p>
+  <p class="small">仲間ごとに回収できる元素が違う。施設スタッフもEXP目的でパーティ参加できる。編成は4人まで。</p><div class="orgNote"><b>組織</b><br>探索隊：パーティに入れて探索成功するとEXP+5<br>研究所・博物館：効果は雇用だけで発動。ただしEXPはパーティ参加時のみ</div>
   <div class="facilityPanel"><h3>施設スタッフ効果</h3><p class="small">研究所・博物館スタッフは、雇っていれば効果が発動する。ただし成長EXPはパーティに入れて探索した時だけ入る。</p><div id="facilityEffectList" class="facilityGrid"></div></div><div class="teamPanel"><h3>チームボーナス</h3><p class="small">特定の組み合わせをパーティに入れると発動する。</p><div id="teamBonusList" class="teamGrid"></div><h3>チーム実績</h3><div id="teamMissionList" class="teamGrid"></div></div><div id="tavernTabs" class="tabRow">
    <button id="tab_all" class="tabBtn" onclick="setTavernFilter('all')">全員</button>
    <button id="tab_explore" class="tabBtn" onclick="setTavernFilter('探索隊')">探索隊</button>
@@ -458,7 +461,7 @@ button.blue{background:#7bdff2}
 
 <section id="save" class="screen">
  <div class="card savePanel">
-  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.1c SOUND PLUS</div>
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.2f SYSTEM CHECK</div>
   <p>
    <button onclick="manualSave()">セーブ</button>
    <button onclick="exportBackup()">バックアップ出力</button>
@@ -502,6 +505,12 @@ const characters={
  deepsea:{name:"深海探査員",face:"🚢",cost:13000,elements:["Ca","Na"],role:"深海",desc:"CaとNaを回収できる。"},
  polar:{name:"極地研究者",face:"❄️",cost:14000,elements:[],role:"レア",desc:"レア鉱物・伝説鉱物の発見を補助。"},
  planetary:{name:"惑星地質学者",face:"☄️",cost:20000,elements:[],role:"最終",desc:"最終研究向けの終盤仲間。"},
+ nemo:{name:"ネモ船長",face:"🚢",cost:0,elements:["Na","Ca"],role:"偉人",secret:true,desc:"NaとCaを回収できる。深海・伝説鉱物を補助する。"},
+ magellan:{name:"マゼラン",face:"🧭",cost:0,elements:["Na","Mg"],role:"偉人",secret:true,desc:"NaとMgを回収できる。探索報酬を上げる。"},
+ plato:{name:"プラトン",face:"📐",cost:0,elements:["SiO₂","Al"],role:"偉人",secret:true,desc:"SiO₂とAlを回収できる。論文研究費を下げる。"},
+ archimedes:{name:"アルキメデス",face:"⚙️",cost:0,elements:["Fe","Al"],role:"偉人",secret:true,desc:"FeとAlを回収できる。装備開発費を下げる。"},
+ darwin:{name:"ダーウィン",face:"🐦",cost:0,elements:["Ca","SiO₂"],role:"偉人",secret:true,desc:"CaとSiO₂を回収できる。EXPを補助する。"},
+ humboldt:{name:"フンボルト",face:"🌿",cost:0,elements:["SiO₂","Mg"],role:"偉人",secret:true,desc:"SiO₂とMgを回収できる。探索報酬を上げる。"},
  dalton:{name:"ドルトン",face:"⚛️",cost:0,elements:["SiO₂","Fe"],role:"偉人",secret:true,desc:"SiO₂とFeを回収できる。鉱物系元素の回収量を上げる。"},
  mendeleev:{name:"メンデレーエフ",face:"🧪",cost:0,elements:["Na","Mg","Al","SiO₂","Fe","Ca"],role:"偉人",secret:true,desc:"鉱物系主要元素を広く回収できる。元素系報酬を上げる。"},
  avogadro:{name:"アボガドロ",face:"🔢",cost:0,elements:["Na","Ca"],role:"偉人",secret:true,desc:"NaとCaを回収できる。鉱物系元素の回収量を上げる。"},
@@ -1215,7 +1224,11 @@ const stages={
  sakurajima:{firstBonus:600,name:"桜島",icon:"🌋",moves:13,reward:850,unlockCost:2500,requires:"domesticPass",weights:{"SiO₂":30,Al:17,Mg:18,Fe:25,Ca:8,Na:2},goals:{Fe:54,Mg:42,"SiO₂":38},desc:"黒雲母・輝石向き。"},
  yamanashi:{firstBonus:700,name:"山梨花崗岩帯",icon:"💎",moves:13,reward:1000,unlockCost:3800,requires:"domesticPass",weights:{"SiO₂":45,Al:27,Mg:6,Fe:8,Ca:5,Na:9},goals:{"SiO₂":64,Al:42},desc:"長石・石英の産地。"},
  aso:{firstBonus:900,name:"阿蘇",icon:"🌋",moves:12,reward:1200,unlockCost:6500,requires:"domesticPass",weights:{"SiO₂":34,Al:18,Mg:16,Fe:18,Ca:10,Na:4},goals:{"SiO₂":54,Ca:34,Fe:34},desc:"角閃石を狙える。"},
- iceland:{firstBonus:1200,name:"アイスランド",icon:"🌋",moves:12,reward:1600,unlockCost:12000,requires:"airplane",weights:{"SiO₂":22,Al:10,Mg:28,Fe:24,Ca:12,Na:4},goals:{Mg:60,Fe:48,Ca:34},desc:"曹長石・玄武岩系の産地。"}
+ iceland:{firstBonus:1200,name:"アイスランド",icon:"🌋",moves:12,reward:1600,unlockCost:12000,requires:"airplane",weights:{"SiO₂":22,Al:10,Mg:28,Fe:24,Ca:12,Na:4},goals:{Mg:60,Fe:48,Ca:34},desc:"曹長石・玄武岩系の産地。"},
+ andes:{firstBonus:1800,name:"アンデス火山帯",icon:"⛰️",moves:12,reward:2300,unlockCost:20000,requires:"airplane",weights:{"SiO₂":28,Al:16,Mg:18,Fe:22,Ca:12,Na:4},goals:{Fe:42,Mg:28,Ca:22},desc:"火山帯の海外調査地。"},
+ yellowstone:{firstBonus:2200,name:"イエローストーン",icon:"♨️",moves:12,reward:2600,unlockCost:26000,requires:"airplane",weights:{"SiO₂":46,Al:22,Mg:6,Fe:8,Ca:6,Na:12},goals:{"SiO₂":52,Na:26,Al:24},desc:"地熱と火山活動の海外調査地。"},
+ himalaya:{firstBonus:2600,name:"ヒマラヤ変成帯",icon:"🏔️",moves:12,reward:3000,unlockCost:32000,requires:"airplane",weights:{"SiO₂":38,Al:25,Mg:10,Fe:12,Ca:6,Na:9},goals:{"SiO₂":48,Al:32,Mg:18},desc:"変成作用を調べる山岳地帯。"},
+ mariana:{firstBonus:3500,name:"マリアナ海溝",icon:"🌊",moves:11,reward:3600,unlockCost:45000,requires:"ship",weights:{"SiO₂":20,Al:10,Mg:30,Fe:25,Ca:12,Na:3},goals:{Mg:50,Fe:38,Ca:24},desc:"深海・沈み込み帯をめぐる終盤調査地。"}
 };
 const difficulties={
  sugar:{name:"激甘",moveBonus:4,goalRate:.55,rewardRate:.30,colors:["red","blueC","yellow","green"]},
@@ -1249,20 +1262,20 @@ let legendary={diamond:0,ruby:0,sapphire:0,emerald:0,opal:0};
 let run={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
 let runCollected={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
 let runMissed={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
-let money=0, board=[], current=null, moves=0, selecting=false, path=[], currentColor=null;
+let money=0, board=[], current=null, moves=0, selecting=false, resolving=false, clearPending=false, path=[], currentColor=null;
 let difficulty='normal';
 let tavernFilter='all';
 let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_v1_2_home_screen";
+const SAVE_KEY="tenchi_souzou_v1_2f_system_check_fix";
 let saveReady=false;
 let soundEnabled=true;
 let vibrationEnabled=true;
 function gameData(){
  return {
-  version:"V1_2_HOME_SCREEN",
+  version:"V1_2F_SYSTEM_CHECK_FIX",
   savedAt:new Date().toISOString(),
   money,
   inv,
@@ -1407,6 +1420,26 @@ function importBackup(event){
 
 
 
+
+function toast(msg){
+ const t=document.getElementById("toast");
+ if(!t)return;
+ t.textContent=msg;
+ t.classList.add("show");
+ setTimeout(()=>t.classList.remove("show"),1200);
+}
+function spark(text,x,y){
+ try{
+  const s=document.createElement("div");
+  s.className="spark";
+  s.textContent=text;
+  s.style.left=(x||window.innerWidth/2)+"px";
+  s.style.top=(y||window.innerHeight/2)+"px";
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),900);
+ }catch(e){}
+}
+
 function updateSoundStatus(){
  // 内部確認のみ。画面には出さない。
  window.__soundSupport={
@@ -1503,6 +1536,8 @@ function resetGameState(confirmFirst=true){
  difficulty="normal";
  tavernFilter="all";
  current=null;
+ resolving=false;
+ clearPending=false;
  renderAll();
  return true;
 }
@@ -1528,7 +1563,7 @@ function initBoard(){
 }
 function startStage(id){
  if(!unlockedStages.includes(id)){alert('まだ解放されていません');return;}
- current=id; moves=Math.max(5, stages[id].moves + difficulties[difficulty].moveBonus + newtonMoveBonus());
+ current=id; resolving=false; clearPending=false; moves=Math.max(5, stages[id].moves + difficulties[difficulty].moveBonus + newtonMoveBonus());
  run={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
  runCollected={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
  runMissed={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
@@ -1636,7 +1671,7 @@ function unlockStage(id){
 function renderFinalNotice(){
  const el=document.getElementById("finalNotice");
  if(!el)return;
- el.innerHTML="<b>天地創造 v1.1c SOUND PLUS</b><br><span class='small'>探索・クラフト・仲間育成・偉人・チーム実績・サウンド演出を統合。</span>";
+ el.innerHTML="<b>天地創造 v1.2f SYSTEM CHECK</b><br><span class='small'>探索・クラフト・仲間育成・偉人・チーム実績・サウンド演出・クリア判定・システム安定化を統合。</span>";
 }
 
 function renderAll(){
@@ -1816,6 +1851,7 @@ function renderDifficulty(){
 
 function renderStorage(){
  const el=document.getElementById("storageView");
+ if(!el)return;
  el.innerHTML="<h3>元素</h3>"+Object.entries(inv).map(([k,v])=>"<div class='box'><b>"+v+"</b><span>"+k+"</span></div>").join("")
  +"<h3>鉱物</h3>"+Object.entries(mineralRecipes).map(([k,r])=>"<div class='box'><b>"+(minerals[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("")
  +"<h3>岩石</h3>"+Object.entries(rockRecipes).map(([k,r])=>"<div class='box'><b>"+(rocks[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("");
@@ -2260,8 +2296,19 @@ function removeParty(id){
  party=party.filter(x=>x!==id); renderAll(); saveGame();
 }
 
+
+function checkClearAfterDraw(){
+ try{
+  if(current && document.getElementById("play")?.classList.contains("active") && isMissionCleared()){
+   setTimeout(()=>{ if(current && isMissionCleared()) finishMissionSoon(); },30);
+  }
+ }catch(e){}
+}
+
 function draw(){
+ if(!current || !board || board.length===0)return;
  const b=document.getElementById("board");
+ if(!b)return;
  b.innerHTML="";
  for(let y=0;y<6;y++)for(let x=0;x<6;x++){
   const d=document.createElement("div");
@@ -2278,6 +2325,7 @@ function draw(){
   const got=run[k]||0;
   return "<span class='"+(got>=v?"ok":"bad")+"'>"+k+" "+got+"/"+v+"</span>";
  }).join("　");
+ checkClearAfterDraw();
 }
 function initAudio(){
  try{
@@ -2390,8 +2438,9 @@ function unpauseBoard(){
 
 function near(a,b){return Math.abs(a.x-b.x)<=1 && Math.abs(a.y-b.y)<=1}
 document.addEventListener("pointerdown",e=>{
+ if(resolving || !current)return;
  const boardEl=document.getElementById("board");
- if(!boardEl.contains(e.target))return;
+ if(!boardEl || !boardEl.contains(e.target))return;
  initAudio();
  const c=e.target.closest(".cell"); if(!c)return;
  selecting=true; path=[];
@@ -2401,7 +2450,7 @@ document.addEventListener("pointerdown",e=>{
  sfxTraceAdd(1); vib(8);
 });
 document.addEventListener("pointermove",e=>{
- if(!selecting)return;
+ if(!selecting || resolving || !current)return;
  const t=document.elementFromPoint(e.clientX,e.clientY);
  const c=t&&t.closest(".cell"); if(!c || !document.getElementById("board").contains(c))return;
  const x=+c.dataset.x,y=+c.dataset.y;
@@ -2414,12 +2463,13 @@ document.addEventListener("pointermove",e=>{
  sfxTraceAdd(path.length); vib(5);
 });
 window.addEventListener("pointerup",()=>{
- if(!selecting)return;
+ if(!selecting || resolving || !current)return;
  selecting=false;
  if(path.length<3){ comboMultiplier=1;
   document.getElementById("log").textContent="3個以上必要";
   sfxError(); toast("探索失敗"); vib(20); draw(); return;
  }
+ resolving=true;
  moves--;
  if(path.length>=8) comboMultiplier=Math.min(5,comboMultiplier+1.0);
  else if(path.length>=6) comboMultiplier=Math.min(5,comboMultiplier+0.5);
@@ -2456,24 +2506,39 @@ window.addEventListener("pointerup",()=>{
   }
   board[p.y][p.x]=null;
  });
+ const stageClearedNow=isMissionCleared();
+ if(stageClearedNow){
+  finishMissionSoon();
+ }
  if(path.length>=5){
    const first=path[0];
    board[first.y][first.x]={color:currentColor==='rainbow'?rand(difficulties[difficulty].colors):currentColor,atom:atom(),special:path.length>=8?'rainbow':'bomb'};
  }
  setTimeout(()=>{
-  collapse();
-  unpauseBoard();
-  let gtxt=Object.entries(gained).map(([k,v])=>k+"+"+v).join(" ");
-  let mtxt=Object.entries(missed).map(([k,v])=>k+"×"+v).join(" ");
-  document.getElementById("log").innerHTML=path.length+"個消去！ "+(path.length>=8?"🌈虹結晶生成！ ":path.length>=5?"💥爆発結晶生成！ ":"")+(gtxt?gtxt:"取得なし")+(mtxt?" <span class='miss'>未回収 "+mtxt+"</span>":"");
-  toast(path.length+"個消去！ "+(path.length>=8?"虹結晶！":path.length>=5?"爆発結晶！":""));
-  sfxClear(path.length);
-  spark("+"+path.length, window.innerWidth/2, window.innerHeight/2);
-  vib(path.length>=8?[30,20,30,20,50]:[25,15,25]);
-  draw();
-  if(success())finish(true);
-  else if(moves<=0)finish(false);
- },180);
+  try{
+   collapse();
+   unpauseBoard();
+   let gtxt=Object.entries(gained).map(([k,v])=>k+"+"+v).join(" ");
+   let mtxt=Object.entries(missed).map(([k,v])=>k+"×"+v).join(" ");
+   const log=document.getElementById("log");
+   if(log)log.innerHTML=path.length+"個消去！ "+(path.length>=8?"🌈虹結晶生成！ ":path.length>=5?"💥爆発結晶生成！ ":"")+(gtxt?gtxt:"取得なし")+(mtxt?" <span class='miss'>未回収 "+mtxt+"</span>":"");
+   toast(path.length+"個消去！ "+(path.length>=8?"虹結晶！":path.length>=5?"爆発結晶！":""));
+   sfxClear(path.length);
+   spark("+"+path.length, window.innerWidth/2, window.innerHeight/2);
+   vib(path.length>=8?[30,20,30,20,50]:[25,15,25]);
+   draw();
+   if(stageClearedNow || clearPending || isMissionCleared()){
+    finishMissionSoon();
+    return;
+   }
+   if(moves<=0)finish(false);
+  }catch(err){
+   console.warn("drop/finalize error",err);
+   try{collapse();unpauseBoard();draw();}catch(e){console.warn(e);}
+  }finally{
+   resolving=false;
+  }
+ },360);
 });
 function collapse(){
  for(let x=0;x<6;x++){
@@ -2482,21 +2547,53 @@ function collapse(){
   for(let y=5;y>=0;y--) board[y][x]=col[5-y]||newCell();
  }
 }
+
+
+function finishMissionSoon(){
+ if(!current || clearPending)return;
+ if(!isMissionCleared())return;
+ clearPending=true;
+ resolving=false;
+ setTimeout(()=>{
+  try{
+   if(current && isMissionCleared()) finish(true);
+  }catch(e){
+   console.error("finish mission error",e);
+   const mt=document.getElementById("modalTitle");
+   const mx=document.getElementById("modalText");
+   if(mt)mt.textContent="探索成功！";
+   if(mx)mx.innerHTML="目標を達成しました。";
+   const modal=document.getElementById("modal");
+   if(modal)modal.classList.add("show");
+  }
+ },20);
+}
+
+function isMissionCleared(){
+ if(!current || !stages[current])return false;
+ const g=effectiveGoals(current);
+ return Object.entries(g).every(([k,v])=>Number(run[k]||0)>=Number(v||0));
+}
+
 function success(){
- const g=effectiveGoals();
- return Object.entries(g).every(([k,v])=>(run[k]||0)>=v);
+ return isMissionCleared();
 }
 
 function expResultHtml(){
  if(!lastExpResults || lastExpResults.length===0)return "";
  return "<div class='expResult'><b>成長</b><br>"+lastExpResults.map(r=>{
-  const c=characters[r.id];
+  const c=characters[r.id]||{face:"👤"};
   const up=r.after>r.before ? " <span class='levelUp'>Lv."+r.before+"→"+r.after+"!</span>" : "";
-  return "<span class='expGain'>"+c.face+" "+charTitle(r.id)+" EXP+"+r.amount+"</span>"+up;
+  return "<span class='expGain'>"+c.face+" "+(characters[r.id]?charTitle(r.id):r.id)+" EXP+"+r.amount+"</span>"+up;
  }).join("<br>")+"</div>";
 }
 
 function finish(ok){
+ if(!current)return;
+ const modalEl=document.getElementById("modal");
+ if(modalEl && modalEl.classList.contains("show"))return;
+ clearPending=false;
+ resolving=false;
  if(ok){
   Object.keys(inv).forEach(k=>inv[k]+=(runCollected[k]||0));
   money+=effectiveReward();
@@ -2526,11 +2623,14 @@ function finish(ok){
   document.getElementById("modalText").innerHTML="手数がなくなった。素材は持ち帰れなかった。";
   sfxGameOver();
  }
+ resolving=false;
  document.getElementById("modal").classList.add("show");
 }
 function closeModal(){
  document.getElementById("modal").classList.remove("show");
  current=null;
+ resolving=false;
+ clearPending=false;
  show("hub");
 }
 loadGame();
