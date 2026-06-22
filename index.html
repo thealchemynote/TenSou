@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 v1.4f MAGMA_RATIO_STOCK_FIX</title>
+<title>天地創造 v1.4h TEAM_COLLAPSE</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -314,9 +314,37 @@ button.blue{background:#7bdff2}
 .failText{color:#ff9e8b;font-weight:900}
 </style>
 
+
+<style id="v14g-material-leveling-style">
+.levelCostBox{background:#111827;border:1px solid #ffffff24;border-radius:10px;padding:7px;margin:6px 0;text-align:left;font-size:11px;line-height:1.45}
+.materialLevelNote{background:#0b1020;border:1px solid #85f0a355;border-radius:12px;padding:9px;margin:8px 0;color:#c9c9c9;font-size:12px}
+.expBar{opacity:.55}
+</style>
+
+
+<style id="v14h-team-collapse-style">
+.teamCollapseHeader{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  background:#ffffff18;
+  color:#fff;
+  border:1px solid #ffffff33;
+  border-radius:12px;
+  padding:10px 12px;
+  margin:8px 0;
+}
+.teamCollapseHeader .small{color:#c9c9c9}
+.teamCollapseBody{display:none}
+.teamCollapseBody.open{display:block}
+.teamArrow{font-weight:900;color:#ffd166}
+</style>
+
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">v1.4f｜マグマ判定・3ストック修正</div></header>
+<header><h1>天地創造</h1><div class="small">v1.4h｜チームボーナス折りたたみ</div></header>
 <div class="wrap">
 
 
@@ -324,7 +352,7 @@ button.blue{background:#7bdff2}
  <div class="homeHero">
   <div class="homeCard">
    <div class="homeTitle">天地創造</div>
-   <div class="homeSub">PuzzleHub v1.4f</div>
+   <div class="homeSub">PuzzleHub v1.4h</div>
    <div id="homeSaveDate" class="saveDate">セーブデータ確認中</div>
    <button class="homeBtn" onclick="startNewGameFromHome()">最初から始める</button>
    <button id="continueBtn" class="homeBtn blue" onclick="continueFromSave()">セーブから始める</button>
@@ -426,7 +454,18 @@ button.blue{background:#7bdff2}
   </div>
   <div class="orgNote"><b>組織</b><br>探索隊：パーティに入れて探索成功するとEXP+5<br>研究所・博物館：効果は雇用だけで発動。ただしEXPはパーティ参加時のみ</div>
   <div class="facilityPanel"><h3>施設スタッフ効果</h3><p class="small">研究所・博物館スタッフは、雇っていれば効果が発動する。ただし成長EXPはパーティに入れて探索した時だけ入る。</p><div id="facilityEffectList" class="facilityGrid"></div></div>
-  <div class="teamPanel tavernBottomPanel"><h3>チームボーナス</h3><p class="small">特定の組み合わせをパーティに入れると発動する。</p><div id="teamBonusList" class="teamGrid"></div><h3>チーム実績</h3><div id="teamMissionList" class="teamGrid"></div></div>
+  <div class="teamPanel tavernBottomPanel">
+   <button class="teamCollapseHeader" onclick="toggleTeamBonusPanel()">
+    <span>チームボーナス・チーム実績</span>
+    <span class="small">タップで開閉 <span id="teamCollapseArrow" class="teamArrow">▼</span></span>
+   </button>
+   <div id="teamCollapseBody" class="teamCollapseBody">
+    <h3>チームボーナス</h3>
+    <div id="teamBonusList" class="teamGrid"></div>
+    <h3>チーム実績</h3>
+    <div id="teamMissionList" class="teamGrid"></div>
+   </div>
+  </div>
   <button class="ghost" onclick="show('hub')">戻る</button>
  </div>
 </section>
@@ -616,7 +655,7 @@ button.blue{background:#7bdff2}
 
 <section id="save" class="screen">
  <div class="card savePanel">
-  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.4f MAGMA RATIO STOCK FIX</div>
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.4h TEAM COLLAPSE</div>
   <p>
    <button onclick="manualSave()">セーブ</button>
    <button onclick="exportBackup()">バックアップ出力</button>
@@ -890,19 +929,124 @@ function canPayRocks(cost){
 function payRocks(cost){
  Object.entries(cost||{}).forEach(([k,v])=>rocks[k]-=v);
 }
+
+function keyElementsForChar(id){
+ const c=characters[id]||{};
+ if(c.elements && c.elements.length)return c.elements.slice(0,6);
+ const role=c.role||"";
+ if(id==="gemologist")return ["SiO₂","Al"];
+ if(id==="metamorphic")return ["SiO₂","Al","Mg"];
+ if(id==="fieldScout"||id==="photographer")return ["SiO₂","Fe"];
+ if(id==="curator"||id==="appraiser")return ["SiO₂","Ca"];
+ if(id==="secretary")return ["SiO₂","Al"];
+ if(id==="planetary"||id==="gaia")return ["Na","Mg","Al","SiO₂","Fe","Ca"];
+ return ["SiO₂"];
+}
+function mineralForElement(el){
+ return {"SiO₂":"quartz",Al:"kfeldspar",Mg:"olivine",Fe:"magnetite",Ca:"calcite",Na:"albite"}[el]||"quartz";
+}
+function rockForChar(id,lv){
+ const els=keyElementsForChar(id);
+ if(id==="volcanologist"||els.includes("Mg")||els.includes("Fe"))return lv>=4?"gabbro":"basalt";
+ if(id==="sedimentologist"||els.includes("Ca"))return lv>=4?"limestone":"sandstone";
+ if(id==="oceanographer"||els.includes("Na"))return lv>=4?"basalt":"sandstone";
+ if(id==="metamorphic")return lv>=4?"schist":"slate";
+ if(id==="planetary"||id==="gaia")return lv>=4?"peridotite":"basalt";
+ if(id==="gemologist")return lv>=4?"rhyolite":"granite";
+ return lv>=4?"rhyolite":"granite";
+}
+function invCostText(cost){
+ return Object.entries(cost||{}).map(([k,v])=>k+"×"+v).join(" / ")||"なし";
+}
+function nextEvolutionRecipe(id){
+ const lv=charLevels[id]||1;
+ if(lv>=5)return null;
+ const nextLv=lv+1;
+ const title=charTitleFromLevel(id,nextLv);
+ const els=keyElementsForChar(id);
+ const invCost={};
+ const mineralCost={};
+ const rockCost={};
+ const base=[160,420,950,2200][lv-1]||300;
+ const mineralBase=[12,35,90,220][lv-1]||20;
+ const rockBase=[0,2,12,45][lv-1]||0;
+ els.forEach(el=>{
+  invCost[el]=(invCost[el]||0)+base;
+  const m=mineralForElement(el);
+  mineralCost[m]=(mineralCost[m]||0)+mineralBase;
+ });
+ if(nextLv>=3){
+  const r=rockForChar(id,nextLv);
+  rockCost[r]=(rockCost[r]||0)+rockBase;
+ }
+ // 専門系の追加要求。やり込み用に重め。
+ if(id==="mineralogist"){
+  invCost["SiO₂"]=(invCost["SiO₂"]||0)+[80,200,500,1200][lv-1];
+  mineralCost.quartz=(mineralCost.quartz||0)+[15,40,120,300][lv-1];
+  if(nextLv>=4)rockCost.granite=(rockCost.granite||0)+[0,0,15,70][lv-1];
+ }
+ if(id==="volcanologist"){
+  invCost.Mg=(invCost.Mg||0)+[60,180,450,1000][lv-1];
+  invCost.Fe=(invCost.Fe||0)+[60,180,450,1000][lv-1];
+  mineralCost.pyroxene=(mineralCost.pyroxene||0)+[10,35,100,260][lv-1];
+  if(nextLv>=4)rockCost.basalt=(rockCost.basalt||0)+[0,0,20,90][lv-1];
+ }
+ if(id==="geochemist"||id==="mendeleev"){
+  invCost.Al=(invCost.Al||0)+[80,220,600,1500][lv-1];
+  mineralCost.kfeldspar=(mineralCost.kfeldspar||0)+[12,40,120,300][lv-1];
+ }
+ if(id==="gaia"){
+  Object.keys(inv).forEach(k=>invCost[k]=(invCost[k]||0)+[300,800,1800,4000][lv-1]);
+  ["quartz","kfeldspar","plagioclase","pyroxene","olivine","magnetite","calcite","albite"].forEach(m=>mineralCost[m]=(mineralCost[m]||0)+[20,60,160,400][lv-1]);
+  if(nextLv>=4){rockCost.granite=(rockCost.granite||0)+40; rockCost.basalt=(rockCost.basalt||0)+40; rockCost.peridotite=(rockCost.peridotite||0)+20;}
+ }
+ const money=[1200,5000,18000,65000][lv-1]||1000;
+ const old=growthRecipes[id]&&growthRecipes[id][lv];
+ const equip=old&&old.equip?old.equip:null;
+ const bonus={};
+ els.forEach(el=>bonus[el]=Math.max(1,nextLv-1));
+ return {title,money,equip,inv:invCost,minerals:mineralCost,rocks:rockCost,bonus};
+}
+function charTitleFromLevel(id,level){
+ const old=charLevels[id];
+ charLevels[id]=level;
+ const t=charTitle(id);
+ charLevels[id]=old;
+ return t;
+}
+function canPayInv(cost){
+ return Object.entries(cost||{}).every(([k,v])=>(inv[k]||0)>=v);
+}
+function payInv(cost){
+ Object.entries(cost||{}).forEach(([k,v])=>inv[k]-=v);
+}
+function materialCostHtml(recipe){
+ if(!recipe)return "最大強化";
+ return "<div class='levelCostBox'>"
+  +"資金："+recipe.money+"G<br>"
+  +"元素："+invCostText(recipe.inv)+"<br>"
+  +"鉱物："+costText(recipe.minerals||{},mineralRecipes)+"<br>"
+  +"岩石："+costText(recipe.rocks||{},rockRecipes)
+  +(recipe.equip?"<br><span class='needEquip'>必要装備："+(equipmentRecipes[recipe.equip]?.name||recipe.equip)+"</span>":"")
+  +"</div>";
+}
+
 function evolveChar(id){
  if(!ownedChars.includes(id)){alert("未雇用です");return;}
  const lv=charLevels[id]||1;
- const next=growthRecipes[id]&&growthRecipes[id][lv];
- if(!next){alert("これ以上進化できません");return;}
+ const next=nextEvolutionRecipe(id);
+ if(!next){alert("これ以上強化できません");return;}
  if(next.equip && !equipment[next.equip]){alert("必要装備が未開発です："+(equipmentRecipes[next.equip]?.name||next.equip));return;}
  if(money<next.money){alert("資金不足");return;}
+ if(!canPayInv(next.inv||{})){alert("元素不足");return;}
  if(!canPay(minerals,next.minerals||{})){alert("鉱物不足");return;}
  if(!canPayRocks(next.rocks||{})){alert("岩石不足");return;}
  money-=next.money;
+ payInv(next.inv||{});
  pay(minerals,next.minerals||{});
  payRocks(next.rocks||{});
  charLevels[id]=lv+1;
+ charExp[id]=0;
  sfxEvolve();
  saveGame();
  renderAll();
@@ -1388,15 +1532,14 @@ function renderGrowth(){
  renderTavernTabs();
  const visibleChars=Object.entries(characters).filter(([id,c])=>characterVisibleInTavern(id,c));
  if(visibleChars.length===0){box.innerHTML="<p class='small'>表示できる仲間がいません。</p>";return;}
- box.innerHTML=visibleChars.map(([id,c])=>{
+ box.innerHTML="<div class='materialLevelNote'>レベルアップは経験値ではなく、元素・鉱物・岩石を納品して強化します。余りやすいSiO₂なども強化素材として大量に使います。</div>"
+ + visibleChars.map(([id,c])=>{
   const owned=ownedChars.includes(id);
   const lv=charLevels[id]||1;
-  const next=growthRecipes[id]&&growthRecipes[id][lv];
+  const next=nextEvolutionRecipe(id);
   const title=charTitle(id);
-  let nextText=next
-   ? "次："+next.title+"<br><span class='needEquip'>必要装備："+(next.equip?(equipmentRecipes[next.equip]?.name||next.equip):"なし")+"</span><br>費用："+next.money+"G<br>鉱物："+costText(next.minerals||{},mineralRecipes)+"<br>岩石："+costText(next.rocks||{},rockRecipes)
-   : "最大進化";
-  return "<div class='growthCard "+(lv>1?'evolved':'')+"'><div class='big'>"+c.face+"</div><b>"+title+"</b><p>Lv."+lv+"</p><p class='small'>"+nextText+"</p>"+(owned&&next?"<button onclick=\"evolveChar('"+id+"')\">進化</button>":owned?"<span class='boost'>完成</span>":"<span class='small'>未雇用</span>")+"</div>";
+  let nextText=next ? "次："+next.title+materialCostHtml(next) : "最大強化";
+  return "<div class='growthCard "+(lv>1?'evolved':'')+"'><div class='big'>"+c.face+"</div><b>"+title+"</b><p>Lv."+lv+"</p><p class='small'>"+nextText+"</p>"+(owned&&next?"<button onclick=\"evolveChar('"+id+"')\">素材で強化</button>":owned?"<span class='boost'>完成</span>":"<span class='small'>未雇用</span>")+"</div>";
  }).join("");
 }
 
@@ -1458,17 +1601,18 @@ let crusherGrain="medium";
 let lastRockResultHtml="";
 let difficulty='normal';
 let tavernFilter='all';
+let teamBonusOpen=false;
 let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_v1_4f_magma_ratio_stock_fix";
+const SAVE_KEY="tenchi_souzou_v1_4h_team_collapse";
 let saveReady=false;
 let soundEnabled=true;
 let vibrationEnabled=true;
 function gameData(){
  return {
-  version:"V1_4F_MAGMA_RATIO_STOCK_FIX",
+  version:"V1_4H_TEAM_COLLAPSE",
   savedAt:new Date().toISOString(),
   money,
   inv,
@@ -1501,6 +1645,7 @@ function gameData(){
   unlockedStages,
   difficulty,
   tavernFilter,
+  teamBonusOpen,
   magmaTank,
   magmaStock,
   furnaceSlots,
@@ -1549,6 +1694,7 @@ function applyData(data){
  if(unlockedStages.length===0)unlockedStages=["fuji","hawaii"];
  if(data.difficulty && difficulties[data.difficulty])difficulty=data.difficulty;
  if(data.tavernFilter)tavernFilter=data.tavernFilter;
+ if(typeof data.teamBonusOpen==='boolean')teamBonusOpen=data.teamBonusOpen;
  if(Array.isArray(data.magmaStock))magmaStock=data.magmaStock.filter(m=>m&&typeof m==="object").slice(0,3);
  if(data.magmaTank && typeof data.magmaTank==="object"){
   if(magmaStock.length===0)magmaStock=[data.magmaTank].slice(0,3);
@@ -1759,6 +1905,7 @@ function resetGameState(confirmFirst=true){
  unlockedStages=["fuji","hawaii"];
  difficulty="normal";
  tavernFilter="all";
+ teamBonusOpen=false;
  current=null;
  resolving=false;
  clearPending=false;
@@ -1898,7 +2045,7 @@ function unlockStage(id){
 function renderFinalNotice(){
  const el=document.getElementById("finalNotice");
  if(!el)return;
- el.innerHTML="<b>天地創造 v1.4f MAGMA RATIO STOCK FIX</b><br><span class='small'>火成岩の成分判定を修正し、マグマ3ストックに対応。</span>";
+ el.innerHTML="<b>天地創造 v1.4h TEAM COLLAPSE</b><br><span class='small'>酒場のチームボーナス・チーム実績をデフォルト折りたたみに変更。</span>";
 }
 
 function renderAll(){
@@ -2796,9 +2943,19 @@ function teamEquipmentRate(){
  activeTeams().forEach(id=>{const t=teamCatalog[id]; if(t.type==="equipment")r-=t.rate;});
  return Math.max(.5,r);
 }
+function toggleTeamBonusPanel(){
+ teamBonusOpen=!teamBonusOpen;
+ renderTeamBonuses();
+ saveGame();
+}
 function renderTeamBonuses(){
+ const body=document.getElementById("teamCollapseBody");
+ const arrow=document.getElementById("teamCollapseArrow");
+ if(body)body.classList.toggle("open",!!teamBonusOpen);
+ if(arrow)arrow.textContent=teamBonusOpen?"▲":"▼";
  const box=document.getElementById("teamBonusList");
  if(!box)return;
+ if(!teamBonusOpen){box.innerHTML="";return;}
  box.innerHTML=Object.entries(teamCatalog).map(([id,t])=>{
   const on=hasTeam(id);
   const names=t.members.map(m=>characters[m]?characters[m].face+characters[m].name:m).join(" + ");
@@ -2840,6 +2997,7 @@ function recordTeamMissions(){
 function renderTeamMissions(){
  const box=document.getElementById("teamMissionList");
  if(!box)return;
+ if(!teamBonusOpen){box.innerHTML="";return;}
  box.innerHTML=Object.entries(teamMissionCatalog).map(([id,m])=>{
   const done=!!completedTeamMissions[id];
   const t=teamCatalog[id];
@@ -2891,16 +3049,13 @@ function charOrg(id){
  return "探索隊";
 }
 function expNeed(id){
- return 8 + ((charLevels[id]||1)-1)*6;
+ return 999999;
 }
 function gainCharExp(id,amount){
  if(!ownedChars.includes(id))return;
+ // v1.4g: レベルは経験値では上げない。EXPは活動記録だけにする。
  const before=charLevels[id]||1;
  charExp[id]=(charExp[id]||0)+amount;
- while((charLevels[id]||1)<5 && charExp[id]>=expNeed(id)){
-  charExp[id]-=expNeed(id);
-  charLevels[id]=(charLevels[id]||1)+1;
- }
  const after=charLevels[id]||1;
  lastExpResults.push({id,amount,before,after});
 }
@@ -2918,10 +3073,8 @@ function gainOrganizationExp(){
 }
 function expBar(id){
  const lv=charLevels[id]||1;
- const need=expNeed(id);
  const exp=charExp[id]||0;
- const pct=lv>=5?100:Math.min(100,Math.round(exp/need*100));
- return "<div class='expBar'><div class='expFill' style='width:"+pct+"%'></div></div><span class='small'>Lv."+lv+" EXP "+(lv>=5?"MAX":exp+"/"+need)+"</span>";
+ return "<div class='expBar'><div class='expFill' style='width:0%'></div></div><span class='small'>Lv."+lv+" 活動記録 "+exp+"｜強化は素材で実行</span>";
 }
 
 function characterEffectText(id){
