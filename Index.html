@@ -1,0 +1,2290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>天地創造 v1.0 FINAL</title>
+<style>
+body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
+h1{margin:0;font-size:26px}
+.wrap{max-width:900px;margin:auto;padding:14px}
+.screen{display:none}.active{display:block}
+.card{background:#1c2033;border:1px solid #333b5a;border-radius:16px;padding:14px;margin:12px 0}
+.map{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.partyGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.charCard{background:#111827;border:1px solid #ffffff25;border-radius:14px;padding:10px;text-align:center}.charCard .face{font-size:34px}.charCard b{display:block}.charCard.active{border-color:#ffd166;box-shadow:0 0 16px #ffd16655}.charCard.locked{opacity:.55}.tag{display:inline-block;background:#ffffff18;border:1px solid #ffffff22;border-radius:999px;padding:3px 7px;margin:2px;font-size:11px}.miss{color:#777;text-decoration:line-through}.craftGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.stockGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px;margin:8px 0}.stockMini{background:#0b1020;border:1px solid #ffffff24;border-radius:12px;padding:8px;text-align:center}.stockMini b{display:block;font-size:18px}.difficultyRow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.difficultyBtn{background:#ffffff18;color:#fff;border:1px solid #ffffff33}.difficultyBtn.active{background:#ffd166;color:#211;border-color:#ffd166}.savePanel{text-align:center}.savePanel .small{margin-top:6px}.equipCard,.growthCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px;text-align:center}.equipCard.owned,.growthCard.evolved{border-color:#85f0a3;box-shadow:0 0 12px #85f0a344}.bookCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px;text-align:center}.bookCard.found{border-color:#ffd166;box-shadow:0 0 12px #ffd16644}.questCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px}.questCard.done{border-color:#85f0a3;box-shadow:0 0 12px #85f0a344}.paperCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px}.paperCard.done{border-color:#85f0a3;box-shadow:0 0 12px #85f0a344}.confCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px}.confCard.done{border-color:#ffd166;box-shadow:0 0 12px #ffd16655}.awardCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px;text-align:center}.awardCard.done{border-color:#ffd166;box-shadow:0 0 18px #ffd16666}.congressCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px;text-align:center}.congressCard.done{border-color:#ffd166;box-shadow:0 0 18px #ffd16666}.finalBadge{display:inline-block;background:linear-gradient(180deg,#ffe08a,#c98b22);color:#211;border-radius:999px;padding:5px 12px;margin:4px;font-weight:900}.endingBox{background:linear-gradient(180deg,#1c2033,#090910);border:2px solid #ffd166;border-radius:20px;padding:16px;text-align:center;box-shadow:0 0 28px #ffd16644}.endingTitle{font-size:28px;color:#ffd166;text-shadow:0 0 14px #ffd16677}.titleBadge{display:inline-block;background:#ffd166;color:#211;border-radius:999px;padding:4px 10px;margin:3px;font-weight:900}.prestige{color:#ffd166;font-weight:900}.paperTitle{color:#ffd166;font-weight:900}.orderCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px}.orderCard.done{border-color:#85f0a3;box-shadow:0 0 12px #85f0a344}.labLevelCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px;text-align:center}.labLevelCard.current{border-color:#ffd166;box-shadow:0 0 12px #ffd16644}.museumCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px;text-align:center}.museumCard.active{border-color:#ffd166;box-shadow:0 0 12px #ffd16644}.income{color:#85f0a3;font-weight:900}.labBonus{color:#85f0a3;font-weight:900}.rankBadge{display:inline-block;border-radius:999px;padding:3px 8px;background:#ffd166;color:#211;font-weight:900;margin:2px}.firstBonus{color:#85f0a3;font-weight:900}.transportCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px;text-align:center}.transportCard.owned{border-color:#85f0a3;box-shadow:0 0 12px #85f0a344}.questCard.claimed{opacity:.55}.questReward{color:#ffd166;font-weight:900}.bookGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}.progressBar{height:10px;background:#111;border:1px solid #ffffff22;border-radius:999px;overflow:hidden}.progressFill{height:100%;background:#ffd166;width:0%}.equipGrid,.growthGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.boost{color:#85f0a3;font-weight:900}.craftCard{background:#111827;border:1px solid #ffffff25;border-radius:14px;padding:12px;text-align:center}.craftCard .icon{font-size:34px}.costLine{font-size:12px;color:#c9c9c9}.sellBtn{background:#95d5b2}
+.place{background:#111827;border:1px solid #3b425c;border-radius:16px;padding:18px;text-align:center;cursor:pointer}
+.place div{font-size:42px}
+button{border:0;border-radius:12px;padding:10px 14px;margin:4px;font-weight:800;background:#ffd166;color:#211}
+button.ghost{background:#ffffff18;color:#fff;border:1px solid #ffffff33}
+button.blue{background:#7bdff2}
+#board{width:min(94vw,520px);margin:12px auto;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;touch-action:none}
+.cell{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;border:2px solid transparent;user-select:none;box-shadow:inset 0 1px 0 #ffffff66,0 5px 12px #0008;transition:.12s}.cell.pop{animation:pop .22s ease-out}.cell.clearFlash{animation:flash .25s ease-out}@keyframes pop{0%{transform:scale(.7);opacity:.4}100%{transform:scale(1);opacity:1}}@keyframes flash{0%{transform:scale(1.2);filter:brightness(1.8)}100%{transform:scale(.4);opacity:.1}}
+.red{background:#d94b4b}.blueC{background:#4d7bd9}.yellow{background:#d9c34d;color:#222}.green{background:#4caf6f}.white{background:#f2f2f2;color:#222}.black{background:#222;color:#fff;border-color:#555}
+.sel{border-color:#fff;filter:brightness(1.3);transform:scale(.9)}.bombCell{box-shadow:0 0 14px #ffdf6e,inset 0 1px 0 #ffffff77}.rainbowCell{background:linear-gradient(135deg,#e94b4b,#d9c34d,#4caf6f,#4d7bd9)!important;color:#fff;text-shadow:0 1px 3px #000;box-shadow:0 0 16px #fff8}
+.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.box{background:#111827;border:1px solid #ffffff25;border-radius:12px;padding:10px;text-align:center;min-width:95px}
+.box b{display:block;font-size:22px}
+.small{font-size:12px;color:#c9c9c9}
+.ok{color:#8fffad}.bad{color:#ff9e8b}
+.overlay{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:20px;z-index:100}.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#000c;border:1px solid #ffd166;border-radius:999px;padding:10px 16px;color:#ffd166;font-weight:900;z-index:200;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;bottom:42px}.spark{position:fixed;pointer-events:none;font-weight:900;color:#ffd166;text-shadow:0 0 10px #fff;animation:sparkUp .8s ease-out forwards;z-index:150}@keyframes sparkUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-45px) scale(1.5)}}
+.overlay.show{display:flex}
+.modal{background:#20263d;border:2px solid #ffd166;border-radius:18px;padding:20px;text-align:center;max-width:360px;width:100%}
+</style>
+
+<style id="final-balance-safe-style">
+.cell.clearFlash{animation:finalClear .34s ease-out forwards!important}
+.cell.dropFlash{animation:finalDrop .30s ease-out!important}
+#board.boardPause{filter:brightness(.72);transition:filter .18s ease}
+@keyframes finalClear{
+  0%{transform:scale(1.12);filter:brightness(2)}
+  70%{transform:scale(.75);opacity:.35}
+  100%{transform:scale(.15);opacity:0}
+}
+@keyframes finalDrop{
+  0%{transform:translateY(-22px) scale(.86);opacity:.35}
+  75%{transform:translateY(4px) scale(1.04)}
+  100%{transform:translateY(0) scale(1);opacity:1}
+}
+.finalPatchNote{background:#0b1020;border:1px solid #ffd16666;border-radius:12px;padding:10px;margin:8px 0;color:#ffd166}
+</style>
+
+
+<style id="companions-equip-style">
+.needEquip{display:inline-block;background:#ffffff14;border:1px solid #ffd16655;color:#ffd166;border-radius:999px;padding:3px 8px;margin:3px;font-size:11px}
+.roleTag{display:inline-block;background:#85f0a322;border:1px solid #85f0a366;color:#a8ffc0;border-radius:999px;padding:3px 8px;margin:3px;font-size:11px}
+</style>
+
+
+<style id="mission-result-fix-style">
+.resultGain{color:#85f0a3;font-weight:900}
+.resultMiss{color:#ff9e8b;font-weight:900}
+.resultPanel{background:#0b1020;border:1px solid #ffffff28;border-radius:12px;padding:10px;margin:8px 0;text-align:left}
+</style>
+
+
+<style id="slow-drop-sound-check-style">
+.cell.dropFlash{animation:finalDropSlow .58s cubic-bezier(.18,.84,.28,1.12)!important}
+.cell.clearFlash{animation:finalClearSlow .45s ease-out forwards!important}
+#board.boardPause{filter:brightness(.70);transition:filter .25s ease}
+.soundStatus{background:#0b1020;border:1px solid #ffffff30;border-radius:12px;padding:10px;margin:8px 0;font-size:12px;color:#c9c9c9}
+.soundOk{color:#85f0a3;font-weight:900}.soundWarn{color:#ffcf70;font-weight:900}
+@keyframes finalClearSlow{
+  0%{transform:scale(1.16);filter:brightness(2.1);opacity:1}
+  55%{transform:scale(.88);opacity:.50}
+  100%{transform:scale(.18);opacity:0}
+}
+@keyframes finalDropSlow{
+  0%{transform:translateY(-44px) scale(.82);opacity:.15}
+  55%{transform:translateY(7px) scale(1.06);opacity:1}
+  78%{transform:translateY(-3px) scale(.98)}
+  100%{transform:translateY(0) scale(1)}
+}
+</style>
+
+
+<style id="phase2-exp-style">
+.expBar{height:8px;background:#111;border:1px solid #ffffff26;border-radius:999px;overflow:hidden;margin:5px 0}
+.expFill{height:100%;background:#85f0a3;width:0%}
+.orgNote{background:#0b1020;border:1px solid #85f0a355;border-radius:12px;padding:10px;margin:8px 0}
+</style>
+
+
+<style id="phase3-facility-style">
+.facilityPanel{background:#0b1020;border:1px solid #ffd16655;border-radius:14px;padding:12px;margin:10px 0}
+.facilityGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.facilityMini{background:#111827;border:1px solid #ffffff24;border-radius:12px;padding:10px}
+.facilityMini b{color:#ffd166}
+.effectNow{color:#85f0a3;font-weight:900}
+</style>
+
+
+<style id="phase4-exp-result-style">
+.expResult{background:#0b1020;border:1px solid #85f0a355;border-radius:12px;padding:10px;margin:8px 0;text-align:left}
+.levelUp{color:#ffd166;font-weight:900}
+.expGain{color:#85f0a3;font-weight:900}
+</style>
+
+
+<style id="phase5-secret-style">
+.secretCard{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;padding:12px;text-align:center}
+.secretCard.unlocked{border-color:#ffd166;box-shadow:0 0 16px #ffd16655}
+.secretCondition{color:#c9c9c9;font-size:12px}
+.secretName{color:#ffd166;font-weight:900}
+</style>
+
+
+<style id="phase6-tavern-tabs-style">
+.tabRow{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.tabBtn{background:#ffffff18;color:#fff;border:1px solid #ffffff33}
+.tabBtn.active{background:#ffd166;color:#211;border-color:#ffd166}
+.orgHeader{background:#0b1020;border:1px solid #ffffff24;border-radius:12px;padding:10px;margin:8px 0;text-align:center}
+</style>
+
+
+<style id="phase7-team-style">
+.teamPanel{background:#0b1020;border:1px solid #ffd16655;border-radius:14px;padding:12px;margin:10px 0}
+.teamGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.teamMini{background:#111827;border:1px solid #ffffff24;border-radius:12px;padding:10px}
+.teamMini.active{border-color:#ffd166;box-shadow:0 0 14px #ffd16655}
+.teamName{color:#ffd166;font-weight:900}
+.teamEffect{color:#85f0a3;font-weight:900}
+</style>
+
+
+<style id="phase8-team-missions-style">
+.teamMission{background:#0b1020;border:1px solid #ffffff24;border-radius:12px;padding:10px}
+.teamMission.done{border-color:#85f0a3;box-shadow:0 0 12px #85f0a344}
+.teamStamp{display:inline-block;background:#ffd166;color:#211;border-radius:999px;padding:3px 8px;font-weight:900;font-size:11px}
+</style>
+
+
+<style id="phase9-final-polish-style">
+.finalNotice{background:linear-gradient(180deg,#1a2038,#0b1020);border:1px solid #ffd16666;border-radius:14px;padding:12px;margin:10px 0;text-align:center}
+.systemOk{color:#85f0a3;font-weight:900}
+.systemWarn{color:#ffcf70;font-weight:900}
+</style>
+
+</head>
+<body>
+<header><h1>天地創造</h1><div class="small">v1.0 FINAL｜統合完成版</div></header>
+<div class="wrap">
+
+<section id="hub" class="screen active">
+ <div class="card">
+  <h2>🌍 拠点マップ</h2>
+  <p>資金：<b id="money">0</b> G</p><div id="partyView" class="partyGrid"></div>
+  <div class="map">
+   <div class="place" onclick="show('stages')"><div>⛩️</div><b>探索門</b><p class="small">ステージへ行く</p></div>
+   <div class="place" onclick="show('storage')"><div>📦</div><b>素材倉庫</b><p class="small">元素を確認</p></div>
+   <div class="place" onclick="show('tavern')"><div>🍺</div><b>酒場</b><p class="small">仲間を雇う</p></div>
+   <div class="place" onclick="show('lab')"><div>⚒️</div><b>工房</b><p class="small">クラフト予定</p></div>
+   <div class="place" onclick="show('research')"><div>🏛️</div><b>研究所</b><p class="small">岩石で拡張</p></div>
+   <div class="place" onclick="show('legend')"><div>💎</div><b>伝説鉱物</b><p class="small">超低確率発見</p></div>
+   <div class="place" onclick="show('museum')"><div>🏺</div><b>博物館</b><p class="small">展示と収入</p></div>
+   <div class="place" onclick="show('equipment')"><div>🧰</div><b>装備開発</b><p class="small">研究員を強化</p></div>
+   <div class="place" onclick="show('growth')"><div>⭐</div><b>研究員進化</b><p class="small">専門能力を伸ばす</p></div>
+   <div class="place" onclick="show('book')"><div>📚</div><b>図鑑</b><p class="small">発見記録</p></div>
+   <div class="place" onclick="show('transport')"><div>🧭</div><b>交通開発</b><p class="small">手形・船・飛行機</p></div>
+   <div class="place" onclick="show('orders')"><div>📮</div><b>納品所</b><p class="small">素材・岩石を納品</p></div>
+   <div class="place" onclick="show('papers')"><div>📄</div><b>研究テーマ</b><p class="small">論文を書く</p></div>
+   <div class="place" onclick="show('conference')"><div>🏆</div><b>学会発表</b><p class="small">論文を発表</p></div>
+   <div class="place" onclick="show('awards')"><div>🥇</div><b>地質学賞</b><p class="small">称号と表彰</p></div>
+   <div class="place" onclick="show('congress')"><div>🌐</div><b>国際学会</b><p class="small">最終研究へ</p></div>
+   <div class="place" onclick="show('ending')"><div>🌟</div><b>最終到達</b><p class="small">天地創造へ</p></div>
+   <div class="place" onclick="show('secrets')"><div>🕯️</div><b>偉人図鑑</b><p class="small">隠しキャラ</p></div>
+   <div class="place" onclick="show('quest')"><div>📜</div><b>依頼掲示板</b><p class="small">報酬を受け取る</p></div>
+   <div class="place" onclick="show('save')"><div>💾</div><b>セーブ</b><p class="small">保存とバックアップ</p></div>
+  </div>
+ </div>
+</section>
+
+
+<section id="worldmap" class="screen"><div class="card"><h2>🌍 世界地図</h2><div id="regionList" class="grid2"></div><button class="ghost" onclick="show('hub')">戻る</button></div></section>
+<section id="stages" class="screen">
+ <div class="card">
+  <h2>⛩️ 探索門</h2>
+  <div class="card">
+    <b>難易度</b>
+    <div class="difficultyRow">
+      <button id="diff_sugar" class="difficultyBtn" onclick="setDifficulty('sugar')">激甘</button>
+      <button id="diff_easy" class="difficultyBtn" onclick="setDifficulty('easy')">やさしい</button>
+      <button id="diff_normal" class="difficultyBtn" onclick="setDifficulty('normal')">ふつう</button>
+      <button id="diff_hard" class="difficultyBtn" onclick="setDifficulty('hard')">むずかしい</button>
+      <button id="diff_extreme" class="difficultyBtn" onclick="setDifficulty('extreme')">激ムズ</button>
+    </div>
+    <p class="small">クリア条件を大幅強化。ふつうは標準的な本番難易度。むずかしい以上で白、激ムズで黒ブロック追加。</p>
+  </div>
+  <div id="stageList" class="map"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+<section id="play" class="screen">
+ <div class="card">
+  <h2 id="stageName">探索</h2><div id="stageParty" class="small"></div>
+  <div class="row"><div class="box"><b id="moves">20</b><span class="small">残り手数</span></div><div class="box"><b id="reward">0G</b><span class="small">報酬</span></div><div class="box"><b id="comboView">x1.0</b><span class="small">倍率</span></div></div>
+  <div id="mission" class="card"></div><div id="difficultyNotice" class="small" style="text-align:center"></div>
+  <button class="ghost" onclick="show('stages')">探索をやめる</button>
+ </div>
+ <div id="log" class="card">同じ色を3個以上なぞる。斜めOK。ミッション進行は全消去分、持ち帰り素材は仲間依存。</div>
+ <div id="board"></div>
+ <div id="runInv" class="card"></div>
+</section>
+
+<section id="storage" class="screen">
+ <div class="card">
+  <h2>📦 素材倉庫</h2>
+  <div id="storageView"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+<div class="card">
+<h3>組織</h3>
+<p>
+探索隊：パーティに入れて探索成功するとEXP+5<br>
+研究所：効果は雇用だけで発動。ただしEXPはパーティ参加時のみ<br>
+博物館：効果は雇用だけで発動。ただしEXPはパーティ参加時のみ
+</p>
+</div>
+
+<section id="tavern" class="screen">
+ <div class="card">
+  <h2>🍺 酒場</h2>
+  <p class="small">仲間ごとに回収できる元素が違う。施設スタッフもEXP目的でパーティ参加できる。編成は4人まで。</p>
+  <div class="facilityPanel"><h3>施設スタッフ効果</h3><p class="small">研究所・博物館スタッフは、雇っていれば効果が発動する。ただし成長EXPはパーティに入れて探索した時だけ入る。</p><div id="facilityEffectList" class="facilityGrid"></div></div><div class="teamPanel"><h3>チームボーナス</h3><p class="small">特定の組み合わせをパーティに入れると発動する。</p><div id="teamBonusList" class="teamGrid"></div><h3>チーム実績</h3><div id="teamMissionList" class="teamGrid"></div></div><div id="tavernTabs" class="tabRow">
+   <button id="tab_all" class="tabBtn" onclick="setTavernFilter('all')">全員</button>
+   <button id="tab_explore" class="tabBtn" onclick="setTavernFilter('探索隊')">探索隊</button>
+   <button id="tab_lab" class="tabBtn" onclick="setTavernFilter('研究所')">研究所</button>
+   <button id="tab_museum" class="tabBtn" onclick="setTavernFilter('博物館')">博物館</button>
+   <button id="tab_secret" class="tabBtn" onclick="setTavernFilter('偉人')">偉人</button>
+  </div>
+  <div id="tavernOrgHeader" class="orgHeader"></div>
+  <div id="tavernList" class="map"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+<section id="lab" class="screen">
+ <div class="card">
+  <h2>⚒️ 工房</h2><p class='small'>地域によって特定鉱物にボーナスが付く。</p>
+  <h3>現在の在庫</h3>
+  <div id="labStock" class="stockGrid"></div>
+  <h3>鉱物クラフト</h3>
+  <div id="mineralCraft" class="craftGrid"></div>
+  <h3>岩石クラフト</h3>
+  <div id="rockCraft" class="craftGrid"></div>
+  <h3>岩石売却</h3>
+  <div id="rockSell" class="craftGrid"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+
+
+
+
+
+<section id="legend" class="screen">
+<div class="card">
+<h2>💎 伝説鉱物</h2>
+<p class="small">世界中の調査で極めて低確率で発見される。</p>
+<div id="legendList" class="grid2"></div>
+<button class="ghost" onclick="show('hub')">戻る</button>
+</div>
+</section>
+<section id="museum" class="screen">
+ <div class="card">
+  <h2>🏺 博物館</h2>
+  <p class="small">鉱物・岩石を展示すると来館収入が発生する。展示品は消費しない。</p>
+  <p>展示収入：<b id="museumIncomeView">0</b> G</p>
+  <button onclick="claimMuseumIncome()">展示収入を受け取る</button>
+  <h3>展示スロット</h3>
+  <div id="museumSlots" class="grid2"></div>
+  <h3>展示できる品</h3>
+  <div id="museumItems" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+<section id="research" class="screen">
+ <div class="card">
+  <h2>🏛️ 研究所</h2>
+  <p>研究所Lv：<b id="labLevelView">1</b></p>
+  <p class="small">岩石と資金を使って研究所を拡張。探索報酬と元素回収量が少しずつ上がる。</p>
+  <div id="researchList" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+<section id="growth" class="screen">
+ <div class="card">
+  <h2>⭐ 研究員進化</h2>
+  <p class="small">鉱物・岩石・資金で研究員を進化。進化すると対応元素をさらに多く回収できる。</p>
+  <div id="growthList" class="growthGrid"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+<section id="equipment" class="screen">
+ <div class="card">
+  <h2>🧰 装備開発</h2>
+  <p class="small">鉱物＋資金で装備を開発。装備があると対応元素を追加回収できる。</p>
+  <div id="equipmentList" class="equipGrid"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+<section id="book" class="screen">
+ <div class="card">
+  <h2>📚 図鑑</h2>
+  <div id="bookProgress"></div>
+  <h3>鉱物図鑑</h3>
+  <div id="mineralBook" class="bookGrid"></div>
+  <h3>岩石図鑑</h3>
+  <div id="rockBook" class="bookGrid"></div>
+  <h3>探索記録</h3>
+  <div id="stageBook" class="bookGrid"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+
+<section id="transport" class="screen">
+ <div class="card">
+  <h2>🧭 交通開発</h2>
+  <p class="small">探索地を広げるための手形・乗り物を開発する。</p>
+  <div id="transportList" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+<section id="orders" class="screen">
+ <div class="card">
+  <h2>📮 納品所</h2>
+  <p class="small">研究所からの納品依頼。素材や岩石を納品すると資金がもらえる。</p>
+  <div id="orderList" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+<section id="papers" class="screen">
+ <div class="card">
+  <h2>📄 研究テーマ</h2>
+  <p class="small">岩石・鉱物・調査記録を使って論文を書く。論文は消費型の大型目標。</p>
+  <p>論文数：<b id="paperCountView">0</b></p>
+  <div id="paperList" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+<section id="conference" class="screen">
+ <div class="card">
+  <h2>🏆 学会発表</h2>
+  <p class="small">完成した論文を学会で発表し、名声を獲得する。名声はエンドコンテンツ用。</p>
+  <p>名声：<b id="prestigeView">0</b></p>
+  <div id="conferenceList" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+<section id="awards" class="screen">
+ <div class="card">
+  <h2>🥇 地質学賞</h2>
+  <p class="small">名声・図鑑・論文・研究所を極めると称号を獲得できる。</p>
+  <div id="titleView"></div>
+  <div id="awardList" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+<section id="congress" class="screen">
+ <div class="card">
+  <h2>🌐 国際地質学会</h2>
+  <p class="small">名声・論文・称号を集めて、世界規模の研究発表へ挑む。</p>
+  <div id="finalTitleView"></div>
+  <div id="congressList" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+<section id="ending" class="screen">
+ <div class="card">
+  <h2>🌟 最終到達</h2>
+  <div id="endingView"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+
+<section id="secrets" class="screen">
+ <div class="card">
+  <h2>🕯️ 偉人図鑑</h2>
+  <p class="small">条件を満たすと隠しキャラが解放される。</p>
+  <div id="secretList" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+<section id="quest" class="screen">
+ <div class="card">
+  <h2>📜 依頼掲示板</h2>
+  <p class="small">探索・クラフト・図鑑登録の達成で報酬を受け取れる。</p>
+  <div id="questList" class="grid2"></div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+<section id="save" class="screen">
+ <div class="card savePanel">
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.0 FINAL</div>
+  <p>
+   <button onclick="manualSave()">セーブ</button>
+   <button onclick="exportBackup()">バックアップ出力</button>
+   <button class="ghost" onclick="openImportFile()">セーブデータ読込</button>
+   <button class="ghost" onclick="resetSave()">リセット</button>
+   <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importBackup(event)">
+  </p>
+  <div id="saveStatus" class="small">自動セーブ：準備中</div>
+  <button class="ghost" onclick="show('hub')">戻る</button>
+ </div>
+</section>
+
+</div>
+
+<div id="toast" class="toast"></div>
+<div id="modal" class="overlay">
+ <div class="modal">
+  <h2 id="modalTitle">結果</h2>
+  <p id="modalText"></p>
+  <button onclick="closeModal()">OK</button>
+ </div>
+</div>
+
+<script>
+const colors=["red","blueC","yellow","green"];
+const characters={
+ mineralogist:{name:"鉱物学者",face:"👨‍🔬",cost:0,elements:["SiO₂"],role:"元素",desc:"SiO₂を回収できる。"},
+ volcanologist:{name:"火山学者",face:"🌋",cost:0,elements:["Mg"],role:"元素",desc:"Mgを回収できる。"},
+ geochemist:{name:"地球化学者",face:"🧪",cost:900,elements:["Al"],role:"元素",desc:"Alを回収できる。"},
+ oreScholar:{name:"鉱床学者",face:"🧲",cost:1400,elements:["Fe"],role:"元素",desc:"Feを回収できる。"},
+ sedimentologist:{name:"堆積学者",face:"🏜️",cost:1800,elements:["Ca"],role:"元素",desc:"Caを回収できる。"},
+ oceanographer:{name:"海洋学者",face:"🌊",cost:2200,elements:["Na"],role:"元素",desc:"Naを回収できる。"},
+ gemologist:{name:"宝石学者",face:"💠",cost:5000,elements:[],role:"レア",desc:"伝説鉱物の発見率を上げる。"},
+ metamorphic:{name:"変成岩研究者",face:"🏔️",cost:4200,elements:[],role:"研究所",desc:"白雲母・結晶片岩系の研究を支援。"},
+ fieldScout:{name:"フィールド調査員",face:"🗺️",cost:3000,elements:[],role:"探索",desc:"探索報酬を少し上げる。"},
+ curator:{name:"博物館学芸員",face:"🏺",cost:3600,elements:[],role:"博物館",desc:"博物館の展示収入を上げる。"},
+ secretary:{name:"学会秘書",face:"📑",cost:4800,elements:[],role:"研究所",desc:"論文研究費を下げる。"},
+ photographer:{name:"地質カメラマン",face:"📸",cost:3200,elements:[],role:"博物館",desc:"探索成功時の報酬を少し上げる。"},
+ professor:{name:"大学教授",face:"🎓",cost:9000,elements:["SiO₂","Mg"],role:"研究所",desc:"SiO₂とMgを回収できる。"},
+ international:{name:"国際研究員",face:"🌍",cost:11000,elements:["Al","Fe"],role:"研究所",desc:"AlとFeを回収できる。"},
+ deepsea:{name:"深海探査員",face:"🚢",cost:13000,elements:["Ca","Na"],role:"深海",desc:"CaとNaを回収できる。"},
+ polar:{name:"極地研究者",face:"❄️",cost:14000,elements:[],role:"レア",desc:"レア鉱物・伝説鉱物の発見を補助。"},
+ planetary:{name:"惑星地質学者",face:"☄️",cost:20000,elements:[],role:"最終",desc:"最終研究向けの終盤仲間。"},
+ appraiser:{name:"鑑定士",face:"🔍",cost:1200,elements:[],role:"鑑定",desc:"品質・鑑定補助枠。今は編成戦略用。"}
+};
+let ownedChars=["mineralogist","volcanologist"];
+let party=["mineralogist","volcanologist"];
+let charLevels={mineralogist:1,volcanologist:1,geochemist:1,oreScholar:1,sedimentologist:1,oceanographer:1,gemologist:1,metamorphic:1,fieldScout:1,curator:1,secretary:1,photographer:1,professor:1,international:1,deepsea:1,polar:1,planetary:1,appraiser:1,nemo:1,magellan:1,plato:1,archimedes:1,darwin:1,humboldt:1};
+let charExp={};
+let lastExpResults=[];
+let unlockedSecrets={};
+let completedTeamMissions={};
+
+const growthRecipes={
+ mineralogist:[
+  null,
+  {title:"主任鉱物学者",money:600,equip:"loupe",minerals:{quartz:2},rocks:{},bonus:{"SiO₂":1}},
+  {title:"鉱物学教授",money:2500,equip:"polar",minerals:{quartz:4,kfeldspar:2},rocks:{granite:1},bonus:{"SiO₂":2}}
+ ],
+ volcanologist:[
+  null,
+  {title:"主任火山学者",money:700,equip:"hammer",minerals:{pyroxene:2},rocks:{},bonus:{Mg:1}},
+  {title:"火山研究教授",money:2800,equip:"fieldDrone",minerals:{pyroxene:4,olivine:2},rocks:{basalt:1},bonus:{Mg:2}}
+ ],
+ geochemist:[
+  null,
+  {title:"主任地球化学者",money:900,equip:"geochemKit",minerals:{kfeldspar:2},rocks:{},bonus:{Al:1}},
+  {title:"地球化学教授",money:3200,equip:"polar",minerals:{kfeldspar:4,muscovite:2},rocks:{granite:1},bonus:{Al:2}}
+ ],
+ oreScholar:[
+  null,
+  {title:"主任鉱床学者",money:1000,equip:"magnetometer",minerals:{magnetite:2},rocks:{},bonus:{Fe:1}},
+  {title:"鉱床研究教授",money:3600,equip:"electronScope",minerals:{magnetite:4,pyroxene:2},rocks:{basalt:1},bonus:{Fe:2}}
+ ],
+ sedimentologist:[
+  null,
+  {title:"主任堆積学者",money:1200,equip:"sedimentCore",minerals:{plagioclase:2},rocks:{},bonus:{Ca:1}},
+  {title:"地層解析教授",money:3600,equip:"metamorphicPress",minerals:{plagioclase:4,amphibole:2},rocks:{andesite:1},bonus:{Ca:2}}
+ ],
+ oceanographer:[
+  null,
+  {title:"主任海洋学者",money:1400,equip:"sampler",minerals:{albite:2},rocks:{},bonus:{Na:1}},
+  {title:"深海地質学者",money:4200,equip:"deepseaROV",minerals:{albite:4,plagioclase:2},rocks:{basalt:1},bonus:{Na:2}}
+ ],
+ gemologist:[
+  null,
+  {title:"主任宝石学者",money:3000,equip:"spectroscope",minerals:{quartz:5},rocks:{},bonus:{}},
+  {title:"伝説鉱物研究者",money:8000,equip:"electronScope",minerals:{quartz:8,albite:3},rocks:{rhyolite:1},bonus:{}}
+ ],
+ metamorphic:[
+  null,
+  {title:"主任変成岩研究者",money:2800,equip:"metamorphicPress",minerals:{muscovite:2},rocks:{schist:1},bonus:{}},
+  {title:"変成岩教授",money:7000,equip:"electronScope",minerals:{muscovite:4,amphibole:3},rocks:{schist:2},bonus:{}}
+ ],
+ fieldScout:[
+  null,
+  {title:"主任フィールド調査員",money:2200,equip:"fieldDrone",minerals:{quartz:3},rocks:{},bonus:{}},
+  {title:"世界フィールド隊長",money:6500,equip:"globalKit",minerals:{magnetite:3},rocks:{gabbro:1},bonus:{}}
+ ],
+ curator:[
+  null,
+  {title:"主任学芸員",money:2500,equip:"museumCase",minerals:{quartz:3},rocks:{granite:1},bonus:{}},
+  {title:"世界博物館長",money:7500,equip:"electronScope",minerals:{quartz:6},rocks:{granite:2},bonus:{}}
+ ],
+ secretary:[
+  null,
+  {title:"主任学会秘書",money:2600,equip:"paperDesk",minerals:{quartz:2},rocks:{granite:1},bonus:{}},
+  {title:"国際学会マネージャー",money:8000,equip:"globalKit",minerals:{albite:3},rocks:{schist:1},bonus:{}}
+ ],
+ photographer:[
+  null,
+  {title:"主任地質カメラマン",money:2200,equip:"fieldDrone",minerals:{quartz:2},rocks:{},bonus:{}},
+  {title:"世界地質記録者",money:6500,equip:"globalKit",minerals:{quartz:4},rocks:{rhyolite:1},bonus:{}}
+ ],
+ professor:[
+  null,
+  {title:"主任大学教授",money:7000,equip:"electronScope",minerals:{quartz:6,kfeldspar:3},rocks:{granite:2},bonus:{"SiO₂":1,Mg:1}},
+  {title:"世界的大学教授",money:15000,equip:"globalKit",minerals:{magnetite:4,muscovite:4},rocks:{schist:2},bonus:{"SiO₂":2,Mg:2}}
+ ],
+ international:[
+  null,
+  {title:"主任国際研究員",money:8000,equip:"globalKit",minerals:{albite:3,magnetite:2},rocks:{gabbro:1},bonus:{Al:1,Fe:1}},
+  {title:"世界調査代表",money:18000,equip:"electronScope",minerals:{muscovite:5},rocks:{schist:2,gabbro:1},bonus:{Al:2,Fe:2}}
+ ],
+ deepsea:[
+  null,
+  {title:"主任深海探査員",money:9000,equip:"deepseaROV",minerals:{albite:4},rocks:{basalt:2},bonus:{Ca:1,Na:1}},
+  {title:"深海探査教授",money:20000,equip:"planetaryProbe",minerals:{olivine:4,albite:4},rocks:{peridotite:1},bonus:{Ca:2,Na:2}}
+ ],
+ polar:[
+  null,
+  {title:"主任極地研究者",money:9000,equip:"globalKit",minerals:{quartz:5,albite:3},rocks:{rhyolite:1},bonus:{}},
+  {title:"極地地質教授",money:22000,equip:"planetaryProbe",minerals:{muscovite:5},rocks:{schist:2},bonus:{}}
+ ],
+ planetary:[
+  null,
+  {title:"主任惑星地質学者",money:16000,equip:"planetaryProbe",minerals:{olivine:5,magnetite:5},rocks:{peridotite:2},bonus:{}},
+  {title:"惑星地質学教授",money:40000,equip:"electronScope",minerals:{quartz:10,magnetite:8},rocks:{peridotite:3,rhyolite:2},bonus:{}}
+ ],
+ nemo:[
+  null,
+  {title:"深海の船長",money:9000,equip:"deepseaROV",minerals:{albite:4},rocks:{basalt:2},bonus:{Na:1,Ca:1}},
+  {title:"海底世界の案内人",money:22000,equip:"planetaryProbe",minerals:{olivine:5,albite:5},rocks:{peridotite:2},bonus:{Na:2,Ca:2}}
+ ],
+ magellan:[
+  null,
+  {title:"世界航路の開拓者",money:9000,equip:"globalKit",minerals:{albite:4},rocks:{gabbro:1},bonus:{}},
+  {title:"地球一周の案内人",money:22000,equip:"planetaryProbe",minerals:{magnetite:5},rocks:{gabbro:2},bonus:{}}
+ ],
+ plato:[
+  null,
+  {title:"理論地質学者",money:9000,equip:"paperDesk",minerals:{quartz:6},rocks:{granite:1},bonus:{}},
+  {title:"地球理論の哲人",money:24000,equip:"electronScope",minerals:{quartz:10,muscovite:5},rocks:{schist:2},bonus:{}}
+ ],
+ archimedes:[
+  null,
+  {title:"装備工学者",money:9000,equip:"fieldDrone",minerals:{magnetite:4},rocks:{gabbro:1},bonus:{}},
+  {title:"発明王",money:24000,equip:"electronScope",minerals:{magnetite:8,quartz:6},rocks:{gabbro:2},bonus:{}}
+ ],
+ darwin:[
+  null,
+  {title:"進化研究者",money:9000,equip:"spectroscope",minerals:{quartz:6},rocks:{rhyolite:1},bonus:{}},
+  {title:"生命と地球史の研究者",money:24000,equip:"planetaryProbe",minerals:{olivine:6,muscovite:4},rocks:{peridotite:2},bonus:{}}
+ ],
+ humboldt:[
+  null,
+  {title:"世界博物学者",money:9000,equip:"globalKit",minerals:{quartz:6,albite:3},rocks:{granite:1},bonus:{}},
+  {title:"総合自然探検家",money:24000,equip:"planetaryProbe",minerals:{magnetite:5,muscovite:5},rocks:{schist:2},bonus:{}}
+ ],
+ appraiser:[
+  null,
+  {title:"主任鑑定士",money:1500,equip:"spectroscope",minerals:{quartz:3},rocks:{},bonus:{}},
+  {title:"伝説の鑑定士",money:5200,equip:"electronScope",minerals:{quartz:5,kfeldspar:2},rocks:{granite:1},bonus:{}}
+ ]
+};
+function charTitle(id){
+ const lv=charLevels[id]||1;
+ if(lv===1)return characters[id].name;
+ return growthRecipes[id] && growthRecipes[id][lv-1] ? growthRecipes[id][lv-1].title : characters[id].name;
+}
+function charBonus(atomName){
+ let add=0;
+ party.forEach(id=>{
+  const lv=charLevels[id]||1;
+  for(let i=1;i<lv;i++){
+   const g=growthRecipes[id]&&growthRecipes[id][i];
+   if(g && g.bonus && g.bonus[atomName]) add+=g.bonus[atomName];
+  }
+ });
+ return add;
+}
+function canPayRocks(cost){
+ return Object.entries(cost||{}).every(([k,v])=>(rocks[k]||0)>=v);
+}
+function payRocks(cost){
+ Object.entries(cost||{}).forEach(([k,v])=>rocks[k]-=v);
+}
+function evolveChar(id){
+ if(!ownedChars.includes(id)){alert("未雇用です");return;}
+ const lv=charLevels[id]||1;
+ const next=growthRecipes[id]&&growthRecipes[id][lv];
+ if(!next){alert("これ以上進化できません");return;}
+ if(next.equip && !equipment[next.equip]){alert("必要装備が未開発です："+(equipmentRecipes[next.equip]?.name||next.equip));return;}
+ if(money<next.money){alert("資金不足");return;}
+ if(!canPay(minerals,next.minerals||{})){alert("鉱物不足");return;}
+ if(!canPayRocks(next.rocks||{})){alert("岩石不足");return;}
+ money-=next.money;
+ pay(minerals,next.minerals||{});
+ payRocks(next.rocks||{});
+ charLevels[id]=lv+1;
+ saveGame();
+ renderAll();
+}
+
+
+
+
+
+function itemCatalogForMuseum(){
+ const items=[];
+ Object.entries(mineralRecipes).forEach(([id,r])=>{
+  if((minerals[id]||0)>0)items.push({type:"mineral",id,name:r.name,icon:r.icon,value:120});
+ });
+ Object.entries(rockRecipes).forEach(([id,r])=>{
+  if((rocks[id]||0)>0)items.push({type:"rock",id,name:r.name,icon:r.icon,value:Math.round(r.value*0.35)});
+ });
+ return items;
+}
+function slotValue(slot){
+ if(!slot)return 0;
+ if(slot.type==="mineral")return 120;
+ if(slot.type==="rock")return Math.round((rockRecipes[slot.id]?.value||300)*0.35);
+ return 0;
+}
+function appraiserRate(){
+ return ownedChars.includes("appraiser") ? 1 + 0.05*(charLevels.appraiser||1) : 1;
+}
+function calcMuseumIncome(){
+ return Math.round(museumSlots.reduce((sum,s)=>sum+slotValue(s),0)*museumRate()*appraiserRate());
+}
+function setMuseumSlot(index,type,id){
+ museumSlots[index]={type,id};
+ renderAll();
+ saveGame();
+}
+function clearMuseumSlot(index){
+ museumSlots[index]=null;
+ renderAll();
+ saveGame();
+}
+function claimMuseumIncome(){
+ const inc=calcMuseumIncome();
+ if(inc<=0){alert("展示品がありません");return;}
+ museumIncomeBank+=inc;
+ money+=inc;
+ saveGame();
+ renderAll();
+ alert("展示収入 "+inc+"G を受け取りました");
+}
+function renderMuseum(){
+ const income=document.getElementById("museumIncomeView");
+ if(income)income.textContent=calcMuseumIncome();
+ const slots=document.getElementById("museumSlots");
+ if(slots){
+  slots.innerHTML=museumSlots.map((s,i)=>{
+   if(!s)return "<div class='museumCard'><div class='big'>空</div><p class='small'>スロット "+(i+1)+"</p></div>";
+   const cat=s.type==="mineral"?mineralRecipes:rockRecipes;
+   const item=cat[s.id];
+   return "<div class='museumCard active'><div class='big'>"+item.icon+"</div><b>"+item.name+"</b><p class='income'>+"+slotValue(s)+"G</p><button class='ghost' onclick='clearMuseumSlot("+i+")'>外す</button></div>";
+  }).join("");
+ }
+ const box=document.getElementById("museumItems");
+ if(box){
+  const items=itemCatalogForMuseum();
+  if(items.length===0){box.innerHTML="<p class='small'>展示できる鉱物・岩石がありません。</p>";return;}
+  box.innerHTML=items.map(it=>{
+   return "<div class='museumCard'><div class='big'>"+it.icon+"</div><b>"+it.name+"</b><p class='small'>展示収入目安："+it.value+"G</p>"+museumSlots.map((s,i)=>"<button onclick=\"setMuseumSlot("+i+",'"+it.type+"','"+it.id+"')\">"+(i+1)+"へ展示</button>").join("")+"</div>";
+  }).join("");
+ }
+}
+
+
+const regions={
+ japan:{name:"日本列島",icon:"🇯🇵",cost:0,desc:"国内調査"},
+ pacific:{name:"太平洋火山帯",icon:"🌊",cost:5000,desc:"ハワイ方面"},
+ world:{name:"世界調査網",icon:"🌍",cost:15000,desc:"世界へ進出"}
+};
+function buyRegion(id){
+ if(unlockedRegions[id])return;
+ const r=regions[id];
+ if(money<r.cost){alert("資金不足");return;}
+ money-=r.cost; unlockedRegions[id]=true;
+ saveGame(); renderAll();
+}
+function renderRegions(){
+ const box=document.getElementById("regionList");
+ if(!box)return;
+ box.innerHTML=Object.entries(regions).map(([id,r])=>{
+  const ok=!!unlockedRegions[id];
+  return `<div class="museumCard ${ok?'active':''}">
+  <div class="big">${r.icon}</div><b>${r.name}</b>
+  <p class="small">${r.desc}</p>
+  ${ok?'<span class="boost">解放済</span>':`<button onclick="buyRegion('${id}')">${r.cost}G</button>`}
+  </div>`;
+ }).join("");
+}
+
+const researchLevels={
+ 2:{title:"標本整理室",money:1500,rocks:{basalt:1},bonus:"探索報酬+5%、元素回収+0"},
+ 3:{title:"岩石分析室",money:3000,rocks:{granite:1,basalt:1},bonus:"探索報酬+10%、元素回収+1"},
+ 4:{title:"地球化学ラボ",money:6000,rocks:{andesite:1,rhyolite:1},bonus:"探索報酬+18%、元素回収+1"},
+ 5:{title:"総合地質研究所",money:10000,rocks:{peridotite:1,granite:2},bonus:"探索報酬+30%、元素回収+2"}
+};
+function labRewardRate(){
+ return labLevel>=5?1.30:labLevel>=4?1.18:labLevel>=3?1.10:labLevel>=2?1.05:1;
+}
+function labCollectBonus(){
+ return labLevel>=5?2:labLevel>=3?1:0;
+}
+function upgradeLab(){
+ const next=researchLevels[labLevel+1];
+ if(!next){alert("研究所は最大レベルです");return;}
+ if(money<next.money){alert("資金不足");return;}
+ if(!canPayRocks(next.rocks)){alert("必要な岩石が足りません");return;}
+ money-=next.money;
+ payRocks(next.rocks);
+ labLevel++;
+ saveGame();
+ renderAll();
+}
+function renderResearch(){
+ const lv=document.getElementById("labLevelView");
+ if(lv)lv.textContent=labLevel;
+ const box=document.getElementById("researchList");
+ if(!box)return;
+ box.innerHTML=Object.entries(researchLevels).map(([level,r])=>{
+  const n=Number(level);
+  const done=labLevel>=n;
+  const current=labLevel+1===n;
+  return "<div class='labLevelCard "+(done?'current':'')+"'><h3>Lv."+level+" "+r.title+"</h3><p class='small'>必要："+r.money+"G / "+costText(r.rocks,rockRecipes)+"</p><p class='labBonus'>"+r.bonus+"</p>"+(done?"<span class='boost'>拡張済み</span>":current?"<button onclick='upgradeLab()'>拡張する</button>":"<span class='small'>前のLvが必要</span>")+"</div>";
+ }).join("");
+}
+
+const orderCatalog={
+ sio2Basic:{title:"基礎素材の納品",desc:"SiO₂を10個納品",type:"inv",item:"SiO₂",amount:10,reward:450},
+ mgFeStudy:{title:"苦鉄質素材の納品",desc:"Mgを6個、Feを6個納品",type:"multiInv",items:{Mg:6,Fe:6},reward:650},
+ quartzOrder:{title:"石英標本の納品",desc:"石英を2個納品",type:"mineral",item:"quartz",amount:2,reward:900},
+ basaltOrder:{title:"玄武岩サンプル納品",desc:"玄武岩を1個納品",type:"rock",item:"basalt",amount:1,reward:1400},
+ graniteOrder:{title:"花崗岩サンプル納品",desc:"花崗岩を1個納品",type:"rock",item:"granite",amount:1,reward:1700}
+};
+function orderCanPay(o){
+ if(o.type==="inv")return (inv[o.item]||0)>=o.amount;
+ if(o.type==="mineral")return (minerals[o.item]||0)>=o.amount;
+ if(o.type==="rock")return (rocks[o.item]||0)>=o.amount;
+ if(o.type==="multiInv")return Object.entries(o.items).every(([k,v])=>(inv[k]||0)>=v);
+ return false;
+}
+function orderPay(o){
+ if(o.type==="inv")inv[o.item]-=o.amount;
+ if(o.type==="mineral")minerals[o.item]-=o.amount;
+ if(o.type==="rock")rocks[o.item]-=o.amount;
+ if(o.type==="multiInv")Object.entries(o.items).forEach(([k,v])=>inv[k]-=v);
+}
+function completeOrder(id){
+ const o=orderCatalog[id];
+ if(!o || completedOrders[id])return;
+ if(!orderCanPay(o)){alert("納品素材が足りません");return;}
+ orderPay(o);
+ completedOrders[id]=true;
+ money+=o.reward;
+ saveGame();
+ renderAll();
+}
+function renderOrders(){
+ const box=document.getElementById("orderList");
+ if(!box)return;
+ box.innerHTML=Object.entries(orderCatalog).map(([id,o])=>{
+  const done=!!completedOrders[id];
+  const can=orderCanPay(o);
+  return "<div class='orderCard "+(done?'done':'')+"'><b>"+o.title+"</b><p class='small'>"+o.desc+"</p><p class='questReward'>報酬 "+o.reward+"G</p>"+(done?"<span class='boost'>納品済み</span>":can?"<button onclick=\"completeOrder('"+id+"')\">納品</button>":"<span class='small'>素材不足</span>")+"</div>";
+ }).join("");
+}
+
+
+const paperCatalog={
+ basaltStudy:{title:"玄武岩質マグマの研究",desc:"玄武岩・輝石・カンラン石を使う基礎論文",money:2000,req:{rocks:{basalt:2},minerals:{pyroxene:3,olivine:2},stages:{hawaii:true}},reward:3500},
+ graniteStudy:{title:"花崗岩体と石英脈",desc:"花崗岩・石英・カリ長石を使う論文",money:2600,req:{rocks:{granite:2},minerals:{quartz:5,kfeldspar:3},stages:{yamanashi:true}},reward:4500},
+ volcanicArc:{title:"火山弧の安山岩研究",desc:"安山岩と角閃石を使う中級論文",money:4000,req:{rocks:{andesite:2},minerals:{amphibole:3,plagioclase:3},stages:{sakurajima:true,aso:true}},reward:7000},
+ oceanRidge:{title:"海嶺玄武岩の比較研究",desc:"アイスランド調査と玄武岩系素材を使う上級論文",money:7000,req:{rocks:{basalt:3,peridotite:1},minerals:{olivine:4,albite:2},stages:{iceland:true}},reward:12000}
+};
+function reqText(req){
+ const parts=[];
+ if(req.minerals)parts.push("鉱物："+costText(req.minerals,mineralRecipes));
+ if(req.rocks)parts.push("岩石："+costText(req.rocks,rockRecipes));
+ if(req.stages)parts.push("調査："+Object.keys(req.stages).map(id=>stages[id]?.name||id).join(" / "));
+ return parts.join("<br>");
+}
+function canWritePaper(p){
+ if(money<Math.round(p.money*paperCostRate()*secretPaperRate()))return false;
+ if(p.req.minerals&&!canPay(minerals,p.req.minerals))return false;
+ if(p.req.rocks&&!canPayRocks(p.req.rocks))return false;
+ if(p.req.stages&&!Object.keys(p.req.stages).every(id=>discovered.stages&&discovered.stages[id]))return false;
+ return true;
+}
+function writePaper(id){
+ const p=paperCatalog[id];
+ if(!p || completedPapers[id])return;
+ if(!canWritePaper(p)){alert("研究条件が足りません");return;}
+ money-=Math.round(p.money*paperCostRate()*secretPaperRate());
+ if(p.req.minerals)pay(minerals,p.req.minerals);
+ if(p.req.rocks)payRocks(p.req.rocks);
+ completedPapers[id]=true;
+ money+=p.reward;
+ saveGame(); renderAll();
+ alert("論文完成！ 報酬 "+p.reward+"G");
+}
+function renderPapers(){
+ const box=document.getElementById("paperList");
+ const count=document.getElementById("paperCountView");
+ if(count)count.textContent=Object.keys(completedPapers).length;
+ if(!box)return;
+ box.innerHTML=Object.entries(paperCatalog).map(([id,p])=>{
+  const done=!!completedPapers[id];
+  const can=canWritePaper(p);
+  return "<div class='paperCard "+(done?'done':'')+"'><div class='paperTitle'>"+p.title+"</div><p class='small'>"+p.desc+"</p><p class='small'>研究費："+Math.round(p.money*paperCostRate()*secretPaperRate())+"G<br>"+reqText(p.req)+"</p><p class='questReward'>完成報酬 "+p.reward+"G</p>"+(done?"<span class='boost'>発表済み</span>":can?"<button onclick=\"writePaper('"+id+"')\">論文を書く</button>":"<span class='small'>条件不足</span>")+"</div>";
+ }).join("");
+}
+
+
+function presentPaper(id){
+ const p=paperCatalog[id];
+ if(!p || !completedPapers[id]){alert("先に論文を完成させてください");return;}
+ if(presentedPapers[id])return;
+ presentedPapers[id]=true;
+ const gain = id==="oceanRidge"?8:id==="volcanicArc"?5:3;
+ prestige += gain;
+ money += gain*500;
+ saveGame(); renderAll();
+ alert("学会発表成功！ 名声+"+gain);
+}
+function renderConference(){
+ const box=document.getElementById("conferenceList");
+ const pv=document.getElementById("prestigeView");
+ if(pv)pv.textContent=prestige;
+ if(!box)return;
+ box.innerHTML=Object.entries(paperCatalog).map(([id,p])=>{
+  const ready=!!completedPapers[id];
+  const done=!!presentedPapers[id];
+  const gain = id==="oceanRidge"?8:id==="volcanicArc"?5:3;
+  return "<div class='confCard "+(done?'done':'')+"'><b>"+p.title+"</b><p class='small'>"+(ready?"発表可能":"論文未完成")+"</p><p class='prestige'>名声 +"+gain+"</p>"+(done?"<span class='boost'>発表済み</span>":ready?"<button onclick=\"presentPaper('"+id+"')\">発表する</button>":"<span class='small'>条件不足</span>")+"</div>";
+ }).join("");
+}
+
+
+
+const legendaryInfo={
+ diamond:{icon:"💎",name:"ダイヤモンド",chance:0.003},
+ ruby:{icon:"🔴",name:"ルビー",chance:0.004},
+ sapphire:{icon:"🔵",name:"サファイア",chance:0.004},
+ emerald:{icon:"🟢",name:"エメラルド",chance:0.004},
+ opal:{icon:"🌈",name:"オパール",chance:0.006}
+};
+function rollLegendary(){
+ Object.entries(legendaryInfo).forEach(([id,v])=>{
+  if(Math.random()<v.chance*legendaryRateBonus()) legendary[id]++;
+ });
+}
+function legendsFound(){ return Object.values(legendary).reduce((a,b)=>a+(b>0?1:0),0);}
+function renderLegend(){
+ const box=document.getElementById("legendList");
+ if(!box)return;
+ box.innerHTML=Object.entries(legendaryInfo).map(([id,v])=>
+ `<div class="awardCard ${legendary[id]>0?'done':''}">
+ <div class="big">${v.icon}</div>
+ <b>${v.name}</b>
+ <p class="small">発見数 ${legendary[id]}</p>
+ <p class="small">発見率 ${(v.chance*100).toFixed(2)}%</p>
+ </div>`).join("");
+}
+
+const awardCatalog={
+ fieldNovice:{title:"地質調査員",icon:"🥉",desc:"探索記録を3地点埋める",check:()=>stagesFoundSafe()>=3,reward:2000},
+ mineralMaster:{title:"鉱物標本家",icon:"💎",desc:"鉱物図鑑を5種類埋める",check:()=>mineralsFoundSafe()>=5,reward:3000},
+ rockMaster:{title:"岩石博士",icon:"🪨",desc:"岩石図鑑を4種類埋める",check:()=>rocksFoundSafe()>=4,reward:4000},
+ professor:{title:"地質学教授",icon:"🎓",desc:"論文を3本完成させる",check:()=>Object.keys(completedPapers).length>=3,reward:6000},
+ famous:{title:"世界的研究者",icon:"🌟",desc:"名声を15以上にする",check:()=>prestige>=15,reward:9000},
+ grandPrize:{title:"地球の解読者",icon:"🏆",desc:"研究所Lv5・名声20・論文4本",check:()=>labLevel>=5&&prestige>=20&&Object.keys(completedPapers).length>=4,reward:20000},
+ legendHunter:{title:"伝説鉱物ハンター",icon:"💎",desc:"伝説鉱物を1種発見",check:()=>legendsFound()>=1,reward:12000}
+};
+function currentTitle(){
+ if(claimedAwards.grandPrize)return "地球の解読者";
+ if(claimedAwards.famous)return "世界的研究者";
+ if(claimedAwards.professor)return "地質学教授";
+ if(claimedAwards.rockMaster)return "岩石博士";
+ if(claimedAwards.mineralMaster)return "鉱物標本家";
+ if(claimedAwards.fieldNovice)return "地質調査員";
+ return "見習い研究員";
+}
+function claimAward(id){
+ const a=awardCatalog[id];
+ if(!a || claimedAwards[id])return;
+ if(!a.check()){alert("条件未達成");return;}
+ claimedAwards[id]=true;
+ money+=a.reward;
+ saveGame(); renderAll();
+ alert(a.title+"を獲得！");
+}
+function renderAwards(){
+ const title=document.getElementById("titleView");
+ if(title)title.innerHTML="現在の称号：<span class='titleBadge'>"+currentTitle()+"</span>";
+ const box=document.getElementById("awardList");
+ if(!box)return;
+ box.innerHTML=Object.entries(awardCatalog).map(([id,a])=>{
+  const done=!!claimedAwards[id];
+  const can=a.check();
+  return "<div class='awardCard "+(done?'done':'')+"'><div class='big'>"+a.icon+"</div><b>"+a.title+"</b><p class='small'>"+a.desc+"</p><p class='questReward'>賞金 "+a.reward+"G</p>"+(done?"<span class='boost'>受賞済み</span>":can?"<button onclick=\"claimAward('"+id+"')\">受賞する</button>":"<span class='small'>条件不足</span>")+"</div>";
+ }).join("");
+}
+
+
+
+function endingReady(){
+ return !!completedCongress.final && prestige>=50 && labLevel>=5 && Object.keys(claimedAwards).length>=5 && legendsFound()>=1;
+}
+function completeEnding(){
+ if(!endingReady()){alert("まだ地球史統合理論は完成していません");return;}
+ endingCleared=true;
+ sfxEnding(); toast("天地創造 完成！");
+ saveGame(); renderAll();
+}
+function renderEnding(){
+ const box=document.getElementById("endingView");
+ if(!box)return;
+ const conditions=[
+  ["最終研究「地球史統合理論」完成",!!completedCongress.final],
+  ["名声50以上",prestige>=50],
+  ["研究所Lv5",labLevel>=5],
+  ["地質学賞5個以上",Object.keys(claimedAwards).length>=5],
+  ["伝説鉱物1種以上",legendsFound()>=1]
+ ];
+ if(endingCleared){
+  box.innerHTML=`<div class="endingBox"><div class="endingTitle">天地創造 完成</div>
+  <p>あなたは世界中の岩石と鉱物を調査し、地球史統合理論を完成させた。</p>
+  <p>地質学者たちは、あなたを「地球史の解読者」と呼んだ。</p>
+  <p class="finalBadge">GAME CLEAR</p></div>`;
+  return;
+ }
+ box.innerHTML="<div class='endingBox'><div class='endingTitle'>地球史統合理論</div><p class='small'>すべての条件を満たすとエンディング。</p>"
+ + conditions.map(c=>"<p>"+(c[1]?"✅":"⬜")+" "+c[0]+"</p>").join("")
+ + (endingReady()?"<button onclick='completeEnding()'>天地創造を完成させる</button>":"<p class='small'>条件未達成</p>")
+ + "</div>";
+}
+
+const congressCatalog={
+ asia:{title:"アジア地質学会",icon:"🇯🇵",desc:"国内研究を国際舞台へ出す。",cost:5000,need:()=>prestige>=5&&Object.keys(completedPapers).length>=1,rewardPrestige:4,rewardMoney:6000},
+ pacific:{title:"環太平洋火山会議",icon:"🌋",desc:"火山帯と玄武岩質マグマの研究発表。",cost:9000,need:()=>prestige>=10&&completedPapers.basaltStudy&&completedPapers.volcanicArc,rewardPrestige:7,rewardMoney:10000},
+ world:{title:"世界地質学会",icon:"🌍",desc:"鉱物・岩石・地域研究を総合発表する。",cost:18000,need:()=>prestige>=18&&Object.keys(completedPapers).length>=3&&Object.keys(claimedAwards).length>=3,rewardPrestige:12,rewardMoney:18000},
+ final:{title:"地球史統合理論",icon:"🏆",desc:"全研究成果を統合し、天地創造の最終研究へ。",cost:40000,need:()=>prestige>=30&&labLevel>=5&&Object.keys(completedPapers).length>=4&&Object.keys(claimedAwards).length>=5,rewardPrestige:25,rewardMoney:50000}
+};
+function finalTitle(){
+ if(completedCongress.final)return "地球史の解読者";
+ if(completedCongress.world)return "国際的地質学者";
+ if(completedCongress.pacific)return "火山帯研究者";
+ if(completedCongress.asia)return "国際学会発表者";
+ return "国内研究者";
+}
+function attendCongress(id){
+ const c=congressCatalog[id];
+ if(!c || completedCongress[id])return;
+ if(!c.need()){alert("参加条件が足りません");return;}
+ if(money<c.cost){alert("参加費が足りません");return;}
+ money-=c.cost;
+ money+=c.rewardMoney;
+ prestige+=c.rewardPrestige;
+ completedCongress[id]=true;
+ saveGame(); renderAll();
+ alert(c.title+" 発表成功！");
+}
+function renderCongress(){
+ const title=document.getElementById("finalTitleView");
+ if(title)title.innerHTML="現在の国際称号：<span class='finalBadge'>"+finalTitle()+"</span>";
+ const box=document.getElementById("congressList");
+ if(!box)return;
+ box.innerHTML=Object.entries(congressCatalog).map(([id,c])=>{
+  const done=!!completedCongress[id];
+  const can=c.need() && money>=c.cost;
+  return "<div class='congressCard "+(done?'done':'')+"'><div class='big'>"+c.icon+"</div><b>"+c.title+"</b><p class='small'>"+c.desc+"</p><p class='small'>参加費："+c.cost+"G</p><p class='questReward'>報酬 "+c.rewardMoney+"G / 名声+"+c.rewardPrestige+"</p>"+(done?"<span class='boost'>発表済み</span>":can?"<button onclick=\"attendCongress('"+id+"')\">参加する</button>":"<span class='small'>条件不足</span>")+"</div>";
+ }).join("");
+}
+
+const quests={
+ firstExplore:{title:"はじめての探索成功",desc:"いずれかの探索地で1回成功する",reward:300,check:()=>stagesFoundSafe()>=1},
+ quartzCraft:{title:"石英をつくる",desc:"石英を1個クラフトする",reward:400,check:()=>!!discovered.minerals.quartz},
+ firstRock:{title:"はじめての岩石生成",desc:"岩石を1種類生成する",reward:600,check:()=>rocksFoundSafe()>=1},
+ fujiSurvey:{title:"富士山調査記録",desc:"富士山の探索に成功する",reward:500,check:()=>!!discovered.stages.fuji},
+ hawaiiSurvey:{title:"ハワイ調査記録",desc:"ハワイの探索に成功する",reward:700,check:()=>!!discovered.stages.hawaii},
+ mineralCollector:{title:"鉱物コレクター",desc:"鉱物図鑑を3種類埋める",reward:1200,check:()=>mineralsFoundSafe()>=3},
+ rockCollector:{title:"岩石コレクター",desc:"岩石図鑑を3種類埋める",reward:1800,check:()=>rocksFoundSafe()>=3},
+ worldScout:{title:"調査地を広げる",desc:"探索記録を4地点埋める",reward:2500,check:()=>stagesFoundSafe()>=4},
+ transportDev:{title:"交通開発はじめ",desc:"交通手段を1つ開発する",reward:500,check:()=>Object.values(transports).some(v=>v)},
+ rankA:{title:"Aランク調査員",desc:"いずれかのステージでAランク以上を取る",reward:800,check:()=>Object.values(stageRecords).some(r=>r.bestRank&&rankOrder[r.bestRank]>=rankOrder.A)},
+ rankS:{title:"Sランク調査員",desc:"いずれかのステージでSランク以上を取る",reward:1500,check:()=>Object.values(stageRecords).some(r=>r.bestRank&&rankOrder[r.bestRank]>=rankOrder.S)},
+ orderOne:{title:"納品はじめ",desc:"納品依頼を1件達成する",reward:600,check:()=>Object.keys(completedOrders).length>=1},
+ orderMaster:{title:"研究所の支援者",desc:"納品依頼を3件達成する",reward:1800,check:()=>Object.keys(completedOrders).length>=3},
+ normalClear:{title:"ふつうを超えろ",desc:"ふつう以上の難易度で探索成功する",reward:1200,check:()=>clearedDifficulties.normal||clearedDifficulties.hard||clearedDifficulties.extreme},
+ hardClear:{title:"本格調査員",desc:"むずかしい以上の難易度で探索成功する",reward:2500,check:()=>clearedDifficulties.hard||clearedDifficulties.extreme},
+ firstPaper:{title:"はじめての論文",desc:"研究論文を1本完成させる",reward:2000,check:()=>Object.keys(completedPapers).length>=1},
+ paperMaster:{title:"地質学会の星",desc:"研究論文を3本完成させる",reward:8000,check:()=>Object.keys(completedPapers).length>=3},
+ firstConference:{title:"はじめての学会発表",desc:"論文を1本学会で発表する",reward:3000,check:()=>Object.keys(presentedPapers).length>=1},
+ prestige10:{title:"名声ある研究者",desc:"名声を10以上にする",reward:7000,check:()=>prestige>=10},
+ firstAward:{title:"はじめての受賞",desc:"地質学賞を1つ受賞する",reward:2500,check:()=>Object.keys(claimedAwards).length>=1},
+ firstCongress:{title:"国際学会デビュー",desc:"国際学会で1回発表する",reward:5000,check:()=>Object.keys(completedCongress).length>=1},
+ finalTheory:{title:"天地創造の完成",desc:"地球史統合理論を完成させる",reward:30000,check:()=>!!completedCongress.final},
+ trueEnding:{title:"地球史の解読者",desc:"エンディングを見る",reward:50000,check:()=>endingCleared},
+ worldExplorer:{title:"世界をめぐる地質学者",desc:"探索記録を8地点埋める",reward:12000,check:()=>stagesFoundSafe()>=8},
+ labUpgrade:{title:"研究所を拡張せよ",desc:"研究所Lvを2以上にする",reward:1000,check:()=>labLevel>=2},
+ labMaster:{title:"総合地質研究所",desc:"研究所Lvを5にする",reward:5000,check:()=>labLevel>=5},
+ museumOpen:{title:"博物館オープン",desc:"博物館に1つ展示する",reward:800,check:()=>museumSlots.some(s=>s)},
+ museumIncome:{title:"展示収入",desc:"博物館収入を1回受け取る",reward:1000,check:()=>museumIncomeBank>0},
+ teamFirst:{title:"はじめてのチーム実績",desc:"チーム実績を1つ達成する",reward:2000,check:()=>Object.keys(completedTeamMissions).length>=1},
+ teamMaster:{title:"チーム編成の達人",desc:"チーム実績を5つ達成する",reward:7000,check:()=>Object.keys(completedTeamMissions).length>=5},
+ legendTeam:{title:"偉人チームの完成",desc:"偉人チーム実績を1つ達成する",reward:15000,check:()=>completedTeamMissions.nemoTeam||completedTeamMissions.magellanTeam||completedTeamMissions.academyTeam||completedTeamMissions.inventionTeam}
+};
+function claimQuest(id){
+ const q=quests[id];
+ if(!q || claimedQuests[id])return;
+ if(!q.check()){alert("まだ達成していません");return;}
+ claimedQuests[id]=true;
+ money+=q.reward;
+ saveGame();
+ renderAll();
+}
+function renderQuests(){
+ const box=document.getElementById("questList");
+ if(!box)return;
+ box.innerHTML=Object.entries(quests).map(([id,q])=>{
+  const done=q.check();
+  const claimed=!!claimedQuests[id];
+  return "<div class='questCard "+(claimed?'claimed':done?'done':'')+"'><b>"+q.title+"</b><p class='small'>"+q.desc+"</p><p class='questReward'>報酬 "+q.reward+"G</p>"+(claimed?"<span class='boost'>受取済み</span>":done?"<button onclick=\"claimQuest('"+id+"')\">受け取る</button>":"<span class='small'>未達成</span>")+"</div>";
+ }).join("");
+}
+
+function markDiscovery(type,id){
+ if(!discovered[type])discovered[type]={};
+ discovered[type][id]=true;
+}
+function renderBook(){
+ const mineralBox=document.getElementById("mineralBook");
+ const rockBox=document.getElementById("rockBook");
+ const stageBox=document.getElementById("stageBook");
+ const progress=document.getElementById("bookProgress");
+ if(!mineralBox)return;
+ const mineralTotal=Object.keys(mineralRecipes).length;
+ const rockTotal=Object.keys(rockRecipes).length;
+ const stageTotal=Object.keys(stages).length;
+ const mineralFound=Object.keys(discovered.minerals||{}).length;
+ const rockFound=Object.keys(discovered.rocks||{}).length;
+ const stageFound=Object.keys(discovered.stages||{}).length;
+ const total=mineralTotal+rockTotal+stageTotal;
+ const found=mineralsFoundSafe()+rocksFoundSafe()+stagesFoundSafe();
+ const pct=Math.round(found/total*100);
+ progress.innerHTML="<p>図鑑達成率："+found+"/"+total+"（"+pct+"%）</p><div class='progressBar'><div class='progressFill' style='width:"+pct+"%'></div></div>";
+ mineralBox.innerHTML=Object.entries(mineralRecipes).map(([id,r])=>{
+  const ok=!!(discovered.minerals&&discovered.minerals[id]);
+  return "<div class='bookCard "+(ok?'found':'')+"'><div class='big'>"+(ok?r.icon:"❔")+"</div><b>"+(ok?r.name:"未発見")+"</b><p class='small'>"+(ok?r.desc:"工房でクラフトすると登録")+"</p></div>";
+ }).join("");
+ rockBox.innerHTML=Object.entries(rockRecipes).map(([id,r])=>{
+  const ok=!!(discovered.rocks&&discovered.rocks[id]);
+  return "<div class='bookCard "+(ok?'found':'')+"'><div class='big'>"+(ok?r.icon:"❔")+"</div><b>"+(ok?r.name:"未発見")+"</b><p class='small'>"+(ok?r.desc:"岩石を生成すると登録")+"</p></div>";
+ }).join("");
+ stageBox.innerHTML=Object.entries(stages).map(([id,s])=>{
+  const ok=!!(discovered.stages&&discovered.stages[id]);
+  const rec=stageRecords[id];
+  return "<div class='bookCard "+(ok?'found':'')+"'><div class='big'>"+(ok?s.icon:"🔒")+"</div><b>"+(ok?s.name:"未調査")+"</b><p class='small'>"+(ok?s.desc:"探索成功で登録")+"</p>"+(ok?"<p class='small'>クリア:"+(rec?rec.clears:0)+"回 / 最高:"+bestRankText(id)+"</p>":"")+"</div>";
+ }).join("");
+}
+function mineralsFoundSafe(){return Object.keys(discovered.minerals||{}).filter(id=>mineralRecipes[id]).length;}
+function rocksFoundSafe(){return Object.keys(discovered.rocks||{}).filter(id=>rockRecipes[id]).length;}
+function stagesFoundSafe(){return Object.keys(discovered.stages||{}).filter(id=>stages[id]).length;}
+
+function renderGrowth(){
+ const box=document.getElementById("growthList");
+ if(!box)return;
+ renderTavernTabs();
+ const visibleChars=Object.entries(characters).filter(([id,c])=>characterVisibleInTavern(id,c));
+ if(visibleChars.length===0){box.innerHTML="<p class='small'>表示できる仲間がいません。</p>";return;}
+ box.innerHTML=visibleChars.map(([id,c])=>{
+  const owned=ownedChars.includes(id);
+  const lv=charLevels[id]||1;
+  const next=growthRecipes[id]&&growthRecipes[id][lv];
+  const title=charTitle(id);
+  let nextText=next
+   ? "次："+next.title+"<br><span class='needEquip'>必要装備："+(next.equip?(equipmentRecipes[next.equip]?.name||next.equip):"なし")+"</span><br>費用："+next.money+"G<br>鉱物："+costText(next.minerals||{},mineralRecipes)+"<br>岩石："+costText(next.rocks||{},rockRecipes)
+   : "最大進化";
+  return "<div class='growthCard "+(lv>1?'evolved':'')+"'><div class='big'>"+c.face+"</div><b>"+title+"</b><p>Lv."+lv+"</p><p class='small'>"+nextText+"</p>"+(owned&&next?"<button onclick=\"evolveChar('"+id+"')\">進化</button>":owned?"<span class='boost'>完成</span>":"<span class='small'>未雇用</span>")+"</div>";
+ }).join("");
+}
+
+const stages={
+ fuji:{firstBonus:300,name:"富士山",icon:"🗻",moves:14,reward:500,unlockCost:0,requires:null,weights:{"SiO₂":36,Al:22,Mg:14,Fe:14,Ca:10,Na:4},goals:{"SiO₂":58,Al:34},desc:"石英系鉱物が作りやすい。"},
+ hawaii:{firstBonus:400,name:"ハワイ",icon:"🌋",moves:14,reward:650,unlockCost:0,requires:null,weights:{"SiO₂":18,Al:8,Mg:34,Fe:28,Ca:10,Na:2},goals:{Mg:58,Fe:40},desc:"カンラン石・輝石向き。"},
+ sakurajima:{firstBonus:600,name:"桜島",icon:"🌋",moves:13,reward:850,unlockCost:2500,requires:"domesticPass",weights:{"SiO₂":30,Al:17,Mg:18,Fe:25,Ca:8,Na:2},goals:{Fe:54,Mg:42,"SiO₂":38},desc:"黒雲母・輝石向き。"},
+ yamanashi:{firstBonus:700,name:"山梨花崗岩帯",icon:"💎",moves:13,reward:1000,unlockCost:3800,requires:"domesticPass",weights:{"SiO₂":45,Al:27,Mg:6,Fe:8,Ca:5,Na:9},goals:{"SiO₂":64,Al:42},desc:"長石・石英の産地。"},
+ aso:{firstBonus:900,name:"阿蘇",icon:"🌋",moves:12,reward:1200,unlockCost:6500,requires:"domesticPass",weights:{"SiO₂":34,Al:18,Mg:16,Fe:18,Ca:10,Na:4},goals:{"SiO₂":54,Ca:34,Fe:34},desc:"角閃石を狙える。"},
+ iceland:{firstBonus:1200,name:"アイスランド",icon:"🌋",moves:12,reward:1600,unlockCost:12000,requires:"airplane",weights:{"SiO₂":22,Al:10,Mg:28,Fe:24,Ca:12,Na:4},goals:{Mg:60,Fe:48,Ca:34},desc:"曹長石・玄武岩系の産地。"}
+};
+const difficulties={
+ sugar:{name:"激甘",moveBonus:4,goalRate:.55,rewardRate:.30,colors:["red","blueC","yellow","green"]},
+ easy:{name:"やさしい",moveBonus:2,goalRate:.78,rewardRate:.60,colors:["red","blueC","yellow","green"]},
+ normal:{name:"ふつう",moveBonus:-1,goalRate:1.18,rewardRate:1.2,colors:["red","blueC","yellow","green"]},
+ hard:{name:"むずかしい",moveBonus:-4,goalRate:1.55,rewardRate:2.0,colors:["red","blueC","yellow","green","white"]},
+ extreme:{name:"激ムズ",moveBonus:-6,goalRate:2.0,rewardRate:3.2,colors:["red","blueC","yellow","green","white","black"]}
+};
+
+let inv={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+let minerals={quartz:0,kfeldspar:0,plagioclase:0,pyroxene:0,biotite:0,amphibole:0,olivine:0,albite:0,magnetite:0,muscovite:0};
+let rocks={granite:0,basalt:0,andesite:0,rhyolite:0,peridotite:0,gabbro:0,schist:0};
+let equipment={loupe:false,hammer:false,geochemKit:false,magnetometer:false,sedimentCore:false,sampler:false,polar:false,spectroscope:false,metamorphicPress:false,fieldDrone:false,museumCase:false,paperDesk:false,globalKit:false,deepseaROV:false,planetaryProbe:false,electronScope:false};
+let discovered={minerals:{},rocks:{},stages:{}};
+let claimedQuests={};
+let transports={domesticPass:false,airplane:false,ship:false};
+let stageRecords={};
+let completedOrders={};
+let clearedDifficulties={};
+let labLevel=1;
+let museumSlots=[null,null,null];
+let museumIncomeBank=0;
+let unlockedRegions={japan:true,pacific:false,world:false};
+let completedPapers={};
+let presentedPapers={};
+let prestige=0;
+let claimedAwards={};
+let completedCongress={};
+let endingCleared=false;
+let legendary={diamond:0,ruby:0,sapphire:0,emerald:0,opal:0};
+let run={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+let runCollected={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+let runMissed={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+let money=0, board=[], current=null, moves=0, selecting=false, path=[], currentColor=null;
+let difficulty='normal';
+let tavernFilter='all';
+let comboMultiplier=1;
+let unlockedStages=['fuji','hawaii'];
+let audioCtx=null;
+
+const SAVE_KEY="tenchi_souzou_v1_final";
+let saveReady=false;
+function gameData(){
+ return {
+  version:"V1_FINAL",
+  money,
+  inv,
+  minerals,
+  rocks,
+  equipment,
+  discovered,
+  claimedQuests,
+  transports,
+  stageRecords,
+  completedOrders,
+  clearedDifficulties,
+  labLevel,
+  museumSlots,
+  museumIncomeBank,
+  unlockedRegions,
+  completedPapers,
+  presentedPapers,
+  prestige,
+  claimedAwards,
+  completedCongress,
+  endingCleared,
+  legendary,
+  ownedChars,
+  party,
+  charLevels,
+  charExp,
+  unlockedSecrets,
+  completedTeamMissions,
+  unlockedStages,
+  difficulty,
+  tavernFilter
+ };
+}
+function applyData(data){
+ if(!data || typeof data!=="object")return;
+ money=Number(data.money)||0;
+ if(data.inv){Object.keys(inv).forEach(k=>inv[k]=Number(data.inv[k])||0);}
+ if(data.minerals){Object.keys(minerals).forEach(k=>minerals[k]=Number(data.minerals[k])||0);}
+ if(data.rocks){Object.keys(rocks).forEach(k=>rocks[k]=Number(data.rocks[k])||0);}
+ if(data.equipment){Object.keys(equipment).forEach(k=>equipment[k]=!!data.equipment[k]);}
+ if(data.discovered){discovered={minerals:data.discovered.minerals||{},rocks:data.discovered.rocks||{},stages:data.discovered.stages||{}};}
+ if(data.claimedQuests){claimedQuests=data.claimedQuests||{};}
+ if(data.transports){Object.keys(transports).forEach(k=>transports[k]=!!data.transports[k]);}
+ if(data.stageRecords){stageRecords=data.stageRecords||{};}
+ if(data.completedOrders){completedOrders=data.completedOrders||{};}
+ if(data.clearedDifficulties){clearedDifficulties=data.clearedDifficulties||{};}
+ if(data.labLevel){labLevel=Math.max(1,Math.min(5,Number(data.labLevel)||1));}
+ if(Array.isArray(data.museumSlots)){museumSlots=data.museumSlots.slice(0,3); while(museumSlots.length<3)museumSlots.push(null);}
+ if(data.museumIncomeBank){museumIncomeBank=Number(data.museumIncomeBank)||0;}
+ if(data.unlockedRegions){unlockedRegions=Object.assign(unlockedRegions,data.unlockedRegions);}
+ if(data.completedPapers){completedPapers=data.completedPapers||{};}
+ if(data.presentedPapers){presentedPapers=data.presentedPapers||{};}
+ if(data.prestige){prestige=Number(data.prestige)||0;}
+ if(data.claimedAwards){claimedAwards=data.claimedAwards||{};}
+ if(data.completedCongress){completedCongress=data.completedCongress||{};}
+ if(data.endingCleared){endingCleared=!!data.endingCleared;}
+ if(data.legendary){legendary=Object.assign(legendary,data.legendary);}
+ if(Array.isArray(data.ownedChars))ownedChars=data.ownedChars.filter(id=>characters[id]);
+ if(Array.isArray(data.party))party=data.party.filter(id=>characters[id]&&ownedChars.includes(id)).slice(0,4);
+ if(data.charLevels){Object.keys(charLevels).forEach(k=>charLevels[k]=Math.max(1,Math.min(5,Number(data.charLevels[k])||1)));}
+ if(data.charExp){charExp=data.charExp||{};}
+ if(data.unlockedSecrets){unlockedSecrets=data.unlockedSecrets||{};}
+ if(data.completedTeamMissions){completedTeamMissions=data.completedTeamMissions||{};}
+ if(party.length===0)party=["mineralogist"];
+ if(Array.isArray(data.unlockedStages))unlockedStages=data.unlockedStages.filter(id=>stages[id]);
+ if(unlockedStages.length===0)charExp={};
+ unlockedSecrets={};
+ completedTeamMissions={};
+ unlockedStages=["fuji","hawaii"];
+ if(data.difficulty && difficulties[data.difficulty])difficulty=data.difficulty;
+ if(data.tavernFilter)tavernFilter=data.tavernFilter;
+}
+function saveGame(){
+ try{
+  if(!saveReady)return;
+  localStorage.setItem(SAVE_KEY,JSON.stringify(gameData()));
+  const s=document.getElementById("saveStatus");
+  if(s)s.textContent="自動セーブ済み："+new Date().toLocaleTimeString();
+ }catch(e){console.warn(e);}
+}
+function manualSave(){
+ saveReady=true;
+ saveGame();
+ alert("セーブしました");
+}
+function loadGame(){
+ try{
+  const raw=localStorage.getItem(SAVE_KEY);
+  if(!raw)return;
+  applyData(JSON.parse(raw));
+  const s=document.getElementById("saveStatus");
+  if(s)s.textContent="セーブデータを読み込みました";
+ }catch(e){console.warn(e);}
+}
+function resetSave(){
+ if(!confirm("セーブデータを削除して最初から始めますか？"))return;
+ localStorage.removeItem(SAVE_KEY);
+ money=0;
+ Object.keys(inv).forEach(k=>inv[k]=0);
+ Object.keys(minerals).forEach(k=>minerals[k]=0);
+ Object.keys(rocks).forEach(k=>rocks[k]=0);
+ Object.keys(equipment).forEach(k=>equipment[k]=false);
+ discovered={minerals:{},rocks:{},stages:{}};
+ claimedQuests={};
+ transports={domesticPass:false,airplane:false,ship:false};
+ stageRecords={};
+ completedOrders={};
+ clearedDifficulties={};
+ labLevel=1;
+ museumSlots=[null,null,null];
+ museumIncomeBank=0;
+ unlockedRegions={japan:true,pacific:false,world:false};
+ completedPapers={};
+ presentedPapers={};
+ prestige=0;
+ claimedAwards={};
+ completedCongress={};
+ endingCleared=false;
+ legendary={diamond:0,ruby:0,sapphire:0,emerald:0,opal:0};
+ ownedChars=["mineralogist","volcanologist"];
+ party=["mineralogist","volcanologist"];
+ charLevels={mineralogist:1,volcanologist:1,geochemist:1,oreScholar:1,sedimentologist:1,oceanographer:1,gemologist:1,metamorphic:1,fieldScout:1,curator:1,secretary:1,photographer:1,professor:1,international:1,deepsea:1,polar:1,planetary:1,appraiser:1,nemo:1,magellan:1,plato:1,archimedes:1,darwin:1,humboldt:1};
+ unlockedStages=["fuji","hawaii"];
+ difficulty="normal";
+ tavernFilter="all";
+ saveReady=true;
+ saveGame();
+ renderAll();
+saveGame();
+}
+function exportBackup(){
+ try{
+  saveReady=true; saveGame();
+  const data=gameData();
+  data.savedAt=new Date().toISOString();
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="TenchiSouzou_PuzzleHub_Save_"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(a.href);
+ }catch(e){alert("バックアップ出力に失敗しました");console.warn(e);}
+}
+function openImportFile(){
+ const input=document.getElementById("importFile");
+ if(input){input.value="";input.click();}
+}
+function importBackup(event){
+ const file=event.target.files && event.target.files[0];
+ if(!file)return;
+ const reader=new FileReader();
+ reader.onload=function(e){
+  try{
+   applyData(JSON.parse(e.target.result));
+   saveReady=true; saveGame(); renderAll();
+   alert("セーブデータを読み込みました");
+  }catch(err){
+   alert("読み込み失敗：JSON形式を確認してください");
+   console.warn(err);
+  }
+ };
+ reader.readAsText(file);
+}
+
+
+
+function updateSoundStatus(){
+ // 内部確認のみ。画面には出さない。
+ window.__soundSupport={
+  audio:!!(window.AudioContext||window.webkitAudioContext),
+  vibrate:!!navigator.vibrate,
+  audioState:audioCtx?audioCtx.state:"未起動"
+ };
+}
+function testSoundVib(){
+ initAudio();
+ tone(520,.08);
+ setTimeout(()=>tone(760,.1),90);
+ vib([30,20,30]);
+ updateSoundStatus();
+}
+
+function show(id){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ renderAll();
+}
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function atom(){
+ const w=stages[current].weights;
+ let total=0; Object.values(w).forEach(v=>total+=v);
+ let r=Math.random()*total;
+ for(const k in w){r-=w[k]; if(r<=0)return k}
+ return "SiO₂";
+}
+function newCell(){return {color:rand(difficulties[difficulty].colors),atom:atom(),special:null}}
+function initBoard(){
+ board=[];
+ for(let y=0;y<6;y++){board[y]=[];for(let x=0;x<6;x++)board[y][x]=newCell()}
+}
+function startStage(id){
+ if(!unlockedStages.includes(id)){alert('まだ解放されていません');return;}
+ current=id; moves=Math.max(5, stages[id].moves + difficulties[difficulty].moveBonus);
+ run={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+ runCollected={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+ runMissed={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
+ comboMultiplier=1;
+ initBoard();
+ show("play");
+ document.getElementById("stageName").textContent=stages[id].icon+" "+stages[id].name;
+ renderAll();
+}
+
+function setDifficulty(d){
+ difficulty=d;
+ renderAll();
+ saveGame();
+}
+function effectiveGoals(stageId=current){
+ const base=stages[stageId].goals;
+ const rate=difficulties[difficulty].goalRate;
+ const out={};
+ Object.entries(base).forEach(([k,v])=>out[k]=Math.max(1,Math.ceil(v*rate)));
+ return out;
+}
+function effectiveReward(stageId=current){
+ return Math.round(stages[stageId].reward*difficulties[difficulty].rewardRate*labRewardRate()*fieldRewardRate()*secretRewardRate());
+}
+
+
+
+const transportCatalog={
+ domesticPass:{name:"国内調査手形",icon:"🎫",cost:2200,desc:"国内の追加調査地を解放できる。"},
+ airplane:{name:"調査飛行機",icon:"✈️",cost:9000,desc:"海外ステージへ行ける。"},
+ ship:{name:"調査船",icon:"🚢",cost:11000,desc:"海洋・島しょ部の調査に使う。"}
+};
+function hasTransport(id){
+ return !id || !!transports[id];
+}
+function transportName(id){
+ return id && transportCatalog[id] ? transportCatalog[id].name : "なし";
+}
+function buyTransport(id){
+ const t=transportCatalog[id];
+ if(!t || transports[id])return;
+ if(money<t.cost){alert("資金不足");return;}
+ money-=t.cost;
+ transports[id]=true;
+ saveGame();
+ renderAll();
+}
+function renderTransport(){
+ const box=document.getElementById("transportList");
+ if(!box)return;
+ box.innerHTML=Object.entries(transportCatalog).map(([id,t])=>{
+  const owned=!!transports[id];
+  return "<div class='transportCard "+(owned?'owned':'')+"'><div class='big'>"+t.icon+"</div><b>"+t.name+"</b><p class='small'>"+t.desc+"</p><p>"+t.cost+"G</p>"+(owned?"<span class='boost'>開発済み</span>":"<button onclick=\"buyTransport('"+id+"')\">開発</button>")+"</div>";
+ }).join("");
+}
+
+
+const rankOrder={B:1,A:2,S:3,SS:4};
+function calcRank(){
+ if(comboMultiplier>=4)return "SS";
+ if(comboMultiplier>=3)return "S";
+ if(comboMultiplier>=2)return "A";
+ return "B";
+}
+function updateStageRecord(stageId,rank){
+ const rec=stageRecords[stageId]||{clears:0,bestRank:null,firstClaimed:false};
+ rec.clears++;
+ if(!rec.bestRank || rankOrder[rank]>rankOrder[rec.bestRank])rec.bestRank=rank;
+ stageRecords[stageId]=rec;
+}
+function bestRankText(id){
+ const rec=stageRecords[id];
+ return rec&&rec.bestRank?rec.bestRank:"未クリア";
+}
+
+function renderStageList(){
+ const box=document.getElementById("stageList");
+ if(!box)return;
+ box.innerHTML=Object.entries(stages).map(([id,s])=>{
+  const unlocked=unlockedStages.includes(id);
+  const goals=Object.entries(s.goals).map(([k,v])=>k+"×"+v).join(" / ");
+  if(unlocked){
+   return "<div class='place' onclick=\"startStage('"+id+"')\"><div>"+s.icon+"</div><b>"+s.name+"</b><p class='small'>"+s.desc+"</p><p class='small'>目標:"+goals+" / 報酬:"+s.reward+"G</p><p class='small'>最高ランク:<span class='rankBadge'>"+bestRankText(id)+"</span></p></div>";
+  }else{
+   return "<div class='place'><div>🔒</div><b>"+s.name+"</b><p class='small'>"+s.desc+"</p><p class='small'>解放費:"+s.unlockCost+"G</p><p class='small firstBonus'>初回報酬:"+s.firstBonus+"G</p><button onclick=\"unlockStage('"+id+"')\">手形を買う</button></div>";
+  }
+ }).join("");
+}
+function unlockStage(id){
+ const s=stages[id];
+ if(unlockedStages.includes(id))return;
+ if(!hasTransport(s.requires)){alert("必要な交通手段がありません");return;}
+ if(money<s.unlockCost){alert("資金不足");return;}
+ money-=s.unlockCost;
+ unlockedStages.push(id);
+ renderAll();
+ saveGame();
+}
+
+
+function renderFinalNotice(){
+ const el=document.getElementById("finalNotice");
+ if(!el)return;
+ el.innerHTML="<b>天地創造 v1.0 FINAL</b><br><span class='small'>探索・クラフト・仲間育成・施設効果・偉人・チーム実績を統合。</span>";
+}
+
+function renderAll(){
+ document.getElementById("money").textContent=money;
+ renderStageList();
+ renderStorage();
+ renderParty();
+ renderTavern();
+ renderFacilityEffects();
+ renderTeamBonuses();
+ renderTeamMissions();
+ renderCraft();
+ renderEquipment();
+ renderGrowth();
+ renderBook();
+ renderQuests();
+ renderSecrets();
+ renderPapers();
+ renderConference();
+ renderAwards();
+ renderCongress();
+ renderEnding();
+ renderOrders();
+ renderResearch();
+ renderLegend();
+ renderMuseum();
+ renderRegions();
+ renderTransport();
+ renderDifficulty();
+ renderFinalNotice();
+ updateSoundStatus();
+ if(document.getElementById("play").classList.contains("active")) draw();
+}
+
+const mineralRecipes={
+ quartz:{name:"石英",icon:"💎",cost:{"SiO₂":3},desc:"SiO₂からできる基本鉱物。"},
+ kfeldspar:{name:"カリ長石",icon:"🟨",cost:{"SiO₂":3,Al:1},desc:"花崗岩系に重要な長石。"},
+ plagioclase:{name:"斜長石",icon:"⬜",cost:{"SiO₂":2,Al:1,Ca:1},desc:"火山岩に多い長石グループ。"},
+ pyroxene:{name:"輝石",icon:"🟩",cost:{"SiO₂":2,Mg:1,Fe:1},desc:"玄武岩質に関わる苦鉄質鉱物。"},
+ biotite:{name:"黒雲母",icon:"⬛",cost:{"SiO₂":2,Al:1,Fe:1,Mg:1},desc:"花崗岩などに含まれる黒色鉱物。"},
+ amphibole:{name:"角閃石",icon:"🟫",cost:{"SiO₂":2,Ca:1,Mg:1,Fe:1},desc:"安山岩や閃緑岩に関係する鉱物。"},
+ olivine:{name:"カンラン石",icon:"🟢",cost:{"SiO₂":1,Mg:2,Fe:1},desc:"マントルや玄武岩質マグマに関係する鉱物。"},
+ albite:{name:"曹長石",icon:"🔷",cost:{"SiO₂":2,Al:1,Na:1},desc:"Naを含む斜長石の仲間。"},
+ magnetite:{name:"磁鉄鉱",icon:"🧲",cost:{Fe:3,Mg:1},desc:"鉄を多く含む鉱物。"},
+ muscovite:{name:"白雲母",icon:"⚪",cost:{"SiO₂":2,Al:2,Na:1},desc:"変成岩や花崗岩に関係する明るい雲母。"}
+};
+const rockRecipes={
+ granite:{name:"花崗岩",icon:"🪨",value:900,cost:{quartz:1,kfeldspar:1,biotite:1},desc:"石英・長石・黒雲母からなる代表的な深成岩。"},
+ basalt:{name:"玄武岩",icon:"🌑",value:700,cost:{pyroxene:1,plagioclase:1},desc:"輝石と斜長石を含む黒っぽい火山岩。"},
+ andesite:{name:"安山岩",icon:"🌋",value:1000,cost:{plagioclase:1,amphibole:1,pyroxene:1},desc:"火山弧に多い中間質の火山岩。"},
+ rhyolite:{name:"流紋岩",icon:"🧊",value:1200,cost:{quartz:1,kfeldspar:1,plagioclase:1},desc:"SiO₂が多い明るい火山岩。"},
+ peridotite:{name:"かんらん岩",icon:"🟢",value:1400,cost:{olivine:2,pyroxene:1},desc:"カンラン石を多く含むマントル由来の岩石。"},
+ gabbro:{name:"はんれい岩",icon:"⚫",value:1800,cost:{pyroxene:1,plagioclase:1,olivine:1},desc:"玄武岩質マグマが地下でゆっくり固まった深成岩。"},
+ schist:{name:"結晶片岩",icon:"📐",value:2200,cost:{muscovite:1,quartz:1,amphibole:1},desc:"変成作用で片理が発達した岩石。"}
+};
+
+const equipmentRecipes={
+ loupe:{name:"鉱物ルーペ",icon:"🔍",costMoney:300,cost:{quartz:1},boost:{"SiO₂":1},desc:"鉱物学者の進化素材。SiO₂回収も少し補助。"},
+ hammer:{name:"地質ハンマー",icon:"⛏️",costMoney:500,cost:{pyroxene:1},boost:{Mg:1},desc:"火山学者の進化素材。Mg回収も少し補助。"},
+ geochemKit:{name:"地球化学キット",icon:"🧪",costMoney:800,cost:{kfeldspar:1},boost:{Al:1},desc:"地球化学者の進化素材。"},
+ magnetometer:{name:"磁力計",icon:"🧲",costMoney:1000,cost:{magnetite:1},boost:{Fe:1},desc:"鉱床学者の進化素材。"},
+ sedimentCore:{name:"柱状採泥器",icon:"🏜️",costMoney:1200,cost:{plagioclase:1},boost:{Ca:1},desc:"堆積学者の進化素材。"},
+ sampler:{name:"海洋採水器",icon:"🌊",costMoney:1400,cost:{plagioclase:1,albite:1},boost:{Na:1},desc:"海洋学者の進化素材。"},
+ polar:{name:"偏光顕微鏡",icon:"🔬",costMoney:2200,cost:{quartz:2,kfeldspar:1},boost:{"SiO₂":1,Al:1,Mg:1,Fe:1},desc:"上位研究者の進化素材。"},
+ spectroscope:{name:"分光分析装置",icon:"🌈",costMoney:3200,cost:{quartz:3,albite:1},boost:{},desc:"宝石学者・鑑定士の進化素材。"},
+ metamorphicPress:{name:"変成実験プレス",icon:"🏔️",costMoney:3600,cost:{muscovite:2,amphibole:1},boost:{},desc:"変成岩研究者の進化素材。"},
+ fieldDrone:{name:"調査ドローン",icon:"🛸",costMoney:4200,cost:{magnetite:2,quartz:2},boost:{},desc:"フィールド調査員・カメラマンの進化素材。"},
+ museumCase:{name:"高級展示ケース",icon:"🏺",costMoney:3800,cost:{quartz:2,granite:1},boost:{},desc:"博物館学芸員の進化素材。"},
+ paperDesk:{name:"論文執筆デスク",icon:"📑",costMoney:4200,cost:{quartz:2,granite:1},boost:{},desc:"学会秘書の進化素材。"},
+ globalKit:{name:"国際調査キット",icon:"🌍",costMoney:9000,cost:{gabbro:1,schist:1},boost:{},desc:"国際研究員の進化素材。"},
+ deepseaROV:{name:"深海ROV",icon:"🚢",costMoney:12000,cost:{basalt:2,albite:3},boost:{},desc:"深海探査員の進化素材。"},
+ planetaryProbe:{name:"惑星探査プローブ",icon:"☄️",costMoney:20000,cost:{peridotite:2,rhyolite:2},boost:{},desc:"惑星地質学者の進化素材。"},
+ electronScope:{name:"電子顕微鏡",icon:"⚛️",costMoney:15000,cost:{quartz:8,magnetite:4},boost:{"SiO₂":2,Al:1},desc:"最上位進化素材。"}
+};
+function equipBoost(atomName){
+ let add=0;
+ Object.entries(equipmentRecipes).forEach(([id,e])=>{
+  if(equipment[id] && e.boost[atomName]) add+=e.boost[atomName];
+ });
+ return add;
+}
+function developEquipment(id){
+ const e=equipmentRecipes[id];
+ if(equipment[id]){alert("すでに開発済み");return;}
+ const actualCost=Math.round(e.costMoney*equipmentCostRate());
+ if(money<actualCost){alert("資金不足");return;}
+ if(!canPay(minerals,e.cost)){alert("鉱物不足");return;}
+ money-=actualCost;
+ pay(minerals,e.cost);
+ equipment[id]=true;
+ saveGame();
+ renderAll();
+}
+function renderEquipment(){
+ const box=document.getElementById("equipmentList");
+ if(!box)return;
+ box.innerHTML=Object.entries(equipmentRecipes).map(([id,e])=>{
+  const owned=equipment[id];
+  return "<div class='equipCard "+(owned?'owned':'')+"'><div class='big'>"+e.icon+"</div><b>"+e.name+"</b><p class='small'>"+e.desc+"</p><p class='costLine'>費用："+Math.round(e.costMoney*equipmentCostRate())+"G / "+costText(e.cost,mineralRecipes)+"</p><p>"+(owned?"<span class='boost'>開発済み</span>":"<button onclick=\"developEquipment('"+id+"')\">開発</button>")+"</p></div>";
+ }).join("");
+}
+
+function canPay(store,cost){
+ return Object.entries(cost).every(([k,v])=>(store[k]||0)>=v);
+}
+function pay(store,cost){
+ Object.entries(cost).forEach(([k,v])=>store[k]-=v);
+}
+function costText(cost,dict){
+ return Object.entries(cost).map(([k,v])=>(dict&&dict[k]?dict[k].name:k)+"×"+v).join(" / ");
+}
+function craftMineral(id){
+ const r=mineralRecipes[id];
+ if(!canPay(inv,r.cost)){alert("素材不足");return;}
+ pay(inv,r.cost);
+ minerals[id]=(minerals[id]||0)+1+regionalBonus(id)+(id==="muscovite"&&partyHas("metamorphic")?partyLevel("metamorphic"):0);
+ markDiscovery('minerals',id);
+ saveGame();
+ document.getElementById("log") && (document.getElementById("log").textContent=r.name+"をクラフトした！");
+ renderAll();
+}
+function craftRock(id){
+ const r=rockRecipes[id];
+ if(!canPay(minerals,r.cost)){alert("鉱物不足");return;}
+ pay(minerals,r.cost);
+ rocks[id]=(rocks[id]||0)+1+(id==="schist"&&partyLevel("metamorphic")>=2?1:0);
+ markDiscovery('rocks',id);
+ saveGame();
+ document.getElementById("log") && (document.getElementById("log").textContent=r.name+"を生成した！");
+ renderAll();
+}
+function sellRock(id){
+ if((rocks[id]||0)<=0){alert("売る岩石がありません");return;}
+ rocks[id]--;
+ money+=rockRecipes[id].value;
+ saveGame();
+ renderAll();
+}
+function renderCraft(){
+ const stock=document.getElementById("labStock");
+ if(stock){
+  stock.innerHTML =
+   Object.entries(inv).map(([k,v])=>"<div class='stockMini'><b>"+v+"</b><span>"+k+"</span></div>").join("")
+   + Object.entries(mineralRecipes).map(([k,r])=>"<div class='stockMini'><b>"+(minerals[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("")
+   + Object.entries(rockRecipes).map(([k,r])=>"<div class='stockMini'><b>"+(rocks[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("");
+ }
+ const m=document.getElementById("mineralCraft");
+ if(m){
+  m.innerHTML=Object.entries(mineralRecipes).map(([id,r])=>
+   "<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='costLine'>"+costText(r.cost)+"</p><p class='small'>所持："+(minerals[id]||0)+"</p><button onclick=\"craftMineral('"+id+"')\">作る</button></div>"
+  ).join("");
+ }
+ const rc=document.getElementById("rockCraft");
+ if(rc){
+  rc.innerHTML=Object.entries(rockRecipes).map(([id,r])=>
+   "<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='costLine'>"+costText(r.cost,mineralRecipes)+"</p><p class='small'>所持："+(rocks[id]||0)+"</p><button onclick=\"craftRock('"+id+"')\">生成</button></div>"
+  ).join("");
+ }
+ const rs=document.getElementById("rockSell");
+ if(rs){
+  rs.innerHTML=Object.entries(rockRecipes).map(([id,r])=>
+   "<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='small'>売価："+r.value+"G / 所持："+(rocks[id]||0)+"</p><button class='sellBtn' onclick=\"sellRock('"+id+"')\">売る</button></div>"
+  ).join("");
+ }
+}
+
+
+function renderDifficulty(){
+ Object.keys(difficulties).forEach(k=>{
+  const b=document.getElementById("diff_"+k);
+  if(b)b.classList.toggle("active",k===difficulty);
+ });
+}
+
+function renderStorage(){
+ const el=document.getElementById("storageView");
+ el.innerHTML="<h3>元素</h3>"+Object.entries(inv).map(([k,v])=>"<div class='box'><b>"+v+"</b><span>"+k+"</span></div>").join("")
+ +"<h3>鉱物</h3>"+Object.entries(mineralRecipes).map(([k,r])=>"<div class='box'><b>"+(minerals[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("")
+ +"<h3>岩石</h3>"+Object.entries(rockRecipes).map(([k,r])=>"<div class='box'><b>"+(rocks[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("");
+}
+
+
+
+const teamCatalog={
+ basicMineral:{name:"基礎鉱物班",members:["mineralogist","geochemist"],effect:"SiO₂・Al回収+10%",type:"collect",atoms:["SiO₂","Al"],rate:.10},
+ basicVolcano:{name:"火山調査班",members:["volcanologist","oreScholar"],effect:"Mg・Fe回収+10%",type:"collect",atoms:["Mg","Fe"],rate:.10},
+ sedimentSea:{name:"水圏堆積班",members:["sedimentologist","oceanographer"],effect:"Ca・Na回収+10%",type:"collect",atoms:["Ca","Na"],rate:.10},
+ gemSearch:{name:"宝石探索班",members:["mineralogist","gemologist"],effect:"伝説鉱物率+30%",type:"legend",rate:.30},
+ fieldTeam:{name:"現地調査班",members:["fieldScout","photographer"],effect:"探索報酬+12%",type:"reward",rate:.12},
+ labTeam:{name:"研究支援班",members:["secretary","professor"],effect:"論文研究費-12%",type:"paper",rate:.12},
+ museumTeam:{name:"展示鑑定班",members:["curator","appraiser"],effect:"博物館収入+12%",type:"museum",rate:.12},
+ deepTeam:{name:"深海調査隊",members:["oceanographer","deepsea"],effect:"Ca・Na回収+20%",type:"collect",atoms:["Ca","Na"],rate:.20},
+ volcanoPro:{name:"火山研究隊",members:["volcanologist","geochemist","oreScholar"],effect:"Mg・Fe回収+20%",type:"collect",atoms:["Mg","Fe"],rate:.20},
+ worldTeam:{name:"世界探検隊",members:["international","fieldScout"],effect:"海外ステージ報酬+20%",type:"overseas",rate:.20},
+ nemoTeam:{name:"ノーチラス号",members:["nemo","deepsea","oceanographer"],effect:"深海・伝説鉱物率+100%",type:"legend",rate:1.0},
+ magellanTeam:{name:"世界航路隊",members:["magellan","international","humboldt"],effect:"探索報酬+40%",type:"reward",rate:.40},
+ academyTeam:{name:"アカデメイア",members:["plato","professor","secretary"],effect:"論文研究費-30%",type:"paper",rate:.30},
+ inventionTeam:{name:"発明工房",members:["archimedes","geochemist"],effect:"装備開発費-20%",type:"equipment",rate:.20}
+};
+function hasTeam(id){
+ const t=teamCatalog[id];
+ return !!t && t.members.every(m=>party.includes(m));
+}
+function activeTeams(){
+ return Object.entries(teamCatalog).filter(([id,t])=>hasTeam(id)).map(([id,t])=>id);
+}
+function teamCollectBonus(atomName){
+ let r=0;
+ activeTeams().forEach(id=>{
+  const t=teamCatalog[id];
+  if(t.type==="collect" && t.atoms && t.atoms.includes(atomName))r+=t.rate;
+ });
+ return r;
+}
+function teamRewardRate(){
+ let r=1;
+ activeTeams().forEach(id=>{
+  const t=teamCatalog[id];
+  if(t.type==="reward")r+=t.rate;
+  if(t.type==="overseas" && current && (stages[current]?.requires==="airplane" || stages[current]?.requires==="ship"))r+=t.rate;
+ });
+ return r;
+}
+function teamPaperRate(){
+ let r=1;
+ activeTeams().forEach(id=>{const t=teamCatalog[id]; if(t.type==="paper")r-=t.rate;});
+ return Math.max(.5,r);
+}
+function teamMuseumRate(){
+ let r=1;
+ activeTeams().forEach(id=>{const t=teamCatalog[id]; if(t.type==="museum")r+=t.rate;});
+ return r;
+}
+function teamLegendaryRate(){
+ let r=1;
+ activeTeams().forEach(id=>{const t=teamCatalog[id]; if(t.type==="legend")r+=t.rate;});
+ return r;
+}
+function teamEquipmentRate(){
+ let r=1;
+ activeTeams().forEach(id=>{const t=teamCatalog[id]; if(t.type==="equipment")r-=t.rate;});
+ return Math.max(.5,r);
+}
+function renderTeamBonuses(){
+ const box=document.getElementById("teamBonusList");
+ if(!box)return;
+ box.innerHTML=Object.entries(teamCatalog).map(([id,t])=>{
+  const on=hasTeam(id);
+  const names=t.members.map(m=>characters[m]?characters[m].face+characters[m].name:m).join(" + ");
+  return "<div class='teamMini "+(on?'active':'')+"'><div class='teamName'>"+(on?"✅ ":"⬜ ")+t.name+"</div><p class='small'>"+names+"</p><p class='teamEffect'>"+t.effect+"</p></div>";
+ }).join("");
+}
+
+const teamMissionCatalog={
+ basicMineral:{reward:1200,desc:"基礎鉱物班で探索成功"},
+ basicVolcano:{reward:1200,desc:"火山調査班で探索成功"},
+ sedimentSea:{reward:1200,desc:"水圏堆積班で探索成功"},
+ gemSearch:{reward:1800,desc:"宝石探索班で探索成功"},
+ fieldTeam:{reward:1800,desc:"現地調査班で探索成功"},
+ labTeam:{reward:2000,desc:"研究支援班で探索成功"},
+ museumTeam:{reward:2000,desc:"展示鑑定班で探索成功"},
+ deepTeam:{reward:3500,desc:"深海調査隊で探索成功"},
+ volcanoPro:{reward:3500,desc:"火山研究隊で探索成功"},
+ worldTeam:{reward:5000,desc:"世界探検隊で探索成功"},
+ nemoTeam:{reward:9000,desc:"ノーチラス号で探索成功"},
+ magellanTeam:{reward:9000,desc:"世界航路隊で探索成功"},
+ academyTeam:{reward:9000,desc:"アカデメイアで探索成功"},
+ inventionTeam:{reward:9000,desc:"発明工房で探索成功"}
+};
+function recordTeamMissions(){
+ activeTeams().forEach(id=>{
+  if(!completedTeamMissions[id]){
+   completedTeamMissions[id]=true;
+   const r=teamMissionCatalog[id]?.reward||0;
+   money+=r;
+   toast("チーム実績："+teamCatalog[id].name);
+  }
+ });
+}
+function renderTeamMissions(){
+ const box=document.getElementById("teamMissionList");
+ if(!box)return;
+ box.innerHTML=Object.entries(teamMissionCatalog).map(([id,m])=>{
+  const done=!!completedTeamMissions[id];
+  const t=teamCatalog[id];
+  return "<div class='teamMission "+(done?'done':'')+"'><b>"+(done?"✅ ":"⬜ ")+t.name+"</b><p class='small'>"+m.desc+"</p><p class='questReward'>報酬 "+m.reward+"G</p>"+(done?"<span class='teamStamp'>達成済み</span>":"<span class='small'>未達成</span>")+"</div>";
+ }).join("");
+}
+function teamMissionResultHtml(){
+ const newly=activeTeams().filter(id=>!completedTeamMissions[id]);
+ if(newly.length===0)return "";
+ return "<div class='resultPanel'><b>新チーム実績</b><br>"+newly.map(id=>"🏅 "+teamCatalog[id].name+"：+"+(teamMissionCatalog[id]?.reward||0)+"G").join("<br>")+"</div>";
+}
+
+function activeTeamText(){
+ const a=activeTeams();
+ if(a.length===0)return "";
+ return "<div class='resultPanel'><b>発動チーム</b><br>"+a.map(id=>"✅ "+teamCatalog[id].name+"：<span class='teamEffect'>"+teamCatalog[id].effect+"</span>").join("<br>")+"</div>";
+}
+
+function partyHas(id){return party.includes(id);}
+function partyLevel(id){return partyHas(id)?(charLevels[id]||1):0;}
+function fieldRewardRate(){
+ let r=1;
+ if(partyHas("fieldScout"))r+=0.06*partyLevel("fieldScout");
+ if(ownedChars.includes("photographer"))r+=0.04*(charLevels.photographer||1);
+ if(current && (stages[current]?.requires==="airplane" || stages[current]?.requires==="ship") && ownedChars.includes("international"))r+=0.08*(charLevels.international||1);
+ return r*teamRewardRate();
+}
+function museumRate(){
+ return (ownedChars.includes("curator") ? 1 + 0.12*(charLevels.curator||1) : 1)*teamMuseumRate();
+}
+function paperCostRate(){
+ return (ownedChars.includes("secretary") ? Math.max(.55,1-0.07*(charLevels.secretary||1)) : 1)*teamPaperRate();
+}
+function legendaryRateBonus(){
+ let r=1;
+ if(partyHas("gemologist"))r+=0.8*partyLevel("gemologist");
+ if(partyHas("polar"))r+=0.35*partyLevel("polar");
+ if(partyHas("planetary"))r+=0.5*partyLevel("planetary");
+ return r*teamLegendaryRate();
+}
+
+
+
+function charOrg(id){
+ const r=characters[id]?.role||"探索";
+ if(["研究所","論文","世界","万能","岩石"].includes(r))return "研究所";
+ if(["博物館","図鑑","鑑定"].includes(r))return "博物館";
+ return "探索隊";
+}
+function expNeed(id){
+ return 8 + ((charLevels[id]||1)-1)*6;
+}
+function gainCharExp(id,amount){
+ if(!ownedChars.includes(id))return;
+ const before=charLevels[id]||1;
+ charExp[id]=(charExp[id]||0)+amount;
+ while((charLevels[id]||1)<5 && charExp[id]>=expNeed(id)){
+  charExp[id]-=expNeed(id);
+  charLevels[id]=(charLevels[id]||1)+1;
+ }
+ const after=charLevels[id]||1;
+ lastExpResults.push({id,amount,before,after});
+}
+function gainOrganizationExp(){
+ lastExpResults=[];
+ // EXPはパーティに入れて探索成功した仲間だけ.
+ // 施設スタッフの効果は雇用だけで発動するが、成長させるには連れて行く必要がある。
+ const professorBoost=ownedChars.includes("professor")?Math.max(0,(charLevels.professor||1)-1):0;
+ party.forEach(id=>{
+  const org=charOrg(id);
+  const base = org==="探索隊" ? 5 : 4;
+  const bonus = org==="研究所" ? professorBoost : 0;
+  gainCharExp(id,base+bonus+secretExpBonus());
+ });
+}
+function expBar(id){
+ const lv=charLevels[id]||1;
+ const need=expNeed(id);
+ const exp=charExp[id]||0;
+ const pct=lv>=5?100:Math.min(100,Math.round(exp/need*100));
+ return "<div class='expBar'><div class='expFill' style='width:"+pct+"%'></div></div><span class='small'>Lv."+lv+" EXP "+(lv>=5?"MAX":exp+"/"+need)+"</span>";
+}
+
+function characterEffectText(id){
+ const lv=charLevels[id]||1;
+ const c=characters[id];
+ const base = c.elements.length ? "回収: "+c.elements.join(" / ") : "元素回収なし";
+ const extra = {
+  gemologist:"伝説鉱物発見率UP",
+  polar:"伝説鉱物発見率UP",
+  planetary:"伝説鉱物発見率UP",
+  fieldScout:"探索報酬UP",
+  photographer:"探索報酬UP",
+  curator:"博物館展示収入UP",
+  secretary:"論文研究費DOWN",
+  metamorphic:"白雲母・結晶片岩ボーナス",
+  appraiser:"鑑定・進化ルート用"
+ }[id] || "";
+ // 原子回収系は用途説明を出しすぎず、何を回収できるかだけ見せる。
+ if(c.elements.length)return base+"｜Lv."+lv;
+ return base + (extra ? "｜"+extra : "") + "｜Lv."+lv;
+}
+
+function canCollect(atomName){
+ return party.some(id=>characters[id].elements.includes(atomName));
+}
+function partyNames(){
+ return party.map(id=>characters[id].face+characters[id].name).join(" / ");
+}
+function renderParty(){
+ const pv=document.getElementById("partyView");
+ if(pv){
+  pv.innerHTML=party.map(id=>{
+   const c=characters[id];
+   return "<div class='charCard active'><div class='face'>"+c.face+"</div><b>"+charTitle(id)+"</b><div>"+c.elements.map(e=>"<span class='tag'>"+e+"</span>").join("")+"<span class='roleTag'>"+charOrg(id)+"</span><p class='small'>"+characterEffectText(id)+"</p>"+expBar(id)+"</div></div>";
+  }).join("");
+ }
+ const sp=document.getElementById("stageParty");
+ if(sp) sp.innerHTML="編成："+partyNames()+(activeTeams().length?"<br>発動："+activeTeams().map(id=>teamCatalog[id].name).join(" / "):"");
+}
+
+
+function secretRewardRate(){
+ let r=1;
+ if(ownedChars.includes("magellan"))r+=0.20*(charLevels.magellan||1);
+ if(ownedChars.includes("humboldt"))r+=0.08*(charLevels.humboldt||1);
+ return r;
+}
+function equipmentCostRate(){
+ return (ownedChars.includes("archimedes") ? Math.max(.55,1-0.08*(charLevels.archimedes||1)) : 1)*teamEquipmentRate();
+}
+function secretPaperRate(){
+ let r=1;
+ if(ownedChars.includes("plato"))r-=0.06*(charLevels.plato||1);
+ return Math.max(.55,r);
+}
+function secretExpBonus(){
+ return ownedChars.includes("darwin") ? Math.max(0,(charLevels.darwin||1)-1) : 0;
+}
+
+function facilityEffectValue(id){
+ const lv=charLevels[id]||1;
+ if(!ownedChars.includes(id))return null;
+ const map={
+  curator:"展示収入 +"+Math.round((museumRate()-1)*100)+"%",
+  secretary:"論文研究費 -"+Math.round((1-paperCostRate())*100)+"%",
+  professor:"研究所スタッフEXP +"+Math.max(0,lv-1),
+  international:"海外ステージ報酬 +"+(8*lv)+"%",
+  metamorphic:"白雲母+"+lv+" / Lv2以上で結晶片岩+1",
+  photographer:"探索報酬 +"+(4*lv)+"%",
+  appraiser:"展示価値 +"+(5*lv)+"%",
+  gemologist:"伝説鉱物率 +"+(80*lv)+"%",
+  polar:"伝説鉱物率 +"+(35*lv)+"%",
+  planetary:"伝説鉱物率 +"+(50*lv)+"%",
+  nemo:"深海・伝説鉱物補助",
+  magellan:"探索報酬 +"+(20*lv)+"%",
+  plato:"論文研究費DOWN",
+  archimedes:"装備開発費DOWN",
+  darwin:"EXP補助",
+  humboldt:"探索報酬 +"+(8*lv)+"%"
+ };
+ return map[id]||null;
+}
+function renderFacilityEffects(){
+ const box=document.getElementById("facilityEffectList");
+ if(!box)return;
+ const ids=ownedChars.filter(id=>facilityEffectValue(id));
+ if(ids.length===0){box.innerHTML="<p class='small'>施設スタッフはまだいません。</p>";return;}
+ box.innerHTML=ids.map(id=>{
+  const c=characters[id];
+  return "<div class='facilityMini'><b>"+c.face+" "+charTitle(id)+"</b><p class='small'>"+charOrg(id)+" / Lv."+(charLevels[id]||1)+" / "+(party.includes(id)?"EXP獲得中":"効果発動中")+"</p><p class='effectNow'>"+facilityEffectValue(id)+"</p>"+expBar(id)+"</div>";
+ }).join("");
+}
+
+
+const secretCatalog={
+ nemo:{name:"ネモ船長",condition:"海洋学者Lv5・深海探査員Lv5・マリアナ海溝調査",check:()=> (charLevels.oceanographer||1)>=5 && (charLevels.deepsea||1)>=5 && !!(discovered.stages&&discovered.stages.mariana)},
+ magellan:{name:"マゼラン",condition:"探索記録8地点以上・国際研究員Lv3",check:()=> stagesFoundSafe()>=8 && (charLevels.international||1)>=3},
+ plato:{name:"プラトン",condition:"論文3本・大学教授Lv3",check:()=> Object.keys(completedPapers||{}).length>=3 && (charLevels.professor||1)>=3},
+ archimedes:{name:"アルキメデス",condition:"装備8種開発・地球化学者Lv3",check:()=> Object.values(equipment||{}).filter(Boolean).length>=8 && (charLevels.geochemist||1)>=3},
+ darwin:{name:"ダーウィン",condition:"仲間5人がLv3以上・進化研究の到達",check:()=> Object.values(charLevels||{}).filter(v=>v>=3).length>=5},
+ humboldt:{name:"フンボルト",condition:"図鑑達成率50%以上・フィールド調査員Lv3",check:()=> ((mineralsFoundSafe()+rocksFoundSafe()+stagesFoundSafe())/(Object.keys(mineralRecipes).length+Object.keys(rockRecipes).length+Object.keys(stages).length))>=.5 && (charLevels.fieldScout||1)>=3}
+};
+function checkSecretUnlocks(){
+ Object.entries(secretCatalog).forEach(([id,s])=>{
+  if(!unlockedSecrets[id] && s.check()){
+   unlockedSecrets[id]=true;
+   if(!ownedChars.includes(id))ownedChars.push(id);
+   if(charLevels[id]==null)charLevels[id]=1;
+   if(charExp[id]==null)charExp[id]=0;
+   toast(s.name+"が仲間になった！");
+  }
+ });
+}
+function renderSecrets(){
+ const box=document.getElementById("secretList");
+ if(!box)return;
+ box.innerHTML=Object.entries(secretCatalog).map(([id,s])=>{
+  const c=characters[id];
+  const ok=!!unlockedSecrets[id] || ownedChars.includes(id);
+  return "<div class='secretCard "+(ok?'unlocked':'')+"'><div class='big'>"+(ok?c.face:"？？？")+"</div><div class='secretName'>"+(ok?c.name:"？？？")+"</div><p class='secretCondition'>条件："+s.condition+"</p><p>"+(ok?"<span class='boost'>解放済み</span>":"未解放")+"</p></div>";
+ }).join("");
+}
+
+
+function setTavernFilter(f){
+ tavernFilter=f;
+ renderAll();
+}
+function tavernFilterLabel(){
+ const map={all:"全員",探索隊:"探索隊",研究所:"研究所",博物館:"博物館",偉人:"偉人"};
+ return map[tavernFilter]||"全員";
+}
+function characterVisibleInTavern(id,c){
+ if(c.secret && !unlockedSecrets[id] && !ownedChars.includes(id))return false;
+ if(tavernFilter==="all")return true;
+ if(tavernFilter==="偉人")return !!c.secret;
+ return charOrg(id)===tavernFilter && !c.secret;
+}
+function renderTavernTabs(){
+ ["all","explore","lab","museum","secret"].forEach(k=>{
+  const b=document.getElementById("tab_"+k);
+  if(!b)return;
+  const f={all:"all",explore:"探索隊",lab:"研究所",museum:"博物館",secret:"偉人"}[k];
+  b.classList.toggle("active",tavernFilter===f);
+ });
+ const h=document.getElementById("tavernOrgHeader");
+ if(h){
+  const msg={
+   all:"全員表示。探索隊は元素回収、研究所・博物館は雇用効果、偉人は条件解放。",
+   探索隊:"探索隊：パーティで元素回収・探索補助。EXPは探索成功で獲得。",
+   研究所:"研究所：雇うだけで効果発動。育成したい時はパーティに入れる。",
+   博物館:"博物館：雇うだけで展示・鑑定効果。育成したい時はパーティに入れる。",
+   偉人:"偉人：条件達成で加入する隠しキャラ。"
+  }[tavernFilter]||"";
+  h.innerHTML="<b>"+tavernFilterLabel()+"</b><p class='small'>"+msg+"</p>";
+ }
+}
+
+function renderTavern(){
+ const box=document.getElementById("tavernList");
+ if(!box)return;
+ renderTavernTabs();
+ const visibleChars=Object.entries(characters).filter(([id,c])=>characterVisibleInTavern(id,c));
+ if(visibleChars.length===0){box.innerHTML="<p class='small'>表示できる仲間がいません。</p>";return;}
+ box.innerHTML=visibleChars.map(([id,c])=>{
+  const owned=ownedChars.includes(id);
+  const inParty=party.includes(id);
+  let btn="";
+  if(!owned){
+   btn="<button onclick=\"hireChar('"+id+"')\">雇用 "+c.cost+"G</button>";
+  }else if(inParty){
+   btn="<button class='ghost' onclick=\"removeParty('"+id+"')\">編成から外す</button>";
+  }else{
+   btn="<button class='blue' onclick=\"addParty('"+id+"')\">編成する</button>";
+  }
+  return "<div class='charCard "+(owned?'':'locked')+"'><div class='face'>"+c.face+"</div><b>"+charTitle(id)+"</b><p class='small'>"+c.desc+"</p><div>"+c.elements.map(e=>"<span class='tag'>"+e+"</span>").join("")+"<span class='roleTag'>"+charOrg(id)+"</span><p class='small'>"+characterEffectText(id)+"</p>"+expBar(id)+"</div>"+btn+"</div>";
+ }).join("");
+}
+function hireChar(id){
+ const c=characters[id];
+ if(ownedChars.includes(id))return;
+ if(money<c.cost){alert("資金不足");return;}
+ money-=c.cost;
+ ownedChars.push(id);
+ if(charOrg(id)==="探索隊" && party.length<4)party.push(id);
+ saveGame();
+ renderAll();
+}
+function addParty(id){
+ if(!ownedChars.includes(id))return;
+ if(party.includes(id))return;
+ if(party.length>=4){alert("編成は4人まで");return;}
+ party.push(id); renderAll(); saveGame();
+}
+function removeParty(id){
+ if(party.length<=1){alert("最低1人は必要");return;}
+ party=party.filter(x=>x!==id); renderAll(); saveGame();
+}
+
+function draw(){
+ const b=document.getElementById("board");
+ b.innerHTML="";
+ for(let y=0;y<6;y++)for(let x=0;x<6;x++){
+  const d=document.createElement("div");
+  d.className="cell dropFlash "+board[y][x].color+(board[y][x].special==="bomb"?" bombCell":"")+(board[y][x].special==="rainbow"?" rainbowCell":"");
+  d.dataset.x=x; d.dataset.y=y; d.textContent=(board[y][x].special==="bomb"?"💥":board[y][x].special==="rainbow"?"🌈":board[y][x].atom);
+  b.appendChild(d);
+ }
+ document.getElementById("moves").textContent=moves;
+ document.getElementById("reward").textContent=effectiveReward()+"G";
+ document.getElementById("comboView").textContent="x"+comboMultiplier.toFixed(1);
+ document.getElementById("difficultyNotice").textContent="難易度："+difficulties[difficulty].name+" / 目標倍率 x"+difficulties[difficulty].goalRate+" / 手数補正 "+difficulties[difficulty].moveBonus;
+ document.getElementById("runInv").innerHTML="<b>ミッション進行</b>："+Object.entries(run).map(([k,v])=>k+":"+v).join(" / ")+"<br><b class='resultGain'>持ち帰り予定</b>："+Object.entries(runCollected).map(([k,v])=>k+":"+v).join(" / ")+"<br><b class='resultMiss'>未回収</b>："+Object.entries(runMissed).filter(([k,v])=>v>0).map(([k,v])=>k+":"+v).join(" / ");
+ document.getElementById("mission").innerHTML="目標："+Object.entries(effectiveGoals()).map(([k,v])=>{
+  const got=run[k]||0;
+  return "<span class='"+(got>=v?"ok":"bad")+"'>"+k+" "+got+"/"+v+"</span>";
+ }).join("　");
+}
+function initAudio(){
+ try{
+  if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==="suspended")audioCtx.resume();
+  setTimeout(updateSoundStatus,50);
+ }catch(e){}
+}
+function tone(f,d){
+ try{
+  if(!audioCtx)return;
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.frequency.value=f; o.connect(g); g.connect(audioCtx.destination);
+  const t=audioCtx.currentTime;
+  g.gain.setValueAtTime(.06,t); g.gain.exponentialRampToValueAtTime(.001,t+d);
+  o.start(t); o.stop(t+d);
+ }catch(e){}
+}
+function beep(kind){
+ if(kind==="pick") tone(500,.04);
+ if(kind==="clear"){tone(260,.06);setTimeout(()=>tone(650,.08),70)}
+ if(kind==="fail") tone(150,.12);
+ if(kind==="win"){tone(520,.08);setTimeout(()=>tone(800,.12),90)}
+}
+function vib(p){try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}}
+
+function toast(msg){
+ const t=document.getElementById("toast");
+ if(!t)return;
+ t.textContent=msg;
+ t.classList.add("show");
+ setTimeout(()=>t.classList.remove("show"),1200);
+}
+function spark(msg,x=window.innerWidth/2,y=window.innerHeight/2){
+ const s=document.createElement("div");
+ s.className="spark";
+ s.textContent=msg;
+ s.style.left=x+"px";
+ s.style.top=y+"px";
+ document.body.appendChild(s);
+ setTimeout(()=>s.remove(),900);
+}
+function melody(notes){
+ if(!audioCtx)return;
+ notes.forEach((n,i)=>setTimeout(()=>tone(n[0],n[1]||.08),i*80));
+}
+function sfxClear(n){
+ if(n>=8) melody([[330,.06],[520,.06],[780,.12]]);
+ else if(n>=5) melody([[260,.05],[520,.09]]);
+ else melody([[300,.05],[560,.07]]);
+}
+function sfxSuccess(){melody([[420,.08],[560,.08],[740,.12],[980,.18]]);}
+function sfxEnding(){melody([[330,.1],[440,.1],[550,.1],[660,.1],[880,.25]]);}
+
+
+function markClearing(list){
+ list.forEach(p=>{
+  const el=document.querySelector(`.cell[data-x="${p.x}"][data-y="${p.y}"]`);
+  if(el)el.classList.add("clearFlash");
+ });
+ const boardEl=document.getElementById("board");
+ if(boardEl)boardEl.classList.add("boardPause");
+}
+function unpauseBoard(){
+ const boardEl=document.getElementById("board");
+ if(boardEl)boardEl.classList.remove("boardPause");
+}
+
+function near(a,b){return Math.abs(a.x-b.x)<=1 && Math.abs(a.y-b.y)<=1}
+document.addEventListener("pointerdown",e=>{
+ const boardEl=document.getElementById("board");
+ if(!boardEl.contains(e.target))return;
+ initAudio();
+ const c=e.target.closest(".cell"); if(!c)return;
+ selecting=true; path=[];
+ currentColor=board[+c.dataset.y][+c.dataset.x].special==='rainbow'?'rainbow':board[+c.dataset.y][+c.dataset.x].color;
+ c.classList.add("sel");
+ path.push({x:+c.dataset.x,y:+c.dataset.y});
+ beep("pick"); vib(8);
+});
+document.addEventListener("pointermove",e=>{
+ if(!selecting)return;
+ const t=document.elementFromPoint(e.clientX,e.clientY);
+ const c=t&&t.closest(".cell"); if(!c || !document.getElementById("board").contains(c))return;
+ const x=+c.dataset.x,y=+c.dataset.y;
+ if(currentColor==='rainbow' && board[y][x].special!=='rainbow') currentColor=board[y][x].color;
+ if(board[y][x].special!=='rainbow' && currentColor!=='rainbow' && board[y][x].color!==currentColor)return;
+ if(path.find(p=>p.x===x&&p.y===y))return;
+ if(!near(path[path.length-1],{x,y}))return;
+ c.classList.add("sel");
+ path.push({x,y});
+ beep("pick"); vib(5);
+});
+window.addEventListener("pointerup",()=>{
+ if(!selecting)return;
+ selecting=false;
+ if(path.length<3){ comboMultiplier=1;
+  document.getElementById("log").textContent="3個以上必要";
+  beep("fail"); toast("探索失敗"); vib(20); draw(); return;
+ }
+ moves--;
+ if(path.length>=8) comboMultiplier=Math.min(5,comboMultiplier+1.0);
+ else if(path.length>=6) comboMultiplier=Math.min(5,comboMultiplier+0.5);
+ else if(path.length>=4) comboMultiplier=Math.min(5,comboMultiplier+0.2);
+ let gained={}, missed={};
+ let clearList=[...path];
+ path.forEach(p=>{
+  const cell=board[p.y][p.x];
+  if(cell && cell.special==="bomb"){
+    for(let yy=p.y-1;yy<=p.y+1;yy++)for(let xx=p.x-1;xx<=p.x+1;xx++){
+      if(yy>=0&&yy<6&&xx>=0&&xx<6&&!clearList.find(q=>q.x===xx&&q.y===yy)) clearList.push({x:xx,y:yy});
+    }
+  }
+  if(cell && cell.special==="rainbow"){
+    const target=path.find(q=>board[q.y][q.x] && board[q.y][q.x].special!=="rainbow");
+    const col=target?board[target.y][target.x].color:cell.color;
+    for(let yy=0;yy<6;yy++)for(let xx=0;xx<6;xx++){
+      if(board[yy][xx] && board[yy][xx].color===col && !clearList.find(q=>q.x===xx&&q.y===yy)) clearList.push({x:xx,y:yy});
+    }
+  }
+ });
+ markClearing(clearList);
+ clearList.forEach(p=>{
+  if(!board[p.y][p.x])return;
+  const a=board[p.y][p.x].atom;
+  const bonus=Math.max(1,Math.round((1+equipBoost(a)+charBonus(a)+labCollectBonus())*(1+teamCollectBonus(a))*comboMultiplier));
+  run[a]+=bonus; // ミッション判定用。仲間がいなくても進む。
+  if(canCollect(a)){
+    runCollected[a]=(runCollected[a]||0)+bonus;
+    gained[a]=(gained[a]||0)+bonus;
+  }else{
+    runMissed[a]=(runMissed[a]||0)+bonus;
+    missed[a]=(missed[a]||0)+bonus;
+  }
+  board[p.y][p.x]=null;
+ });
+ if(path.length>=5){
+   const first=path[0];
+   board[first.y][first.x]={color:currentColor==='rainbow'?rand(difficulties[difficulty].colors):currentColor,atom:atom(),special:path.length>=8?'rainbow':'bomb'};
+ }
+ setTimeout(()=>{
+  collapse();
+  unpauseBoard();
+  let gtxt=Object.entries(gained).map(([k,v])=>k+"+"+v).join(" ");
+  let mtxt=Object.entries(missed).map(([k,v])=>k+"×"+v).join(" ");
+  document.getElementById("log").innerHTML=path.length+"個消去！ "+(path.length>=8?"🌈虹結晶生成！ ":path.length>=5?"💥爆発結晶生成！ ":"")+(gtxt?gtxt:"取得なし")+(mtxt?" <span class='miss'>未回収 "+mtxt+"</span>":"");
+  toast(path.length+"個消去！ "+(path.length>=8?"虹結晶！":path.length>=5?"爆発結晶！":""));
+  sfxClear(path.length);
+  spark("+"+path.length, window.innerWidth/2, window.innerHeight/2);
+  vib(path.length>=8?[30,20,30,20,50]:[25,15,25]);
+  draw();
+  if(success())finish(true);
+  else if(moves<=0)finish(false);
+ },180);
+});
+function collapse(){
+ for(let x=0;x<6;x++){
+  let col=[];
+  for(let y=5;y>=0;y--) if(board[y][x]) col.push(board[y][x]);
+  for(let y=5;y>=0;y--) board[y][x]=col[5-y]||newCell();
+ }
+}
+function success(){
+ const g=effectiveGoals();
+ return Object.entries(g).every(([k,v])=>(run[k]||0)>=v);
+}
+
+function expResultHtml(){
+ if(!lastExpResults || lastExpResults.length===0)return "";
+ return "<div class='expResult'><b>成長</b><br>"+lastExpResults.map(r=>{
+  const c=characters[r.id];
+  const up=r.after>r.before ? " <span class='levelUp'>Lv."+r.before+"→"+r.after+"!</span>" : "";
+  return "<span class='expGain'>"+c.face+" "+charTitle(r.id)+" EXP+"+r.amount+"</span>"+up;
+ }).join("<br>")+"</div>";
+}
+
+function finish(ok){
+ if(ok){
+  Object.keys(inv).forEach(k=>inv[k]+=(runCollected[k]||0));
+  money+=effectiveReward();
+  markDiscovery('stages',current);
+  saveGame();
+  document.getElementById("modalTitle").textContent="探索成功！";
+  let rank=calcRank();
+  let firstBonus=0;
+  if(!stageRecords[current] || !stageRecords[current].clears){
+    firstBonus=stages[current].firstBonus||0;
+    money+=firstBonus;
+  }
+  updateStageRecord(current,rank);
+  rollLegendary();
+  gainOrganizationExp();
+  checkSecretUnlocks();
+  clearedDifficulties[difficulty]=true;
+  const gainText=Object.entries(runCollected).filter(([k,v])=>v>0).map(([k,v])=>k+"+"+v).join(" / ") || "なし";
+  const missText=Object.entries(runMissed).filter(([k,v])=>v>0).map(([k,v])=>k+"×"+v).join(" / ") || "なし";
+  const teamMissionHtml=teamMissionResultHtml();
+  recordTeamMissions();
+  saveGame();
+  document.getElementById("modalText").innerHTML=effectiveReward()+"Gを獲得。"+(firstBonus?"<br>初回調査報酬："+firstBonus+"G":"")+"<br>探索ランク："+rank+"<div class='resultPanel'><div class='resultGain'>持ち帰れた素材： "+gainText+"</div><div class='resultMiss'>仲間不足で回収できなかった素材： "+missText+"</div></div>"+activeTeamText()+teamMissionHtml+expResultHtml();
+  sfxSuccess(); toast("探索成功！");
+ }else{
+  document.getElementById("modalTitle").textContent="探索失敗";
+  document.getElementById("modalText").innerHTML="手数がなくなった。素材は持ち帰れなかった。";
+  beep("fail");
+ }
+ document.getElementById("modal").classList.add("show");
+}
+function closeModal(){
+ document.getElementById("modal").classList.remove("show");
+ current=null;
+ show("hub");
+}
+loadGame();
+saveReady=true;
+renderAll();
+saveGame();
+</script>
+</body>
+</html>
