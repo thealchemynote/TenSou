@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 v1.3e MAGMA_TANK</title>
+<title>天地創造 v1.4f MAGMA_RATIO_STOCK_FIX</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -217,9 +217,106 @@ button.blue{background:#7bdff2}
 .coolBtnRapid{background:#7bdff2;color:#102}
 </style>
 
+
+<style id="v14-machine-slots-style">
+.machineBoard{display:grid;grid-template-columns:1fr;gap:12px}
+.machinePanel{background:#0b1020;border:1px solid #ffffff2c;border-radius:16px;padding:12px;margin:10px 0}
+.machinePanel.furnace{border-color:#ffb86b88;box-shadow:0 0 14px #ff6b2b22}
+.machinePanel.cooler{border-color:#7bdff288;box-shadow:0 0 14px #7bdff222}
+.machinePanel.crusher{border-color:#cdb4db88;box-shadow:0 0 14px #cdb4db22}
+.machinePanel.press{border-color:#85f0a388;box-shadow:0 0 14px #85f0a322}
+.machinePanel.metamorphic{border-color:#bde0fe88;box-shadow:0 0 14px #bde0fe22}
+.machineTitle{font-size:17px;font-weight:900;color:#ffd166;margin-bottom:6px}
+.slotGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
+.machineSlot{min-height:58px;background:#111827;border:1px dashed #ffffff55;border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;padding:6px}
+.machineSlot.filled{border-style:solid;border-color:#ffd166;background:#1c2033}
+.singleSlot{max-width:180px;margin:8px auto}
+.sourceGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:7px;margin-top:8px}
+.sourceChip{background:#111827;border:1px solid #ffffff24;border-radius:12px;padding:8px;text-align:center}
+.sourceChip button{padding:7px 9px;font-size:12px}
+.machineFlow{font-size:12px;color:#c9c9c9;line-height:1.5}
+.machineResult{background:#111827;border:1px solid #ffd16655;border-radius:12px;padding:8px;margin:8px 0}
+.grainBtn.active{outline:2px solid #fff;filter:brightness(1.15)}
+</style>
+
+
+<style id="v14b-clean-workshop-style">
+#rockWorkshop{display:block}
+.machineBoard{gap:8px}
+.machinePanel{padding:10px;margin:8px 0;border-radius:14px}
+.machineTitle{font-size:16px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
+.machineFlow{display:none!important}
+.machineResult{padding:6px 8px;margin:6px 0;font-size:12px}
+.slotGrid{grid-template-columns:repeat(6,1fr);gap:5px;margin:6px 0}
+.machineSlot{min-height:44px;font-size:11px;padding:4px;border-radius:10px}
+.singleSlot{max-width:none;min-height:46px;margin:6px 0}
+.sourceGrid{grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:5px;margin-top:6px}
+.sourceChip{padding:6px;border-radius:10px}
+.sourceChip b{font-size:11px}
+.sourceChip .small{font-size:10px}
+.sourceChip button{padding:5px 7px;font-size:11px;margin:2px}
+.machinePanel button{padding:8px 10px;margin:3px}
+.machineMiniStatus{font-size:12px;color:#c9c9c9}
+.machineActions{display:flex;gap:4px;flex-wrap:wrap;align-items:center;justify-content:center}
+.sedimentBadge{display:inline-block;background:#cdb4db;color:#102;border-radius:999px;padding:2px 7px;margin:2px;font-size:10px;font-weight:900}
+@media(max-width:520px){
+ .slotGrid{grid-template-columns:repeat(3,1fr)}
+ .sourceGrid{grid-template-columns:repeat(auto-fit,minmax(96px,1fr))}
+}
+</style>
+
+
+<style id="v14c-compact-mineral-craft-style">
+#mineralCraft{
+  display:grid!important;
+  grid-template-columns:repeat(6,1fr)!important;
+  gap:6px!important;
+}
+#mineralCraft .craftCard{
+  padding:7px 5px!important;
+  border-radius:10px!important;
+  min-width:0!important;
+}
+#mineralCraft .craftCard .icon{
+  font-size:20px!important;
+  line-height:1.05!important;
+}
+#mineralCraft .craftCard b{
+  font-size:11px!important;
+  line-height:1.15!important;
+  display:block!important;
+  min-height:24px!important;
+}
+#mineralCraft .craftCard .costLine{
+  display:none!important;
+}
+#mineralCraft .craftCard .small{
+  font-size:10px!important;
+  margin:3px 0!important;
+}
+#mineralCraft .craftCard button{
+  padding:5px 6px!important;
+  margin:2px!important;
+  font-size:10px!important;
+  border-radius:8px!important;
+}
+@media(min-width:760px){
+  #mineralCraft{grid-template-columns:repeat(7,1fr)!important;}
+}
+@media(max-width:430px){
+  #mineralCraft{grid-template-columns:repeat(4,1fr)!important;}
+}
+</style>
+
+
+<style id="v14f-magma-stock-style">
+.magmaStockList{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center}
+.failText{color:#ff9e8b;font-weight:900}
+</style>
+
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">v1.3e｜マグマ工程追加</div></header>
+<header><h1>天地創造</h1><div class="small">v1.4f｜マグマ判定・3ストック修正</div></header>
 <div class="wrap">
 
 
@@ -227,7 +324,7 @@ button.blue{background:#7bdff2}
  <div class="homeHero">
   <div class="homeCard">
    <div class="homeTitle">天地創造</div>
-   <div class="homeSub">PuzzleHub v1.3e</div>
+   <div class="homeSub">PuzzleHub v1.4f</div>
    <div id="homeSaveDate" class="saveDate">セーブデータ確認中</div>
    <button class="homeBtn" onclick="startNewGameFromHome()">最初から始める</button>
    <button id="continueBtn" class="homeBtn blue" onclick="continueFromSave()">セーブから始める</button>
@@ -519,7 +616,7 @@ button.blue{background:#7bdff2}
 
 <section id="save" class="screen">
  <div class="card savePanel">
-  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.3e MAGMA TANK</div>
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.4f MAGMA RATIO STOCK FIX</div>
   <p>
    <button onclick="manualSave()">セーブ</button>
    <button onclick="exportBackup()">バックアップ出力</button>
@@ -1325,7 +1422,7 @@ const difficulties={
 
 let inv={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
 let minerals={quartz:0,kfeldspar:0,plagioclase:0,pyroxene:0,biotite:0,amphibole:0,olivine:0,albite:0,magnetite:0,muscovite:0,calcite:0,clay:0};
-let rocks={granite:0,diorite:0,gabbro:0,rhyolite:0,andesite:0,basalt:0,peridotite:0,sandstone:0,mudstone:0,limestone:0,marble:0,quartzite:0,slate:0,schist:0,gneiss:0};
+let rocks={granite:0,diorite:0,gabbro:0,rhyolite:0,andesite:0,basalt:0,peridotite:0,conglomerate:0,sandstone:0,siltstone:0,mudstone:0,shale:0,limestone:0,tuffaceous:0,marble:0,quartzite:0,slate:0,schist:0,gneiss:0};
 let equipment={loupe:false,hammer:false,geochemKit:false,magnetometer:false,sedimentCore:false,sampler:false,polar:false,spectroscope:false,metamorphicPress:false,fieldDrone:false,museumCase:false,paperDesk:false,globalKit:false,deepseaROV:false,planetaryProbe:false,electronScope:false};
 let discovered={minerals:{},rocks:{},stages:{}};
 let claimedQuests={};
@@ -1350,6 +1447,14 @@ let runMissed={"SiO₂":0,Al:0,Mg:0,Fe:0,Ca:0,Na:0};
 let money=0, board=[], current=null, moves=0, selecting=false, resolving=false, clearPending=false, path=[], currentColor=null;
 let rockBatch={};
 let magmaTank=null;
+let magmaStock=[];
+let furnaceSlots=[];
+let crusherSlots=[];
+let coolingSlot=null;
+let pressSlot=null;
+let metamorphicSlots=[];
+let crushedSediment=null;
+let crusherGrain="medium";
 let lastRockResultHtml="";
 let difficulty='normal';
 let tavernFilter='all';
@@ -1357,13 +1462,13 @@ let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_v1_3e_magma_tank";
+const SAVE_KEY="tenchi_souzou_v1_4f_magma_ratio_stock_fix";
 let saveReady=false;
 let soundEnabled=true;
 let vibrationEnabled=true;
 function gameData(){
  return {
-  version:"V1_3E_MAGMA_TANK",
+  version:"V1_4F_MAGMA_RATIO_STOCK_FIX",
   savedAt:new Date().toISOString(),
   money,
   inv,
@@ -1397,6 +1502,14 @@ function gameData(){
   difficulty,
   tavernFilter,
   magmaTank,
+  magmaStock,
+  furnaceSlots,
+  crusherSlots,
+  coolingSlot,
+  pressSlot,
+  metamorphicSlots,
+  crushedSediment,
+  crusherGrain,
   soundEnabled,
   vibrationEnabled
  };
@@ -1436,7 +1549,18 @@ function applyData(data){
  if(unlockedStages.length===0)unlockedStages=["fuji","hawaii"];
  if(data.difficulty && difficulties[data.difficulty])difficulty=data.difficulty;
  if(data.tavernFilter)tavernFilter=data.tavernFilter;
- if(data.magmaTank && typeof data.magmaTank==="object")magmaTank=data.magmaTank;
+ if(Array.isArray(data.magmaStock))magmaStock=data.magmaStock.filter(m=>m&&typeof m==="object").slice(0,3);
+ if(data.magmaTank && typeof data.magmaTank==="object"){
+  if(magmaStock.length===0)magmaStock=[data.magmaTank].slice(0,3);
+  magmaTank=magmaStock[0]||data.magmaTank;
+ }
+ if(Array.isArray(data.furnaceSlots))furnaceSlots=data.furnaceSlots.filter(id=>mineralRecipes[id]).slice(0,6);
+ if(Array.isArray(data.crusherSlots))crusherSlots=data.crusherSlots.filter(id=>mineralRecipes[id]).slice(0,6);
+ if(data.coolingSlot && typeof data.coolingSlot==="object")coolingSlot=data.coolingSlot;
+ if(data.pressSlot && typeof data.pressSlot==="object")pressSlot=data.pressSlot;
+ if(Array.isArray(data.metamorphicSlots))metamorphicSlots=data.metamorphicSlots.filter(id=>rockRecipes[id]).slice(0,6);
+ if(data.crushedSediment && typeof data.crushedSediment==="object")crushedSediment=data.crushedSediment;
+ if(data.crusherGrain)crusherGrain=data.crusherGrain;
  if(typeof data.soundEnabled==="boolean")soundEnabled=data.soundEnabled;
  if(typeof data.vibrationEnabled==="boolean")vibrationEnabled=data.vibrationEnabled;
 }
@@ -1570,16 +1694,26 @@ function renderHomeStatus(){
  if(vb){vb.textContent="バイブ "+(vibrationEnabled?"ON":"OFF"); vb.className=vibrationEnabled?"toggleOn":"toggleOff";}
 }
 function startNewGameFromHome(){
- if(hasSaveData() && !confirm("現在のセーブデータを消して最初から始めますか？"))return;
- resetGameState(false);
- saveReady=true;
- saveGame();
- show("hub");
+ try{
+  // iPhoneのファイルビューア等でconfirmが効かないことがあるため、ここでは確認ダイアログを出さず確実に開始する。
+  resetGameState(false);
+  saveReady=true;
+  saveGame();
+  show("hub");
+ }catch(e){
+  console.error(e);
+  alert("開始処理でエラーが出ました。セーブ画面のリセットを試してください。");
+ }
 }
 function continueFromSave(){
- loadGame();
- saveReady=true;
- show("hub");
+ try{
+  loadGame();
+  saveReady=true;
+  show("hub");
+ }catch(e){
+  console.error(e);
+  alert("セーブ読込でエラーが出ました。最初から始めるか、バックアップを読み込んでください。");
+ }
 }
 function toggleSound(){
  soundEnabled=!soundEnabled;
@@ -1764,11 +1898,11 @@ function unlockStage(id){
 function renderFinalNotice(){
  const el=document.getElementById("finalNotice");
  if(!el)return;
- el.innerHTML="<b>天地創造 v1.3e MAGMA TANK</b><br><span class='small'>高熱炉でマグマ生成→冷却装置で火成岩生成の工程を追加。</span>";
+ el.innerHTML="<b>天地創造 v1.4f MAGMA RATIO STOCK FIX</b><br><span class='small'>火成岩の成分判定を修正し、マグマ3ストックに対応。</span>";
 }
 
 function renderAll(){
- document.getElementById("money").textContent=money;
+ const moneyEl=document.getElementById("money"); if(moneyEl)moneyEl.textContent=money;
  renderStageList();
  renderStorage();
  renderParty();
@@ -1821,9 +1955,13 @@ const rockRecipes={
  andesite:{name:"安山岩",icon:"🌋",value:1000,cost:{plagioclase:1,amphibole:1,pyroxene:1},type:"igneous",desc:"火山弧に多い中間質の火山岩。"},
  basalt:{name:"玄武岩",icon:"🌑",value:700,cost:{pyroxene:1,plagioclase:1},type:"igneous",desc:"輝石と斜長石を含む黒っぽい火山岩。"},
  peridotite:{name:"かんらん岩",icon:"🟢",value:1400,cost:{olivine:2,pyroxene:1},type:"igneous",desc:"カンラン石を多く含むマントル由来の岩石。"},
- sandstone:{name:"砂岩",icon:"🏜️",value:650,cost:{quartz:2},type:"sedimentary",desc:"石英を多く含む砂が固結した堆積岩。"},
- mudstone:{name:"泥岩",icon:"🟫",value:700,cost:{clay:2,muscovite:1},type:"sedimentary",desc:"粘土鉱物を多く含む泥が固結した堆積岩。"},
+ conglomerate:{name:"礫岩",icon:"🪨",value:760,cost:{quartz:1,kfeldspar:1},type:"sedimentary",desc:"粗い粒が固結した堆積岩。"},
+ sandstone:{name:"砂岩",icon:"🏜️",value:650,cost:{quartz:2},type:"sedimentary",desc:"砂粒が固結した堆積岩。"},
+ siltstone:{name:"シルト岩",icon:"▫️",value:680,cost:{quartz:1,clay:1},type:"sedimentary",desc:"砂岩と泥岩の中間くらいの粒の堆積岩。"},
+ mudstone:{name:"泥岩",icon:"🟫",value:700,cost:{clay:2,muscovite:1},type:"sedimentary",desc:"細かい泥が固結した堆積岩。"},
+ shale:{name:"頁岩",icon:"📚",value:820,cost:{clay:2,muscovite:1},type:"sedimentary",desc:"泥が薄く割れやすく固まった堆積岩。"},
  limestone:{name:"石灰岩",icon:"⚱️",value:900,cost:{calcite:2},type:"sedimentary",desc:"方解石を多く含む堆積岩。"},
+ tuffaceous:{name:"凝灰質砂岩",icon:"🌋",value:880,cost:{pyroxene:1,plagioclase:1,quartz:1},type:"sedimentary",desc:"火山由来の粒を含む砂質の堆積岩。"},
  marble:{name:"大理石",icon:"🏛️",value:1500,cost:{limestone:1},type:"metamorphic",desc:"石灰岩が熱と圧力を受けてできる変成岩。"},
  quartzite:{name:"珪岩",icon:"💠",value:1450,cost:{sandstone:1},type:"metamorphic",desc:"砂岩が熱と圧力を受けて硬くなった変成岩。"},
  slate:{name:"粘板岩",icon:"📄",value:1200,cost:{mudstone:1},type:"metamorphic",desc:"泥岩が低い変成度で変化した岩石。"},
@@ -1923,6 +2061,7 @@ function missingMixedCostText(cost){
  });
  return miss.join(" / ");
 }
+function regionalBonus(id){return 0;}
 function craftMineral(id){
  const r=mineralRecipes[id];
  if(!canPay(inv,r.cost)){alert("素材不足");return;}
@@ -2036,12 +2175,31 @@ function classifyMagmaFromBatch(batch){
  const p=partsFromBatch(batch);
  const t=p.total;
  if(t<2)return null;
- const light=p.light/t, dark=p.dark/t, quartz=p.quartz/t, feldspar=p.feldspar/t, plag=p.plagioclase/t, kfs=p.kfeldspar/t;
- const ultra=p.ultramafic/t, oliv=p.olivine/t;
- if(oliv>=0.50 || ultra>=0.70)return "ultramafic";
- if(dark>=0.45 && plag>=0.20 && quartz<0.10)return "mafic";
- if(light>=0.70 && quartz>=0.18 && feldspar>=0.35 && dark<=0.30)return "felsic";
- return "intermediate";
+ const light=p.light;
+ const dark=p.dark;
+ const quartz=p.quartz;
+ const feldspar=p.feldspar;
+ const plag=p.plagioclase;
+ const kfs=p.kfeldspar;
+ const oliv=p.olivine;
+ const pyrox=(batch.pyroxene||0);
+ const amph=(batch.amphibole||0);
+ const biot=(batch.biotite||0);
+ const musc=(batch.muscovite||0);
+ const mafic=p.mafic;
+ const kinds=Object.values(batch||{}).filter(v=>Number(v)>0).length;
+ // 単一鉱物や評価不能な組み合わせは失敗。石英100%はここで落とす。
+ if(kinds<2)return null;
+ // 花崗岩/流紋岩系：石英＋長石類が必要。有色は黒雲母・角閃石などが少量。
+ // 6スロット基準なら、無色白色4〜5、有色1〜2を想定。ユーザー指定の「有色2〜3・無色4〜5」に合わせ、5〜8投入も許容。
+ if(light>=4 && light<=5 && dark>=1 && dark<=3 && quartz>=1 && feldspar>=2 && (kfs>=1 || plag>=1) && (biot+amph+musc)>=1)return "felsic";
+ // 閃緑岩/安山岩系：斜長石＋角閃石/輝石/黒雲母。明暗がほぼ半々。
+ if(light>=3 && light<=4 && dark>=2 && dark<=3 && plag>=1 && (amph+pyrox+biot)>=1 && quartz<=2)return "intermediate";
+ // はんれい岩/玄武岩系：斜長石＋輝石/カンラン石が中心。石英はほぼなし。
+ if(light>=1 && light<=3 && dark>=3 && dark<=5 && plag>=1 && (pyrox+oliv+amph)>=2 && quartz===0)return "mafic";
+ // 超苦鉄質：カンラン石・輝石が圧倒的
+ if((oliv+pyrox)>=4 && light<=2 && quartz===0)return "ultramafic";
+ return null;
 }
 function magmaTypeName(type){
  return {felsic:"珪長質マグマ",intermediate:"中間質マグマ",mafic:"苦鉄質マグマ",ultramafic:"超苦鉄質マグマ"}[type]||"未分類マグマ";
@@ -2200,7 +2358,9 @@ function processIgneous(mode){
  }
  coolMagma(mode);
 }
-function processSedimentary(){if(batchTotal()<2){alert("鉱物を2個以上投入してください");return;} createRock(identifySedimentary(),"圧縮機");}
+function processSedimentary(){
+ alert("堆積岩は、粉砕機で砕いた砕屑物を圧縮機に入れて作ります。");
+}
 function metamorphicResult(source,grade){
  if(source==="limestone")return "marble";
  if(source==="sandstone")return "quartzite";
@@ -2221,6 +2381,315 @@ function processMetamorphic(source,grade){
 function igneousHint(){return "<div class='formulaHint'>火成岩：鉱物を選ぶ → 高熱炉でマグマ生成 → じっくり冷却機で深成岩、急冷機で火山岩。<br>堆積岩：鉱物を選ぶ → 圧縮機で堆積岩。</div>";}
 function sedimentHint(){return "<div class='formulaHint'>圧縮機では、石英が多いと砂岩、方解石が多いと石灰岩、粘土鉱物が多いと泥岩。</div>";}
 
+
+function countList(list){
+ const out={};
+ (list||[]).forEach(id=>out[id]=(out[id]||0)+1);
+ return out;
+}
+function canAddMineralToSlots(id,slots){
+ const used=countList(slots)[id]||0;
+ return (minerals[id]||0)>used;
+}
+function canAddRockToSlots(id,slots){
+ const used=countList(slots)[id]||0;
+ return (rocks[id]||0)>used;
+}
+function slotsToBatch(slots){
+ return countList(slots||[]);
+}
+function slotItemHtml(id,kind){
+ if(!id)return "空";
+ const dict=kind==="rock"?rockRecipes:mineralRecipes;
+ const r=dict[id];
+ return r ? r.icon+"<br>"+r.name : id;
+}
+function renderSlots(slots,kind,removeFn,max=6){
+ const arr=[...(slots||[])];
+ while(arr.length<max)arr.push(null);
+ return "<div class='slotGrid'>"+arr.slice(0,max).map((id,i)=>"<div class='machineSlot "+(id?'filled':'')+"' onclick='"+(id?removeFn+"("+i+")":"")+"'>"+slotItemHtml(id,kind)+"</div>").join("")+"</div>";
+}
+function addFurnaceSlot(id){
+ if(furnaceSlots.length>=6){alert("マグマ炉は6個までです");return;}
+ if(!canAddMineralToSlots(id,furnaceSlots)){alert("鉱物在庫が足りません");return;}
+ furnaceSlots.push(id); renderCraft(); saveGame();
+}
+function removeFurnaceSlot(i){furnaceSlots.splice(i,1); renderCraft(); saveGame();}
+function clearFurnaceSlots(){furnaceSlots=[]; renderCraft(); saveGame();}
+function addCrusherSlot(id){
+ if(crusherSlots.length>=6){alert("粉砕機は6個までです");return;}
+ if(!canAddMineralToSlots(id,crusherSlots)){alert("鉱物在庫が足りません");return;}
+ crusherSlots.push(id); renderCraft(); saveGame();
+}
+function removeCrusherSlot(i){crusherSlots.splice(i,1); renderCraft(); saveGame();}
+function clearCrusherSlots(){crusherSlots=[]; renderCraft(); saveGame();}
+function addMetaSlot(id){
+ if(metamorphicSlots.length>=6){alert("変成炉は6個までです");return;}
+ if(!canAddRockToSlots(id,metamorphicSlots)){alert("岩石在庫が足りません");return;}
+ metamorphicSlots.push(id); renderCraft(); saveGame();
+}
+function removeMetaSlot(i){metamorphicSlots.splice(i,1); renderCraft(); saveGame();}
+function clearMetaSlots(){metamorphicSlots=[]; renderCraft(); saveGame();}
+function setCrusherGrain(g){crusherGrain=g; renderCraft(); saveGame();}
+
+function syncLegacyMagmaTank(){
+ magmaTank=Array.isArray(magmaStock)&&magmaStock.length?magmaStock[0]:null;
+}
+function addMagmaToStock(magma){
+ if(!Array.isArray(magmaStock))magmaStock=[];
+ if(magmaStock.length>=3)return false;
+ magmaStock.push(magma);
+ syncLegacyMagmaTank();
+ return true;
+}
+function removeMagmaStock(index){
+ if(!Array.isArray(magmaStock))magmaStock=[];
+ magmaStock.splice(index,1);
+ syncLegacyMagmaTank();
+ renderCraft(); saveGame();
+}
+function setCoolingSlotFromStock(index){
+ if(!Array.isArray(magmaStock))magmaStock=[];
+ const m=magmaStock[index];
+ if(!m){alert("マグマがありません");return;}
+ if(coolingSlot && !confirm("冷却装置のマグマを入れ替えますか？"))return;
+ coolingSlot=JSON.parse(JSON.stringify(m));
+ magmaStock.splice(index,1);
+ syncLegacyMagmaTank();
+ renderCraft(); saveGame();
+}
+function magmaStockHtml(){
+ if(!Array.isArray(magmaStock))magmaStock=[];
+ if(magmaStock.length===0)return "なし";
+ return "<div class='magmaStockList'>"+magmaStock.map((m,i)=>{
+  const name=magmaTypeName(m.type);
+  return `<span class="magmaBadge">${i+1}:${name}</span><button onclick="setCoolingSlotFromStock(${i})">冷却へ</button><button class="ghost" onclick="removeMagmaStock(${i})">破棄</button>`;
+ }).join("")+"</div>";
+}
+function magmaFail(reason){
+ lastRockResultHtml="<div class='resultRockBox'><div class='resultRockTitle failText'>岩石崩壊</div><p class='small'>"+reason+"</p></div>";
+ sfxError?sfxError():sfxCraft();
+ toast("岩石崩壊");
+}
+
+function makeMagmaFromSlots(){
+ if((furnaceSlots||[]).length<2){alert("マグマ炉に鉱物を2個以上入れてください");return;}
+ if(Array.isArray(magmaStock) && magmaStock.length>=3){alert("マグマは3つまでストックできます");return;}
+ const batch=slotsToBatch(furnaceSlots);
+ const type=classifyMagmaFromBatch(batch);
+ if(!type){
+  magmaFail("鉱物成分が火成岩の条件に合わなかったため、炉の中で岩石が崩壊しました。");
+  furnaceSlots=[];
+  saveGame(); renderAll();
+  return;
+ }
+ const ratio=ratioDataFromBatch(batch);
+ Object.entries(batch).forEach(([k,v])=>minerals[k]-=v);
+ const newMagma={type,minerals:batch,ratio,createdAt:Date.now()};
+ if(!addMagmaToStock(newMagma)){alert("マグマは3つまでストックできます");return;}
+ furnaceSlots=[];
+ lastRockResultHtml="<div class='resultRockBox'><div class='resultRockTitle'>"+magmaTypeName(type)+"</div><span class='magmaBadge'>マグマ炉</span><p class='small'>鉱物割合を評価してマグマを生成しました。ストック "+magmaStock.length+"/3</p></div>";
+ sfxCraft(); toast(magmaTypeName(type)+"生成！");
+ saveGame(); renderAll();
+}
+function setCoolingSlotFromTank(){
+ if(!Array.isArray(magmaStock) || magmaStock.length===0){
+  if(magmaTank)magmaStock=[magmaTank];
+  else {alert("マグマがありません");return;}
+ }
+ setCoolingSlotFromStock(0);
+}
+function clearCoolingSlot(){
+ if(!coolingSlot)return;
+ if(!confirm("冷却装置のマグマを破棄しますか？"))return;
+ coolingSlot=null; renderCraft(); saveGame();
+}
+function coolSlotMagma(mode){
+ if(!coolingSlot){alert("冷却装置にマグマを入れてください");return;}
+ const tank=JSON.parse(JSON.stringify(coolingSlot));
+ const id=magmaToRock(tank.type,mode);
+ if(!id || !rockRecipes[id]){alert("このマグマはまだ岩石化できません");return;}
+ const resultHtml=rockLearningResultFromMagmaHtml(id,mode==="rapid"?"冷却装置：急冷":"冷却装置：徐冷",tank);
+ coolingSlot=null;
+ syncLegacyMagmaTank();
+ rocks[id]=(rocks[id]||0)+1;
+ markDiscovery("rocks",id);
+ lastRockResultHtml=resultHtml;
+ sfxCraft(); toast(rockRecipes[id].name+"を生成！");
+ saveGame(); renderAll();
+ const rockResult=document.getElementById("rockResult"); if(rockResult)rockResult.innerHTML=resultHtml;
+}
+function crushFromSlots(){
+ if((crusherSlots||[]).length<2){alert("粉砕機に鉱物を2個以上入れてください");return;}
+ const batch=slotsToBatch(crusherSlots);
+ const ratio=ratioDataFromBatch(batch);
+ Object.entries(batch).forEach(([k,v])=>minerals[k]-=v);
+ crushedSediment={size:crusherGrain,minerals:batch,ratio,createdAt:Date.now()};
+ crusherSlots=[];
+ lastRockResultHtml="<div class='resultRockBox'><div class='resultRockTitle'>砕屑物</div><span class='magmaBadge'>粉砕機："+grainName(crusherGrain)+"</span><p class='small'>複数鉱物を砕きました。圧縮機に入れると成分で堆積岩に分岐します。</p></div>";
+ sfxCraft(); toast("砕屑物生成！");
+ saveGame(); renderAll();
+}
+function grainName(size){
+ return {fine:"細かい",medium:"ふつう",coarse:"粗い"}[size]||"ふつう";
+}
+function clearCrushedSediment(){
+ if(!crushedSediment)return;
+ if(!confirm("砕屑物を破棄しますか？"))return;
+ crushedSediment=null; renderCraft(); saveGame();
+}
+function setPressSlotFromCrushed(){
+ if(!crushedSediment){alert("砕屑物がありません");return;}
+ pressSlot=JSON.parse(JSON.stringify(crushedSediment));
+ crushedSediment=null;
+ renderCraft(); saveGame();
+}
+function clearPressSlot(){pressSlot=null; renderCraft(); saveGame();}
+function identifySedimentaryFromBatch(batch,size){
+ const total=Object.values(batch||{}).reduce((a,b)=>a+(Number(b)||0),0);
+ if(total<2)return null;
+ const calc=(batch.calcite||0)/total;
+ const quartz=(batch.quartz||0)/total;
+ const clay=((batch.clay||0)+(batch.muscovite||0))/total;
+ const feld=((batch.kfeldspar||0)+(batch.plagioclase||0)+(batch.albite||0))/total;
+ const mafic=((batch.pyroxene||0)+(batch.amphibole||0)+(batch.olivine||0)+(batch.biotite||0)+(batch.magnetite||0))/total;
+ const volcanic=(batch.pyroxene||0)+(batch.amphibole||0)+(batch.plagioclase||0)+(batch.olivine||0);
+ // まず成分で大きく分岐
+ if(calc>=0.45)return "limestone";
+ if(volcanic>=2 && mafic+feld>=0.45)return "tuffaceous";
+ // 粒度による砕屑岩分岐
+ if(size==="coarse"){
+  if(quartz+feld>=0.45)return "conglomerate";
+  if(clay>=0.35)return "siltstone";
+  return "sandstone";
+ }
+ if(size==="medium"){
+  if(quartz>=0.40 || quartz+feld>=0.50)return "sandstone";
+  if(clay>=0.50)return "shale";
+  if(clay>=0.30)return "siltstone";
+  return mafic>=0.35 ? "siltstone" : "sandstone";
+ }
+ // fine
+ if(clay>=0.55)return "shale";
+ if(clay>=0.35 || mafic>=0.35)return "mudstone";
+ if(quartz>=0.45)return "siltstone";
+ return "mudstone";
+}
+function compressPressSlot(){
+ if(!pressSlot){alert("圧縮機に砕屑物を入れてください");return;}
+ const id=identifySedimentaryFromBatch(pressSlot.minerals,pressSlot.size);
+ if(!id || !rockRecipes[id]){alert("堆積岩にする条件が足りません");return;}
+ const r=pressSlot.ratio||{};
+ lastRockResultHtml="<div class='resultRockBox'><div class='resultRockTitle'>"+rockRecipes[id].name+"</div><span class='magmaBadge'>圧縮機</span><span class='sedimentBadge'>"+grainName(pressSlot.size)+"</span><p class='small'>成分比で堆積岩へ分岐しました。</p></div>";
+ pressSlot=null;
+ rocks[id]=(rocks[id]||0)+1;
+ markDiscovery("rocks",id);
+ sfxCraft(); toast(rockRecipes[id].name+"を生成！");
+ saveGame(); renderAll();
+}
+function metamorphicResultFromSlots(slots,grade){
+ const c=countList(slots||[]);
+ if((c.limestone||0)>=1)return "marble";
+ if((c.sandstone||0)+(c.conglomerate||0)+(c.siltstone||0)+(c.tuffaceous||0)>=1)return "quartzite";
+ if((c.mudstone||0)+(c.shale||0)>=1){
+  if(grade==="low")return "slate";
+  if(grade==="mid")return "schist";
+  return "gneiss";
+ }
+ if((c.granite||0)>=1)return "gneiss";
+ if((c.basalt||0)+(c.andesite||0)+(c.diorite||0)+(c.gabbro||0)>=1)return grade==="high"?"schist":"slate";
+ if((c.slate||0)>=1 && grade!=="low")return grade==="mid"?"schist":"gneiss";
+ if((c.schist||0)>=1 && grade==="high")return "gneiss";
+ return null;
+}
+function fireMetamorphicFurnace(grade){
+ if((metamorphicSlots||[]).length<1){alert("変成炉に岩石を入れてください");return;}
+ const id=metamorphicResultFromSlots(metamorphicSlots,grade);
+ if(!id || !rockRecipes[id]){alert("この組み合わせは変成できません");return;}
+ const batch=countList(metamorphicSlots);
+ Object.entries(batch).forEach(([k,v])=>rocks[k]-=v);
+ metamorphicSlots=[];
+ rocks[id]=(rocks[id]||0)+1;
+ markDiscovery("rocks",id);
+ lastRockResultHtml="<div class='resultRockBox'><div class='resultRockTitle'>"+rockRecipes[id].name+"</div><span class='magmaBadge'>変成炉</span><p class='small'>熱と圧力："+({low:"低温低圧",mid:"中温中圧",high:"高温高圧"}[grade]||"変成")+"</p><p class='recipeRange'>マグマではなく、既存の岩石が熱と圧力で変成しました。</p></div>";
+ sfxCraft(); toast(rockRecipes[id].name+"に変成！");
+ saveGame(); renderAll();
+}
+function mineralSourceButtons(addFn){
+ return "<div class='sourceGrid'>"+Object.entries(mineralRecipes).map(([id,r])=>{
+  return `<div class="sourceChip"><b>${r.icon} ${r.name}</b><p class="small">在庫：${minerals[id]||0}</p><button onclick="${addFn}('${id}')">入れる</button></div>`;
+ }).join("")+"</div>";
+}
+function rockSourceButtons(addFn){
+ return "<div class='sourceGrid'>"+Object.entries(rockRecipes).map(([id,r])=>{
+  return `<div class="sourceChip"><b>${r.icon} ${r.name}</b><p class="small">在庫：${rocks[id]||0}</p><button onclick="${addFn}('${id}')">入れる</button></div>`;
+ }).join("")+"</div>";
+}
+function machineWorkshopHtml(){
+ const magmaText=magmaTank ? magmaTypeName(magmaTank.type) : "なし";
+ const coolingText=coolingSlot ? magmaTypeName(coolingSlot.type) : "空";
+ const crushedText=crushedSediment ? "砕屑物："+grainName(crushedSediment.size) : "なし";
+ const pressText=pressSlot ? "砕屑物："+grainName(pressSlot.size) : "空";
+ return `
+ <div class="machineBoard">
+  <div class="machinePanel furnace">
+   <div class="machineTitle">🔥 マグマ炉 <span class="machineMiniStatus">${furnaceSlots.length}/6</span></div>
+   ${renderSlots(furnaceSlots,'mineral','removeFurnaceSlot',6)}
+   <div class="machineActions">
+    <button class="magmaBtn" onclick="makeMagmaFromSlots()">マグマ生成</button>
+    <button class="ghost" onclick="clearFurnaceSlots()">空にする</button>
+   </div>
+   <div class="machineResult">マグマ：${magmaText}</div>
+   ${mineralSourceButtons('addFurnaceSlot')}
+  </div>
+
+  <div class="machinePanel cooler">
+   <div class="machineTitle">❄️ 冷却装置</div>
+   <div class="machineSlot singleSlot ${coolingSlot?'filled':''}">${coolingSlot?magmaTypeName(coolingSlot.type):"マグマ"}</div>
+   <div class="machineActions">
+    <button class="coolBtnRapid" onclick="coolSlotMagma('rapid')">急冷</button>
+    <button class="coolBtnSlow" onclick="coolSlotMagma('slow')">徐冷</button>
+    <button class="ghost" onclick="clearCoolingSlot()">外す</button>
+   </div>
+  </div>
+
+  <div class="machinePanel crusher">
+   <div class="machineTitle">🪨 粉砕機 <span class="machineMiniStatus">${crusherSlots.length}/6</span></div>
+   ${renderSlots(crusherSlots,'mineral','removeCrusherSlot',6)}
+   <div class="machineActions">
+    <button class="grainBtn ${crusherGrain==='fine'?'active':''}" onclick="setCrusherGrain('fine')">細</button>
+    <button class="grainBtn ${crusherGrain==='medium'?'active':''}" onclick="setCrusherGrain('medium')">中</button>
+    <button class="grainBtn ${crusherGrain==='coarse'?'active':''}" onclick="setCrusherGrain('coarse')">粗</button>
+    <button class="processBtn compact" onclick="crushFromSlots()">粉砕</button>
+    <button class="ghost" onclick="clearCrusherSlots()">空</button>
+   </div>
+   <div class="machineResult">砕屑物：${crushedText}${crushedSediment ? ` <button onclick="setPressSlotFromCrushed()">圧縮機へ</button>` : ``}</div>
+   ${mineralSourceButtons('addCrusherSlot')}
+  </div>
+
+  <div class="machinePanel press">
+   <div class="machineTitle">🧱 圧縮機</div>
+   <div class="machineSlot singleSlot ${pressSlot?'filled':''}">${pressText}</div>
+   <div class="machineActions">
+    <button class="processBtn compact" onclick="compressPressSlot()">圧縮</button>
+    <button class="ghost" onclick="clearPressSlot()">外す</button>
+   </div>
+  </div>
+
+  <div class="machinePanel metamorphic">
+   <div class="machineTitle">🏔️ 変成炉 <span class="machineMiniStatus">${metamorphicSlots.length}/6</span></div>
+   ${renderSlots(metamorphicSlots,'rock','removeMetaSlot',6)}
+   <div class="machineActions">
+    <button class="processBtn meta" onclick="fireMetamorphicFurnace('low')">低温低圧</button>
+    <button class="processBtn meta" onclick="fireMetamorphicFurnace('mid')">中温中圧</button>
+    <button class="processBtn meta" onclick="fireMetamorphicFurnace('high')">高温高圧</button>
+    <button class="ghost" onclick="clearMetaSlots()">空</button>
+   </div>
+   ${rockSourceButtons('addMetaSlot')}
+  </div>
+ </div>`;
+}
+
 function renderCraft(){
  const result=document.getElementById("rockResult");
  if(result)result.innerHTML=lastRockResultHtml||"まだ岩石を生成していません。";
@@ -2231,16 +2700,14 @@ function renderCraft(){
    + Object.entries(rockRecipes).map(([k,r])=>"<div class='stockMini'><b>"+(rocks[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("");
  }
  const m=document.getElementById("mineralCraft");
- if(m)m.innerHTML=Object.entries(mineralRecipes).map(([id,r])=>"<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='costLine'>"+costText(r.cost)+"</p><p class='small'>所持："+(minerals[id]||0)+"</p><button onclick=\"craftMineral('"+id+"')\">作る</button></div>").join("");
+ if(m)m.innerHTML=Object.entries(mineralRecipes).map(([id,r])=>"<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='costLine'>"+costText(r.cost)+"</p><p class='small'>×"+(minerals[id]||0)+"</p><button onclick=\"craftMineral('"+id+"')\">作る</button></div>").join("");
  const rw=document.getElementById("rockWorkshop");
  if(rw){
-  const mineralButtons=Object.entries(mineralRecipes).map(([id,r])=>"<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='small'>在庫："+(minerals[id]||0)+" / 投入："+batchUsed(id)+"</p><button onclick=\"addToRockBatch('"+id+"')\">投入</button>"+(batchUsed(id)>0?"<button class='ghost' onclick=\"removeFromRockBatch('"+id+"')\">戻す</button>":"")+"</div>").join("");
-  rw.innerHTML="<div class='batchPanel'><h3>投入中の鉱物</h3><div class='batchList'>"+Object.entries(rockBatch).filter(([k,v])=>v>0).map(([k,v])=>"<span class='batchChip'>"+(mineralRecipes[k]?.icon||"")+" "+(mineralRecipes[k]?.name||k)+"×"+v+"</span>").join("")+"</div><p class='small'>"+batchText()+"</p>"+ratioSummaryHtml()+"<p class='recipeRange'>マグマ予測："+(classifyMagmaFromBatch(rockBatch)?magmaTypeName(classifyMagmaFromBatch(rockBatch)):"条件不足")+"<br><span class='secretRecipe'>岩石名は冷却後に登録。未発見は？？？表示</span></p><button class='ghost' onclick='clearRockBatch()'>投入をリセット</button><hr>"+igneousHint()+sedimentHint()+"<p><button class='magmaBtn' onclick='createMagma()'>高熱炉でマグマにする</button><button class='processBtn compact' onclick='processSedimentary()'>圧縮機で堆積岩にする</button></p>"+magmaTankHtml()+"</div>"+mineralButtons;
+  rw.innerHTML=machineWorkshopHtml();
  }
  const meta=document.getElementById("metamorphicCraft");
  if(meta){
-  const sources=["limestone","sandstone","mudstone","granite","basalt","andesite"];
-  meta.innerHTML=sources.map(id=>{const r=rockRecipes[id]; if(!r)return ""; return "<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='small'>所持："+(rocks[id]||0)+"</p><button class='processBtn meta' onclick=\"processMetamorphic('"+id+"','low')\">低温低圧</button><button class='processBtn meta' onclick=\"processMetamorphic('"+id+"','mid')\">中温中圧</button><button class='processBtn meta' onclick=\"processMetamorphic('"+id+"','high')\">高温高圧</button></div>";}).join("");
+  meta.innerHTML="";
  }
  const rs=document.getElementById("rockSell");
  if(rs)rs.innerHTML=Object.entries(rockRecipes).map(([id,r])=>"<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='small'>売価："+r.value+"G / 所持："+(rocks[id]||0)+"</p><button class='sellBtn' onclick=\"sellRock('"+id+"')\">売る</button></div>").join("");
