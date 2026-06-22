@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 v1.2f SYSTEM_CHECK_FIX</title>
+<title>天地創造 v1.2g TITLE_FIX</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -171,7 +171,7 @@ button.blue{background:#7bdff2}
 
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">v1.2f｜システム点検修正</div></header>
+<header><h1>天地創造</h1><div class="small">v1.2g｜称号名修正</div></header>
 <div class="wrap">
 
 
@@ -179,7 +179,7 @@ button.blue{background:#7bdff2}
  <div class="homeHero">
   <div class="homeCard">
    <div class="homeTitle">天地創造</div>
-   <div class="homeSub">PuzzleHub v1.2f</div>
+   <div class="homeSub">PuzzleHub v1.2g</div>
    <div id="homeSaveDate" class="saveDate">セーブデータ確認中</div>
    <button class="homeBtn" onclick="startNewGameFromHome()">最初から始める</button>
    <button id="continueBtn" class="homeBtn blue" onclick="continueFromSave()">セーブから始める</button>
@@ -461,7 +461,7 @@ button.blue{background:#7bdff2}
 
 <section id="save" class="screen">
  <div class="card savePanel">
-  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.2f SYSTEM CHECK</div>
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.2g TITLE FIX</div>
   <p>
    <button onclick="manualSave()">セーブ</button>
    <button onclick="exportBackup()">バックアップ出力</button>
@@ -535,8 +535,8 @@ const growthRecipes={
  ],
  volcanologist:[
   null,
-  {title:"主任火山学者",money:700,equip:"hammer",minerals:{pyroxene:2},rocks:{},bonus:{Mg:1}},
-  {title:"火山研究教授",money:2800,equip:"fieldDrone",minerals:{pyroxene:4,olivine:2},rocks:{basalt:1},bonus:{Mg:2}}
+  {title:"火山修士",money:700,equip:"hammer",minerals:{pyroxene:2},rocks:{},bonus:{Mg:1}},
+  {title:"火山研究員",money:2800,equip:"fieldDrone",minerals:{pyroxene:4,olivine:2},rocks:{basalt:1},bonus:{Mg:2}}
  ],
  geochemist:[
   null,
@@ -545,13 +545,13 @@ const growthRecipes={
  ],
  oreScholar:[
   null,
-  {title:"主任鉱床学者",money:1000,equip:"magnetometer",minerals:{magnetite:2},rocks:{},bonus:{Fe:1}},
-  {title:"鉱床研究教授",money:3600,equip:"electronScope",minerals:{magnetite:4,pyroxene:2},rocks:{basalt:1},bonus:{Fe:2}}
+  {title:"鉱床修士",money:1000,equip:"magnetometer",minerals:{magnetite:2},rocks:{},bonus:{Fe:1}},
+  {title:"鉱床研究員",money:3600,equip:"electronScope",minerals:{magnetite:4,pyroxene:2},rocks:{basalt:1},bonus:{Fe:2}}
  ],
  sedimentologist:[
   null,
-  {title:"主任堆積学者",money:1200,equip:"sedimentCore",minerals:{plagioclase:2},rocks:{},bonus:{Ca:1}},
-  {title:"地層解析教授",money:3600,equip:"metamorphicPress",minerals:{plagioclase:4,amphibole:2},rocks:{andesite:1},bonus:{Ca:2}}
+  {title:"堆積修士",money:1200,equip:"sedimentCore",minerals:{plagioclase:2},rocks:{},bonus:{Ca:1}},
+  {title:"堆積研究員",money:3600,equip:"metamorphicPress",minerals:{plagioclase:4,amphibole:2},rocks:{andesite:1},bonus:{Ca:2}}
  ],
  oceanographer:[
   null,
@@ -560,53 +560,53 @@ const growthRecipes={
  ],
  gemologist:[
   null,
-  {title:"主任宝石学者",money:3000,equip:"spectroscope",minerals:{quartz:5},rocks:{},bonus:{}},
-  {title:"伝説鉱物研究者",money:8000,equip:"electronScope",minerals:{quartz:8,albite:3},rocks:{rhyolite:1},bonus:{}}
+  {title:"宝石修士",money:3000,equip:"spectroscope",minerals:{quartz:5},rocks:{},bonus:{}},
+  {title:"宝石研究員",money:8000,equip:"electronScope",minerals:{quartz:8,albite:3},rocks:{rhyolite:1},bonus:{}}
  ],
  metamorphic:[
   null,
-  {title:"主任変成岩研究者",money:2800,equip:"metamorphicPress",minerals:{muscovite:2},rocks:{schist:1},bonus:{}},
-  {title:"変成岩教授",money:7000,equip:"electronScope",minerals:{muscovite:4,amphibole:3},rocks:{schist:2},bonus:{}}
+  {title:"変成岩修士",money:2800,equip:"metamorphicPress",minerals:{muscovite:2},rocks:{schist:1},bonus:{}},
+  {title:"変成岩研究員",money:7000,equip:"electronScope",minerals:{muscovite:4,amphibole:3},rocks:{schist:2},bonus:{}}
  ],
  fieldScout:[
   null,
-  {title:"主任フィールド調査員",money:2200,equip:"fieldDrone",minerals:{quartz:3},rocks:{},bonus:{}},
-  {title:"世界フィールド隊長",money:6500,equip:"globalKit",minerals:{magnetite:3},rocks:{gabbro:1},bonus:{}}
+  {title:"野外調査修士",money:2200,equip:"fieldDrone",minerals:{quartz:3},rocks:{},bonus:{}},
+  {title:"野外調査研究員",money:6500,equip:"globalKit",minerals:{magnetite:3},rocks:{gabbro:1},bonus:{}}
  ],
  curator:[
   null,
-  {title:"主任学芸員",money:2500,equip:"museumCase",minerals:{quartz:3},rocks:{granite:1},bonus:{}},
-  {title:"世界博物館長",money:7500,equip:"electronScope",minerals:{quartz:6},rocks:{granite:2},bonus:{}}
+  {title:"博物館修士",money:2500,equip:"museumCase",minerals:{quartz:3},rocks:{granite:1},bonus:{}},
+  {title:"博物館研究員",money:7500,equip:"electronScope",minerals:{quartz:6},rocks:{granite:2},bonus:{}}
  ],
  secretary:[
   null,
-  {title:"主任学会秘書",money:2600,equip:"paperDesk",minerals:{quartz:2},rocks:{granite:1},bonus:{}},
-  {title:"国際学会マネージャー",money:8000,equip:"globalKit",minerals:{albite:3},rocks:{schist:1},bonus:{}}
+  {title:"学会運営修士",money:2600,equip:"paperDesk",minerals:{quartz:2},rocks:{granite:1},bonus:{}},
+  {title:"学会運営研究員",money:8000,equip:"globalKit",minerals:{albite:3},rocks:{schist:1},bonus:{}}
  ],
  photographer:[
   null,
-  {title:"主任地質カメラマン",money:2200,equip:"fieldDrone",minerals:{quartz:2},rocks:{},bonus:{}},
-  {title:"世界地質記録者",money:6500,equip:"globalKit",minerals:{quartz:4},rocks:{rhyolite:1},bonus:{}}
+  {title:"地質記録修士",money:2200,equip:"fieldDrone",minerals:{quartz:2},rocks:{},bonus:{}},
+  {title:"地質記録研究員",money:6500,equip:"globalKit",minerals:{quartz:4},rocks:{rhyolite:1},bonus:{}}
  ],
  professor:[
   null,
-  {title:"主任大学教授",money:7000,equip:"electronScope",minerals:{quartz:6,kfeldspar:3},rocks:{granite:2},bonus:{"SiO₂":1,Mg:1}},
-  {title:"世界的大学教授",money:15000,equip:"globalKit",minerals:{magnetite:4,muscovite:4},rocks:{schist:2},bonus:{"SiO₂":2,Mg:2}}
+  {title:"地質修士",money:7000,equip:"electronScope",minerals:{quartz:6,kfeldspar:3},rocks:{granite:2},bonus:{"SiO₂":1,Mg:1}},
+  {title:"地質研究員",money:15000,equip:"globalKit",minerals:{magnetite:4,muscovite:4},rocks:{schist:2},bonus:{"SiO₂":2,Mg:2}}
  ],
  international:[
   null,
-  {title:"主任国際研究員",money:8000,equip:"globalKit",minerals:{albite:3,magnetite:2},rocks:{gabbro:1},bonus:{Al:1,Fe:1}},
-  {title:"世界調査代表",money:18000,equip:"electronScope",minerals:{muscovite:5},rocks:{schist:2,gabbro:1},bonus:{Al:2,Fe:2}}
+  {title:"国際地質修士",money:8000,equip:"globalKit",minerals:{albite:3,magnetite:2},rocks:{gabbro:1},bonus:{Al:1,Fe:1}},
+  {title:"国際地質研究員",money:18000,equip:"electronScope",minerals:{muscovite:5},rocks:{schist:2,gabbro:1},bonus:{Al:2,Fe:2}}
  ],
  deepsea:[
   null,
-  {title:"主任深海探査員",money:9000,equip:"deepseaROV",minerals:{albite:4},rocks:{basalt:2},bonus:{Ca:1,Na:1}},
-  {title:"深海探査教授",money:20000,equip:"planetaryProbe",minerals:{olivine:4,albite:4},rocks:{peridotite:1},bonus:{Ca:2,Na:2}}
+  {title:"深海探査修士",money:9000,equip:"deepseaROV",minerals:{albite:4},rocks:{basalt:2},bonus:{Ca:1,Na:1}},
+  {title:"深海探査研究員",money:20000,equip:"planetaryProbe",minerals:{olivine:4,albite:4},rocks:{peridotite:1},bonus:{Ca:2,Na:2}}
  ],
  polar:[
   null,
-  {title:"主任極地研究者",money:9000,equip:"globalKit",minerals:{quartz:5,albite:3},rocks:{rhyolite:1},bonus:{}},
-  {title:"極地地質教授",money:22000,equip:"planetaryProbe",minerals:{muscovite:5},rocks:{schist:2},bonus:{}}
+  {title:"極地修士",money:9000,equip:"globalKit",minerals:{quartz:5,albite:3},rocks:{rhyolite:1},bonus:{}},
+  {title:"極地研究員",money:22000,equip:"planetaryProbe",minerals:{muscovite:5},rocks:{schist:2},bonus:{}}
  ],
  planetary:[
   null,
@@ -675,7 +675,7 @@ const growthRecipes={
  ],
  appraiser:[
   null,
-  {title:"主任鑑定士",money:1500,equip:"spectroscope",minerals:{quartz:3},rocks:{},bonus:{}},
+  {title:"鑑定修士",money:1500,equip:"spectroscope",minerals:{quartz:3},rocks:{},bonus:{}},
   {title:"伝説の鑑定士",money:5200,equip:"electronScope",minerals:{quartz:5,kfeldspar:2},rocks:{granite:1},bonus:{}}
  ]
 };
@@ -684,13 +684,39 @@ function charTitle(id){
  const lv=charLevels[id]||1;
  const titleMap={
   mineralogist:["鉱物学士","鉱物修士","鉱物研究員","鉱物博士","鉱物学者ダナ"],
+  volcanologist:["火山学士","火山修士","火山研究員","火山博士","火山学者モホロビチッチ"],
   geochemist:["地球化学学士","地球化学修士","地球化学研究員","地球化学博士","地球化学者ゴールドシュミット"],
+  oreScholar:["鉱床学士","鉱床修士","鉱床研究員","鉱床博士","鉱床学者リンドグレン"],
+  sedimentologist:["堆積学士","堆積修士","堆積研究員","堆積博士","堆積学者ライエル"],
   oceanographer:["海洋学士","海洋修士","海洋研究員","海洋博士","海洋学者クストー"],
-  planetary:["惑星学士","惑星修士","惑星研究員","惑星博士","惑星地質学者シューメーカー"]
+  gemologist:["宝石学士","宝石修士","宝石研究員","宝石博士","宝石学者クンツ"],
+  metamorphic:["変成岩学士","変成岩修士","変成岩研究員","変成岩博士","変成岩学者バロー"],
+  fieldScout:["野外調査士","野外調査修士","野外調査研究員","野外調査博士","地理学者フンボルト"],
+  curator:["博物館学士","博物館修士","博物館研究員","博物館博士","博物館学芸長"],
+  secretary:["学会運営士","学会運営修士","学会運営研究員","学会運営博士","国際学会統括官"],
+  photographer:["地質記録士","地質記録修士","地質記録研究員","地質記録博士","地質記録家ブラッサイ"],
+  professor:["地質学士","地質修士","地質研究員","地質博士","地質学者ハットン"],
+  international:["国際地質学士","国際地質修士","国際地質研究員","国際地質博士","国際地質学者ウェゲナー"],
+  deepsea:["深海探査士","深海探査修士","深海探査研究員","深海探査博士","深海探検家ウォルシュ"],
+  polar:["極地学士","極地修士","極地研究員","極地博士","極地探検家シャクルトン"],
+  planetary:["惑星学士","惑星修士","惑星研究員","惑星博士","惑星地質学者シューメーカー"],
+  appraiser:["鑑定学士","鑑定修士","鑑定研究員","鑑定博士","伝説の鑑定士"],
+  nemo:["ネモ船長","深海の船長","海底世界の案内人","海底世界の支配者","ノーチラス号の伝説"],
+  magellan:["マゼラン","世界航路の開拓者","地球一周の案内人","世界航路の覇者","大航海者マゼラン"],
+  plato:["プラトン","理論地質学者","地球理論の哲人","アカデメイアの賢者","哲学者プラトン"],
+  archimedes:["アルキメデス","装備工学者","発明王","古代工学の天才","発明家アルキメデス"],
+  darwin:["ダーウィン","進化研究者","生命と地球史の研究者","自然史の観察者","博物学者ダーウィン"],
+  humboldt:["フンボルト","世界博物学者","総合自然探検家","自然地理学の巨人","博物学者フンボルト"],
+  dalton:["ドルトン","原子論の研究者","原子論の祖","近代原子論の巨人","原子論者ドルトン"],
+  mendeleev:["メンデレーエフ","周期表の研究者","周期表の完成者","元素周期律の巨人","周期表の父メンデレーエフ"],
+  avogadro:["アボガドロ","分子論の研究者","分子論の巨人","物質量の探究者","分子論者アボガドロ"],
+  newton:["ニュートン","自然哲学者","万有引力の巨人","古典物理学の完成者","物理学者ニュートン"],
+  einstein:["アインシュタイン","相対論研究者","時空の理論家","現代物理学の巨人","物理学者アインシュタイン"],
+  gaia:["ガイア","地球の意志","天地創造の化身","地球そのもの","星の母ガイア"]
  };
  if(titleMap[id])return titleMap[id][Math.max(1,Math.min(5,lv))-1];
- if(lv===1)return characters[id].name;
- return growthRecipes[id] && growthRecipes[id][lv-1] ? growthRecipes[id][lv-1].title : characters[id].name;
+ if(lv===1)return characters[id]?.name||id;
+ return growthRecipes[id] && growthRecipes[id][lv-1] ? growthRecipes[id][lv-1].title : (characters[id]?.name||id);
 }
 function charBonus(atomName){
  let add=0;
@@ -1269,13 +1295,13 @@ let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_v1_2f_system_check_fix";
+const SAVE_KEY="tenchi_souzou_v1_2g_title_fix";
 let saveReady=false;
 let soundEnabled=true;
 let vibrationEnabled=true;
 function gameData(){
  return {
-  version:"V1_2F_SYSTEM_CHECK_FIX",
+  version:"V1_2G_TITLE_FIX",
   savedAt:new Date().toISOString(),
   money,
   inv,
@@ -1671,7 +1697,7 @@ function unlockStage(id){
 function renderFinalNotice(){
  const el=document.getElementById("finalNotice");
  if(!el)return;
- el.innerHTML="<b>天地創造 v1.2f SYSTEM CHECK</b><br><span class='small'>探索・クラフト・仲間育成・偉人・チーム実績・サウンド演出・クリア判定・システム安定化を統合。</span>";
+ el.innerHTML="<b>天地創造 v1.2g TITLE FIX</b><br><span class='small'>探索・クラフト・仲間育成・偉人・チーム実績・サウンド演出・クリア判定・システム安定化を統合。</span>";
 }
 
 function renderAll(){
