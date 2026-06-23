@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 v1.4l MAGMA_STOCK_UI_RESTORE</title>
+<title>天地創造 v1.4n MAGMA_STORAGE_SLOTS</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -424,9 +424,58 @@ button.blue{background:#7bdff2}
 .coolingNow{color:#7bdff2!important;font-weight:900!important}
 </style>
 
+
+<style id="v14m-lab-stock-collapse-style">
+.labStockPanel{background:#0b1020;border:1px solid #ffffff24;border-radius:14px;margin:8px 0;overflow:hidden}
+.labStockHeader{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;background:#ffffff14;color:#fff;border:0;border-radius:0;margin:0;padding:10px 12px;text-align:left}
+.labStockHeader span:first-child{font-weight:900}.labStockHeader .small{color:#c9c9c9}
+.labStockBody{display:none;padding:8px}.labStockBody.open{display:grid}.labStockArrow{color:#ffd166;font-weight:900}
+</style>
+
+
+<style id="v14n-magma-storage-slots-style">
+.magmaStorage{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:6px!important;
+}
+.magmaStorageRow{
+  display:grid!important;
+  grid-template-columns:1fr auto!important;
+  gap:8px!important;
+  align-items:center!important;
+}
+.magmaStoreSlot{
+  min-height:42px!important;
+  background:#111827!important;
+  border:1px dashed #ffffff66!important;
+  border-radius:10px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:6px!important;
+  font-size:12px!important;
+}
+.magmaStoreSlot.filled{
+  border-style:solid!important;
+  border-color:#ffd166!important;
+  background:#1c2033!important;
+}
+.magmaStorageRow button{
+  min-width:96px!important;
+  padding:8px 10px!important;
+  font-size:12px!important;
+}
+.magmaStorageRow button:disabled{
+  opacity:.38!important;
+  filter:grayscale(1)!important;
+}
+</style>
+
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">v1.4l｜マグマストックUI復旧</div></header>
+<header><h1>天地創造</h1><div class="small">v1.4n｜マグマ保管庫スロット化</div></header>
 <div class="wrap">
 
 
@@ -434,7 +483,7 @@ button.blue{background:#7bdff2}
  <div class="homeHero">
   <div class="homeCard">
    <div class="homeTitle">天地創造</div>
-   <div class="homeSub">PuzzleHub v1.4l</div>
+   <div class="homeSub">PuzzleHub v1.4n</div>
    <div id="homeSaveDate" class="saveDate">セーブデータ確認中</div>
    <button class="homeBtn" onclick="startNewGameFromHome()">最初から始める</button>
    <button id="continueBtn" class="homeBtn blue" onclick="continueFromSave()">セーブから始める</button>
@@ -556,7 +605,7 @@ button.blue{background:#7bdff2}
  <div class="card">
   <h2>⚒️ 工房</h2><p class='small'>地域によって特定鉱物にボーナスが付く。</p>
   <h3>現在の在庫</h3>
-  <div id="labStock" class="stockGrid"></div>
+  <div id="labStock"></div>
   <h3>鉱物クラフト</h3>
   <div id="mineralCraft" class="craftGrid"></div>
   <h3>岩石工房</h3>
@@ -736,7 +785,7 @@ button.blue{background:#7bdff2}
 
 <section id="save" class="screen">
  <div class="card savePanel">
-  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.4l MAGMA STOCK UI RESTORE</div>
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.4n MAGMA STORAGE SLOTS</div>
   <p>
    <button onclick="manualSave()">セーブ</button>
    <button onclick="exportBackup()">バックアップ出力</button>
@@ -1683,17 +1732,18 @@ let lastRockResultHtml="";
 let difficulty='normal';
 let tavernFilter='all';
 let teamBonusOpen=false;
+let labStockOpen={atoms:false,minerals:false,rocks:false};
 let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_v1_4l_magma_stock_ui_restore";
+const SAVE_KEY="tenchi_souzou_v1_4n_magma_storage_slots";
 let saveReady=false;
 let soundEnabled=true;
 let vibrationEnabled=true;
 function gameData(){
  return {
-  version:"V1_4L_MAGMA_STOCK_UI_RESTORE",
+  version:"V1_4N_MAGMA_STORAGE_SLOTS",
   savedAt:new Date().toISOString(),
   money,
   inv,
@@ -1727,6 +1777,7 @@ function gameData(){
   difficulty,
   tavernFilter,
   teamBonusOpen,
+  labStockOpen,
   magmaTank,
   magmaStock,
   furnaceSlots,
@@ -1776,6 +1827,7 @@ function applyData(data){
  if(data.difficulty && difficulties[data.difficulty])difficulty=data.difficulty;
  if(data.tavernFilter)tavernFilter=data.tavernFilter;
  if(typeof data.teamBonusOpen==='boolean')teamBonusOpen=data.teamBonusOpen;
+ if(data.labStockOpen && typeof data.labStockOpen==='object')labStockOpen={atoms:!!data.labStockOpen.atoms,minerals:!!data.labStockOpen.minerals,rocks:!!data.labStockOpen.rocks};
  if(Array.isArray(data.magmaStock))magmaStock=data.magmaStock.filter(m=>m&&typeof m==="object").slice(0,3);
  if(data.magmaTank && typeof data.magmaTank==="object"){
   if(magmaStock.length===0)magmaStock=[data.magmaTank].slice(0,3);
@@ -1987,6 +2039,7 @@ function resetGameState(confirmFirst=true){
  difficulty="normal";
  tavernFilter="all";
  teamBonusOpen=false;
+ labStockOpen={atoms:false,minerals:false,rocks:false};
  current=null;
  resolving=false;
  clearPending=false;
@@ -2126,7 +2179,7 @@ function unlockStage(id){
 function renderFinalNotice(){
  const el=document.getElementById("finalNotice");
  if(!el)return;
- el.innerHTML="<b>天地創造 v1.4l MAGMA STOCK UI RESTORE</b><br><span class='small'>マグマ3ストックの選択UIを復旧。</span>";
+ el.innerHTML="<b>天地創造 v1.4n MAGMA STORAGE SLOTS</b><br><span class='small'>マグマ保管庫を3スロット＋冷却装置へボタンの固定表示に変更。</span>";
 }
 
 function renderAll(){
@@ -2689,12 +2742,17 @@ function setCoolingSlotFromStock(index){
 function magmaStockHtml(){
  if(!Array.isArray(magmaStock))magmaStock=[];
  syncLegacyMagmaTank();
- if(magmaStock.length===0)return "なし";
- return "<div class='magmaStockList'>"+magmaStock.map((m,i)=>{
-  const name=magmaTypeName(m.type);
-  const r=m.ratio||{};
-  return `<div class="magmaStockItem"><span class="magmaBadge">${i+1}. ${name}<br><span class="small">白色${r.lightPct||0}% / 有色${r.darkPct||0}%</span></span><button onclick="setCoolingSlotFromStock(${i})">冷却へ</button><button class="ghost" onclick="removeMagmaStock(${i})">破棄</button></div>`;
- }).join("")+"</div>";
+ const rows=[0,1,2].map(i=>{
+  const m=magmaStock[i];
+  const slot=m
+   ? `<div class="magmaStoreSlot filled">${i+1}. ${magmaTypeName(m.type)}</div>`
+   : `<div class="magmaStoreSlot">${i+1}. 空</div>`;
+  const btn=m
+   ? `<button onclick="setCoolingSlotFromStock(${i})">冷却装置へ</button>`
+   : `<button disabled>冷却装置へ</button>`;
+  return `<div class="magmaStorageRow">${slot}${btn}</div>`;
+ }).join("");
+ return `<div class="magmaStorage">${rows}</div>`;
 }
 function magmaFail(reason){
  lastRockResultHtml="<div class='resultRockBox'><div class='resultRockTitle failText'>岩石崩壊</div><p class='small'>"+reason+"</p></div>";
@@ -2869,7 +2927,7 @@ function machineWorkshopHtml(){
     <button class="magmaBtn" onclick="makeMagmaFromSlots()">マグマ生成</button>
     <button class="ghost" onclick="clearFurnaceSlots()">空にする</button>
    </div>
-   <div class="machineResult">マグマストック：${magmaText}</div>
+   <div class="machineResult">マグマ保管庫：${magmaText}</div>
    ${mineralSourceButtons('addFurnaceSlot')}
   </div>
 
@@ -2925,14 +2983,39 @@ function compactElementCost(cost){
  return Object.entries(cost||{}).map(([k,v])=>k+"×"+v).join("<br>");
 }
 
+
+function toggleLabStockGroup(group){
+ if(!labStockOpen || typeof labStockOpen!=="object")labStockOpen={atoms:false,minerals:false,rocks:false};
+ labStockOpen[group]=!labStockOpen[group];
+ renderCraft();
+ saveGame();
+}
+function labStockGroupHtml(group,title,itemsHtml,count){
+ const open=!!(labStockOpen&&labStockOpen[group]);
+ const arrow=open?"▲":"▼";
+ return `<div class="labStockPanel">
+  <button class="labStockHeader" onclick="toggleLabStockGroup('${group}')">
+   <span>${title}</span>
+   <span class="small">${count}種 <span class="labStockArrow">${arrow}</span></span>
+  </button>
+  <div class="labStockBody stockGrid ${open?'open':''}">${itemsHtml}</div>
+ </div>`;
+}
+function labStockHtml(){
+ const atoms=Object.entries(inv).map(([k,v])=>"<div class='stockMini'><b>"+v+"</b><span>"+k+"</span></div>").join("");
+ const mins=Object.entries(mineralRecipes).map(([k,r])=>"<div class='stockMini'><b>"+(minerals[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("");
+ const rks=Object.entries(rockRecipes).map(([k,r])=>"<div class='stockMini'><b>"+(rocks[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("");
+ return labStockGroupHtml("atoms","原子",atoms,Object.keys(inv).length)
+  + labStockGroupHtml("minerals","鉱物",mins,Object.keys(mineralRecipes).length)
+  + labStockGroupHtml("rocks","岩石",rks,Object.keys(rockRecipes).length);
+}
+
 function renderCraft(){
  const result=document.getElementById("rockResult");
  if(result)result.innerHTML=lastRockResultHtml||"まだ岩石を生成していません。";
  const stock=document.getElementById("labStock");
  if(stock){
-  stock.innerHTML = Object.entries(inv).map(([k,v])=>"<div class='stockMini'><b>"+v+"</b><span>"+k+"</span></div>").join("")
-   + Object.entries(mineralRecipes).map(([k,r])=>"<div class='stockMini'><b>"+(minerals[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("")
-   + Object.entries(rockRecipes).map(([k,r])=>"<div class='stockMini'><b>"+(rocks[k]||0)+"</b><span>"+r.icon+" "+r.name+"</span></div>").join("");
+  stock.innerHTML=labStockHtml();
  }
  const m=document.getElementById("mineralCraft");
  if(m)m.innerHTML=Object.entries(mineralRecipes).map(([id,r])=>"<div class='craftCard'><div class='icon'>"+r.icon+"</div><b>"+r.name+"</b><p class='small'>×"+(minerals[id]||0)+"</p><div class='mineralRecipeLine'>必要<br>"+compactElementCost(r.cost)+"</div><button onclick=\"craftMineral('"+id+"')\">作る</button></div>").join("");
