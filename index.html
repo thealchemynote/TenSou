@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>天地創造 v1.4n MAGMA_STORAGE_SLOTS</title>
+<title>天地創造 v1.4o PAPER_DETAIL_SAVE_FIX</title>
 <style>
 body{margin:0;background:radial-gradient(circle at 50% 0%,#442015 0 8%,transparent 34%),linear-gradient(180deg,#111320,#070812);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
 header{text-align:center;padding:14px;background:#05060a;border-bottom:1px solid #333}
@@ -473,9 +473,14 @@ button.blue{background:#7bdff2}
 }
 </style>
 
+
+<style id="v14o-paper-detail-save-fix-style">
+.paperDetailBox{background:#0b1020;border:1px solid #ffd16677;border-radius:16px;padding:12px;margin:10px 0;text-align:left;box-shadow:0 0 14px #ffd16622}.paperDetailTitle{color:#ffd166;font-size:17px;font-weight:900;margin-bottom:6px}.paperRecipeCard{background:#111827;border:1px solid #ffffff24;border-radius:12px;padding:9px;margin:8px 0}.paperRecipeName{color:#85f0a3;font-weight:900}.paperRecipeLine{font-size:12px;line-height:1.55;color:#e8e8e8}.paperViewBtn{background:#bde0fe!important;color:#102!important}.saveTextBox{width:100%;min-height:150px;box-sizing:border-box;border-radius:12px;border:1px solid #ffffff33;background:#0b1020;color:#fff;padding:10px;font-size:11px;line-height:1.35}
+</style>
+
 </head>
 <body>
-<header><h1>天地創造</h1><div class="small">v1.4n｜マグマ保管庫スロット化</div></header>
+<header><h1>天地創造</h1><div class="small">v1.4o｜論文詳細・成長重め・手動保存修正</div></header>
 <div class="wrap">
 
 
@@ -483,7 +488,7 @@ button.blue{background:#7bdff2}
  <div class="homeHero">
   <div class="homeCard">
    <div class="homeTitle">天地創造</div>
-   <div class="homeSub">PuzzleHub v1.4n</div>
+   <div class="homeSub">PuzzleHub v1.4o</div>
    <div id="homeSaveDate" class="saveDate">セーブデータ確認中</div>
    <button class="homeBtn" onclick="startNewGameFromHome()">最初から始める</button>
    <button id="continueBtn" class="homeBtn blue" onclick="continueFromSave()">セーブから始める</button>
@@ -717,6 +722,7 @@ button.blue{background:#7bdff2}
   <h2>📄 研究テーマ</h2>
   <p class="small">岩石・鉱物・調査記録を使って論文を書く。論文は消費型の大型目標。</p>
   <p>論文数：<b id="paperCountView">0</b></p>
+  <div id="paperDetailView"></div>
   <div id="paperList" class="grid2"></div>
   <button class="ghost" onclick="show('hub')">戻る</button>
  </div>
@@ -785,7 +791,7 @@ button.blue{background:#7bdff2}
 
 <section id="save" class="screen">
  <div class="card savePanel">
-  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.4n MAGMA STORAGE SLOTS</div>
+  <h2>💾 セーブデータ管理</h2><div id="finalNotice" class="finalNotice">天地創造 v1.4o PAPER DETAIL SAVE FIX</div>
   <p>
    <button onclick="manualSave()">セーブ</button>
    <button onclick="exportBackup()">バックアップ出力</button>
@@ -793,7 +799,7 @@ button.blue{background:#7bdff2}
    <button class="ghost" onclick="resetSave()">リセット</button>
    <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importBackup(event)">
   </p>
-  <div id="saveStatus" class="small">自動セーブ：準備中</div>
+  <div id="saveStatus" class="small">自動セーブ：準備中</div><textarea id="backupText" class="saveTextBox" placeholder="手動保存・バックアップ出力時に、ここにもセーブデータが表示されます。コピーして保管できます。"></textarea>
   <button class="ghost" onclick="show('hub')">戻る</button>
  </div>
 </section>
@@ -1097,9 +1103,9 @@ function nextEvolutionRecipe(id){
  const invCost={};
  const mineralCost={};
  const rockCost={};
- const base=[160,420,950,2200][lv-1]||300;
- const mineralBase=[12,35,90,220][lv-1]||20;
- const rockBase=[0,2,12,45][lv-1]||0;
+ const base=[300,900,2200,5600][lv-1]||600;
+ const mineralBase=[28,90,240,650][lv-1]||60;
+ const rockBase=[0,8,45,160][lv-1]||0;
  els.forEach(el=>{
   invCost[el]=(invCost[el]||0)+base;
   const m=mineralForElement(el);
@@ -1111,26 +1117,26 @@ function nextEvolutionRecipe(id){
  }
  // 専門系の追加要求。やり込み用に重め。
  if(id==="mineralogist"){
-  invCost["SiO₂"]=(invCost["SiO₂"]||0)+[80,200,500,1200][lv-1];
-  mineralCost.quartz=(mineralCost.quartz||0)+[15,40,120,300][lv-1];
-  if(nextLv>=4)rockCost.granite=(rockCost.granite||0)+[0,0,15,70][lv-1];
+  invCost["SiO₂"]=(invCost["SiO₂"]||0)+[200,600,1500,3800][lv-1];
+  mineralCost.quartz=(mineralCost.quartz||0)+[35,110,300,850][lv-1];
+  if(nextLv>=4)rockCost.granite=(rockCost.granite||0)+[0,0,45,180][lv-1];
  }
  if(id==="volcanologist"){
-  invCost.Mg=(invCost.Mg||0)+[60,180,450,1000][lv-1];
-  invCost.Fe=(invCost.Fe||0)+[60,180,450,1000][lv-1];
-  mineralCost.pyroxene=(mineralCost.pyroxene||0)+[10,35,100,260][lv-1];
-  if(nextLv>=4)rockCost.basalt=(rockCost.basalt||0)+[0,0,20,90][lv-1];
+  invCost.Mg=(invCost.Mg||0)+[160,520,1350,3200][lv-1];
+  invCost.Fe=(invCost.Fe||0)+[160,520,1350,3200][lv-1];
+  mineralCost.pyroxene=(mineralCost.pyroxene||0)+[30,100,280,760][lv-1];
+  if(nextLv>=4)rockCost.basalt=(rockCost.basalt||0)+[0,0,55,220][lv-1];
  }
  if(id==="geochemist"||id==="mendeleev"){
-  invCost.Al=(invCost.Al||0)+[80,220,600,1500][lv-1];
-  mineralCost.kfeldspar=(mineralCost.kfeldspar||0)+[12,40,120,300][lv-1];
+  invCost.Al=(invCost.Al||0)+[200,650,1700,4200][lv-1];
+  mineralCost.kfeldspar=(mineralCost.kfeldspar||0)+[32,110,320,900][lv-1];
  }
  if(id==="gaia"){
-  Object.keys(inv).forEach(k=>invCost[k]=(invCost[k]||0)+[300,800,1800,4000][lv-1]);
-  ["quartz","kfeldspar","plagioclase","pyroxene","olivine","magnetite","calcite","albite"].forEach(m=>mineralCost[m]=(mineralCost[m]||0)+[20,60,160,400][lv-1]);
+  Object.keys(inv).forEach(k=>invCost[k]=(invCost[k]||0)+[700,2000,5200,12000][lv-1]);
+  ["quartz","kfeldspar","plagioclase","pyroxene","olivine","magnetite","calcite","albite"].forEach(m=>mineralCost[m]=(mineralCost[m]||0)+[50,160,450,1200][lv-1]);
   if(nextLv>=4){rockCost.granite=(rockCost.granite||0)+40; rockCost.basalt=(rockCost.basalt||0)+40; rockCost.peridotite=(rockCost.peridotite||0)+20;}
  }
- const money=[1200,5000,18000,65000][lv-1]||1000;
+ const money=[2500,12000,45000,160000][lv-1]||3000;
  const old=growthRecipes[id]&&growthRecipes[id][lv];
  const equip=old&&old.equip?old.equip:null;
  const bonus={};
@@ -1355,11 +1361,27 @@ function renderOrders(){
 
 
 const paperCatalog={
- basaltStudy:{title:"玄武岩質マグマの研究",desc:"玄武岩・輝石・カンラン石を使う基礎論文",money:2000,req:{rocks:{basalt:2},minerals:{pyroxene:3,olivine:2},stages:{hawaii:true}},reward:3500},
- graniteStudy:{title:"花崗岩体と石英脈",desc:"花崗岩・石英・カリ長石を使う論文",money:2600,req:{rocks:{granite:2},minerals:{quartz:5,kfeldspar:3},stages:{yamanashi:true}},reward:4500},
- volcanicArc:{title:"火山弧の安山岩研究",desc:"安山岩と角閃石を使う中級論文",money:4000,req:{rocks:{andesite:2},minerals:{amphibole:3,plagioclase:3},stages:{sakurajima:true,aso:true}},reward:7000},
- oceanRidge:{title:"海嶺玄武岩の比較研究",desc:"アイスランド調査と玄武岩系素材を使う上級論文",money:7000,req:{rocks:{basalt:3,peridotite:1},minerals:{olivine:4,albite:2},stages:{iceland:true}},reward:12000}
+ basaltStudy:{title:"玄武岩質マグマの研究",desc:"玄武岩・輝石・カンラン石を使う基礎論文",money:6000,req:{rocks:{basalt:5},minerals:{pyroxene:12,olivine:8,plagioclase:8},stages:{hawaii:true}},reward:9000},
+ graniteStudy:{title:"花崗岩体と石英脈",desc:"花崗岩・石英・カリ長石を使う論文",money:8000,req:{rocks:{granite:5,rhyolite:2},minerals:{quartz:18,kfeldspar:12,biotite:8},stages:{yamanashi:true}},reward:12000},
+ volcanicArc:{title:"火山弧の安山岩研究",desc:"安山岩と角閃石を使う中級論文",money:15000,req:{rocks:{andesite:6,diorite:2},minerals:{amphibole:12,plagioclase:14,pyroxene:8},stages:{sakurajima:true,aso:true}},reward:22000},
+ oceanRidge:{title:"海嶺玄武岩の比較研究",desc:"アイスランド調査と玄武岩系素材を使う上級論文",money:30000,req:{rocks:{basalt:8,gabbro:4,peridotite:3},minerals:{olivine:18,pyroxene:18,albite:10},stages:{iceland:true}},reward:45000}
 };
+
+const paperRecipeDetails={
+ basaltStudy:{summary:"玄武岩質マグマは、斜長石と苦鉄質鉱物が中心。石英だけでは成立しない。",recipes:[{name:"玄武岩",steps:["マグマ炉：斜長石×2・輝石×3・カンラン石×1","判定：苦鉄質マグマ","冷却装置：急冷","結果：玄武岩"]},{name:"はんれい岩",steps:["マグマ炉：斜長石×2・輝石×3・カンラン石×1","判定：苦鉄質マグマ","冷却装置：徐冷","結果：はんれい岩"]},{name:"かんらん岩",steps:["マグマ炉：カンラン石×4・輝石×2","判定：超苦鉄質マグマ","冷却装置：急冷または徐冷","結果：かんらん岩"]}]},
+ graniteStudy:{summary:"花崗岩質の岩石は、石英と長石類が多く、黒雲母などの有色鉱物が少量必要。",recipes:[{name:"花崗岩",steps:["マグマ炉：石英×2・カリ長石×2・黒雲母×2","判定：珪長質マグマ","冷却装置：徐冷","結果：花崗岩"]},{name:"流紋岩",steps:["マグマ炉：石英×2・カリ長石×2・黒雲母×2","判定：珪長質マグマ","冷却装置：急冷","結果：流紋岩"]},{name:"補助例",steps:["石英×3だけでは失敗","石英＋長石類＋少量の有色鉱物が必要","白色鉱物が多く、有色鉱物が少なめだと珪長質判定になりやすい"]}]},
+ volcanicArc:{summary:"火山弧の岩石は、斜長石を中心に、角閃石・輝石などの有色鉱物が混ざる中間質組成。",recipes:[{name:"安山岩",steps:["マグマ炉：斜長石×3・角閃石×2・輝石×1","判定：中間質マグマ","冷却装置：急冷","結果：安山岩"]},{name:"閃緑岩",steps:["マグマ炉：斜長石×3・角閃石×2・輝石×1","判定：中間質マグマ","冷却装置：徐冷","結果：閃緑岩"]},{name:"別例",steps:["マグマ炉：斜長石×3・角閃石×2・黒雲母×1","判定：中間質マグマ","急冷で安山岩、徐冷で閃緑岩"]}]},
+ oceanRidge:{summary:"海嶺付近では苦鉄質〜超苦鉄質の岩石が重要。玄武岩・はんれい岩・かんらん岩を使い分ける。",recipes:[{name:"玄武岩",steps:["マグマ炉：斜長石×2・輝石×3・カンラン石×1","判定：苦鉄質マグマ","冷却装置：急冷","結果：玄武岩"]},{name:"はんれい岩",steps:["マグマ炉：斜長石×2・輝石×3・カンラン石×1","判定：苦鉄質マグマ","冷却装置：徐冷","結果：はんれい岩"]},{name:"かんらん岩",steps:["マグマ炉：カンラン石×4・輝石×2","判定：超苦鉄質マグマ","冷却装置：急冷または徐冷","結果：かんらん岩"]}]}
+};
+function viewPaper(id){
+ if(!completedPapers[id]){alert("先に論文を書いてください");return;}
+ viewedPapers[id]=true; selectedPaperId=id; saveGame(); renderPapers();
+}
+function paperDetailHtml(id){
+ const p=paperCatalog[id], d=paperRecipeDetails[id]; if(!p||!d)return "";
+ return "<div class='paperDetailBox'><div class='paperDetailTitle'>"+p.title+"：研究ノート</div><p class='small'>"+d.summary+"</p>"+d.recipes.map(r=>"<div class='paperRecipeCard'><div class='paperRecipeName'>"+r.name+"</div><div class='paperRecipeLine'>"+r.steps.map(s=>"・"+s).join("<br>")+"</div></div>").join("")+"<p class='small'>※図鑑は簡易説明のまま。詳しい作り方は論文で確認する。</p></div>";
+}
+
 function reqText(req){
  const parts=[];
  if(req.minerals)parts.push("鉱物："+costText(req.minerals,mineralRecipes));
@@ -1385,17 +1407,19 @@ function writePaper(id){
  sfxQuest();
  money+=p.reward;
  saveGame(); renderAll();
- alert("論文完成！ 報酬 "+p.reward+"G");
+ alert("論文完成！ 報酬 "+p.reward+"G。見るボタンで詳しいレシピを確認できます。");
 }
 function renderPapers(){
  const box=document.getElementById("paperList");
+ const detail=document.getElementById("paperDetailView");
  const count=document.getElementById("paperCountView");
  if(count)count.textContent=Object.keys(completedPapers).length;
+ if(detail)detail.innerHTML = selectedPaperId && completedPapers[selectedPaperId] ? paperDetailHtml(selectedPaperId) : "";
  if(!box)return;
  box.innerHTML=Object.entries(paperCatalog).map(([id,p])=>{
-  const done=!!completedPapers[id];
-  const can=canWritePaper(p);
-  return "<div class='paperCard "+(done?'done':'')+"'><div class='paperTitle'>"+p.title+"</div><p class='small'>"+p.desc+"</p><p class='small'>研究費："+Math.round(p.money*paperCostRate()*secretPaperRate())+"G<br>"+reqText(p.req)+"</p><p class='questReward'>完成報酬 "+p.reward+"G</p>"+(done?"<span class='boost'>発表済み</span>":can?"<button onclick=\"writePaper('"+id+"')\">論文を書く</button>":"<span class='small'>条件不足</span>")+"</div>";
+  const done=!!completedPapers[id]; const can=canWritePaper(p); const viewed=!!viewedPapers[id];
+  const cost=Math.round(p.money*paperCostRate()*secretPaperRate());
+  return "<div class='paperCard "+(done?'done':'')+"'><div class='paperTitle'>"+p.title+"</div><p class='small'>"+p.desc+"</p><p class='small'>研究費："+cost+"G<br>"+reqText(p.req)+"</p><p class='questReward'>完成報酬 "+p.reward+"G</p>"+(done?"<button class='paperViewBtn' onclick=\"viewPaper('"+id+"')\">"+(viewed?"もう一度見る":"見る")+"</button><span class='boost'> 完成済み</span>":can?"<button onclick=\"writePaper('"+id+"')\">論文を書く</button>":"<span class='small'>条件不足</span>")+"</div>";
  }).join("");
 }
 
@@ -1708,6 +1732,8 @@ let museumSlots=[null,null,null];
 let museumIncomeBank=0;
 let unlockedRegions={japan:true,pacific:false,world:false};
 let completedPapers={};
+let viewedPapers={};
+let selectedPaperId=null;
 let presentedPapers={};
 let prestige=0;
 let claimedAwards={};
@@ -1737,13 +1763,13 @@ let comboMultiplier=1;
 let unlockedStages=['fuji','hawaii'];
 let audioCtx=null;
 
-const SAVE_KEY="tenchi_souzou_v1_4n_magma_storage_slots";
+const SAVE_KEY="tenchi_souzou_v1_4o_paper_detail_save_fix";
 let saveReady=false;
 let soundEnabled=true;
 let vibrationEnabled=true;
 function gameData(){
  return {
-  version:"V1_4N_MAGMA_STORAGE_SLOTS",
+  version:"V1_4O_PAPER_DETAIL_SAVE_FIX",
   savedAt:new Date().toISOString(),
   money,
   inv,
@@ -1761,6 +1787,8 @@ function gameData(){
   museumIncomeBank,
   unlockedRegions,
   completedPapers,
+  viewedPapers,
+  selectedPaperId,
   presentedPapers,
   prestige,
   claimedAwards,
@@ -1809,6 +1837,8 @@ function applyData(data){
  if(data.museumIncomeBank){museumIncomeBank=Number(data.museumIncomeBank)||0;}
  if(data.unlockedRegions){unlockedRegions=Object.assign(unlockedRegions,data.unlockedRegions);}
  if(data.completedPapers){completedPapers=data.completedPapers||{};}
+ if(data.viewedPapers){viewedPapers=data.viewedPapers||{};}
+ if(data.selectedPaperId && paperCatalog[data.selectedPaperId])selectedPaperId=data.selectedPaperId;
  if(data.presentedPapers){presentedPapers=data.presentedPapers||{};}
  if(data.prestige){prestige=Number(data.prestige)||0;}
  if(data.claimedAwards){claimedAwards=data.claimedAwards||{};}
@@ -1853,9 +1883,8 @@ function saveGame(){
  }catch(e){console.warn(e);}
 }
 function manualSave(){
- saveReady=true;
- saveGame();
- alert("セーブしました");
+ saveReady=true; saveGame(); writeBackupText();
+ alert("セーブしました。下の欄にも手動保存用データを出力しました。");
 }
 function loadGame(){
  try{
@@ -1873,20 +1902,19 @@ function resetSave(){
  renderAll();
  renderHomeStatus();
 }
+function writeBackupText(){try{const box=document.getElementById("backupText"); if(box)box.value=JSON.stringify(gameData(),null,2);}catch(e){console.warn(e);}}
 function exportBackup(){
  try{
   saveReady=true; saveGame();
-  const data=gameData();
-  data.savedAt=new Date().toISOString();
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="TenchiSouzou_PuzzleHub_Save_"+new Date().toISOString().slice(0,10)+".json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(a.href);
- }catch(e){alert("バックアップ出力に失敗しました");console.warn(e);}
+  const data=gameData(); data.savedAt=new Date().toISOString();
+  const text=JSON.stringify(data,null,2);
+  const box=document.getElementById("backupText"); if(box)box.value=text;
+  const blob=new Blob([text],{type:"application/json"});
+  const a=document.createElement("a"); const url=URL.createObjectURL(blob);
+  a.href=url; a.download="TenchiSouzou_PuzzleHub_Save_"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const s=document.getElementById("saveStatus"); if(s)s.textContent="バックアップを出力しました。保存されない場合は下の欄をコピーしてください。";
+ }catch(e){writeBackupText(); alert("ファイル出力に失敗しました。下の欄のセーブデータをコピーしてください。"); console.warn(e);}
 }
 function openImportFile(){
  const homeActive=document.getElementById("home")?.classList.contains("active");
@@ -2023,6 +2051,8 @@ function resetGameState(confirmFirst=true){
  museumIncomeBank=0;
  unlockedRegions={japan:true,pacific:false,world:false};
  completedPapers={};
+ viewedPapers={};
+ selectedPaperId=null;
  presentedPapers={};
  prestige=0;
  claimedAwards={};
@@ -2179,7 +2209,7 @@ function unlockStage(id){
 function renderFinalNotice(){
  const el=document.getElementById("finalNotice");
  if(!el)return;
- el.innerHTML="<b>天地創造 v1.4n MAGMA STORAGE SLOTS</b><br><span class='small'>マグマ保管庫を3スロット＋冷却装置へボタンの固定表示に変更。</span>";
+ el.innerHTML="<b>天地創造 v1.4o PAPER DETAIL SAVE FIX</b><br><span class='small'>キャラ成長を重めにし、論文完成後に詳細レシピを閲覧可能に変更。手動保存欄も追加。</span>";
 }
 
 function renderAll(){
